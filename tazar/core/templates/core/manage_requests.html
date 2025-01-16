@@ -1,0 +1,12 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Управление заявками{% endblock %}
+
+{% block content %}
+<h2>Управление заявками</h2>
+<ul>
+    {% for request in requests %}
+        <li>{{ request.collection_point.address }} - {{ request.status }}</li>
+    {% endfor %}
+</ul>
+{% endblock %} 

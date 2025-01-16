@@ -1,0 +1,57 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Главная - TAZAR{% endblock %}
+
+{% block content %}
+<section class="bg-gradient-to-r from-green-400 to-blue-500 p-8 rounded-lg shadow-lg">
+    <h1 class="text-4xl font-bold mb-4 text-white text-center">Добро пожаловать в TAZAR</h1>
+    <p class="mb-6 text-center text-white">Ваша платформа для переработки и экологической ответственности.</p>
+    <div class="flex justify-center">
+        <a class="bg-white text-green-500 px-6 py-3 rounded-lg hover:bg-gray-200 transition duration-300" href="{% url 'register' %}">Присоединиться</a>
+    </div>
+</section>
+
+<section class="mt-8">
+    <h2 class="text-3xl font-bold mb-4">О нас</h2>
+    <p class="text-gray-700">TAZAR - это платформа, которая помогает пользователям эффективно управлять отходами и способствует переработке. Мы стремимся сделать мир чище и помочь вам в этом.</p>
+</section>
+
+<section class="mt-8">
+    <h2 class="text-3xl font-bold mb-4">Часто задаваемые вопросы</h2>
+    <ul class="list-disc pl-5 text-gray-700">
+        <li><strong>Где находятся пункты приема?</strong> - Вы можете найти их на странице "Карта".</li>
+        <li><strong>Как я могу зарегистрироваться?</strong> - Нажмите на кнопку "Регистрация" и заполните форму.</li>
+        <li><strong>Как найти ближайший пункт приема?</strong> - Воспользуйтесь интерактивной картой в разделе "Карта".</li>
+    </ul>
+</section>
+
+<section class="mt-8">
+    <h2 class="text-3xl font-bold mb-4">Отзывы пользователей</h2>
+    <div class="space-y-4">
+        <blockquote class="border-l-4 border-green-500 pl-4 text-gray-700">
+            <p>"TAZAR помог мне найти ближайшие пункты приема!" - Анна</p>
+        </blockquote>
+        <blockquote class="border-l-4 border-green-500 pl-4 text-gray-700">
+            <p>"Отличная платформа для тех, кто заботится об экологии!" - Сергей</p>
+        </blockquote>
+    </div>
+</section>
+
+<section class="mt-8">
+    <h2 class="text-3xl font-bold mb-4">Последние новости</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+            <h3 class="font-bold">Экологические инициативы в вашем городе</h3>
+            <p>Узнайте больше о том, как вы можете помочь.</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+            <h3 class="font-bold">Советы по переработке отходов</h3>
+            <p>Эффективные способы сортировки и переработки.</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+            <h3 class="font-bold">Новости от наших партнеров</h3>
+            <p>Последние обновления и предложения.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
