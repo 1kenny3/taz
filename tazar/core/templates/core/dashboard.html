@@ -1,22 +1,204 @@
 {% extends 'core/base.html' %}
+{% load static %}
+{% load dashboard_tags %}
 
-{% block title %}Личный кабинет{% endblock %}
+{% block title %}Личный кабинет - TAZAR{% endblock %}
 
 {% block content %}
-<h2 class="text-3xl font-bold mb-4">Личный кабинет</h2>
-<p class="text-lg">Баллы: <span class="font-bold">{{ user.points }}</span></p>
+<div class="container mx-auto mt-10">
+    <div class="grid md:grid-cols-4 gap-6">
+        <!-- Левая колонка - Профиль -->
+        <div class="md:col-span-1">
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <div class="text-center mb-6">
+                    {% if user.profile_photo %}
+                        <img src="{{ user.profile_photo.url }}" alt="Фото профиля" 
+                             class="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-green-500">
+                    {% else %}
+                        <div class="w-32 h-32 rounded-full mx-auto mb-4 bg-gray-200 flex items-center justify-center">
+                            <span class="text-4xl text-gray-500">👤</span>
+                        </div>
+                    {% endif %}
+                    <h2 class="text-2xl font-bold">{{ user.username }}</h2>
+                    <p class="text-gray-600">{{ user.email }}</p>
+                    <p class="text-3xl font-bold text-green-600 mt-2">
+                        {{ user.points }} баллов
+                    </p>
+                </div>
 
-<div class="mt-8">
-    <h3 class="text-2xl font-bold mb-4">Действия</h3>
-    <div class="space-y-4">
-        <a href="{% url 'map' %}" class="block bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300 text-center">
-            Посмотреть карту пунктов приема
-        </a>
-        {% if user.is_staff %}
-        <a href="{% url 'add_collection_point' %}" class="block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300 text-center">
-            Добавить пункт приема
-        </a>
-        {% endif %}
+                <!-- Форма редактирования профиля -->
+                <form method="POST" enctype="multipart/form-data" class="mt-6">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">
+                            Фото профиля
+                        </label>
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1">
+                                <input type="file" 
+                                       name="{{ form.profile_photo.name }}" 
+                                       id="{{ form.profile_photo.id_for_label }}"
+                                       class="hidden" 
+                                       accept="image/*">
+                                <label for="{{ form.profile_photo.id_for_label }}" 
+                                       class="cursor-pointer bg-white border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-50 transition duration-300 block text-center">
+                                    Выбрать фото
+                                </label>
+                                <div id="selected-file" class="text-sm text-gray-600 mt-1"></div>
+                            </div>
+                            {% if user.profile_photo %}
+                                <div class="flex items-center">
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" name="clear_photo" class="form-checkbox text-red-500">
+                                        <span class="ml-2 text-sm text-red-500">Удалить</span>
+                                    </label>
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% if form.profile_photo.errors %}
+                            <div class="text-red-500 text-sm mt-1">{{ form.profile_photo.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div id="image-preview" class="mt-2 hidden">
+                        <img src="" alt="Предпросмотр" class="max-w-xs rounded-lg">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ form.bio.id_for_label }}">
+                            О себе
+                        </label>
+                        {{ form.bio }}
+                        {% if form.bio.errors %}
+                            <div class="text-red-500 text-sm mt-1">{{ form.bio.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ form.email.id_for_label }}">
+                            Email
+                        </label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="text-red-500 text-sm mt-1">{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="w-full bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">
+                        Сохранить изменения
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Правая колонка - Основной контент -->
+        <div class="md:col-span-3">
+            <!-- Статистика -->
+            <div class="grid grid-cols-4 gap-4 mb-6">
+                <!-- Статистика -->
+                <div class="bg-white rounded-lg shadow p-4 text-center">
+                    <div class="text-3xl text-green-500 mb-2">{{ stats.total_reports }}</div>
+                    <div class="text-gray-600">Всего сообщений</div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-4 text-center">
+                    <div class="text-3xl text-green-500 mb-2">{{ stats.completed_reports }}</div>
+                    <div class="text-gray-600">Выполнено</div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-4 text-center">
+                    <div class="text-3xl text-green-500 mb-2">{{ stats.total_points }}</div>
+                    <div class="text-gray-600">Баллов заработано</div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-4 text-center">
+                    <div class="text-3xl text-green-500 mb-2">{{ stats.reports_this_month }}</div>
+                    <div class="text-gray-600">Сообщений за месяц</div>
+                </div>
+            </div>
+
+            <!-- Достижения -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <h3 class="text-xl font-semibold mb-4">Ваши достижения</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {% for achievement in achievements %}
+                        <div class="p-4 rounded-lg {% if achievement in user_achievements %}bg-green-50 border-green-200{% else %}bg-gray-50 border-gray-200{% endif %} border">
+                            <div class="text-3xl mb-2">{{ achievement.icon }}</div>
+                            <div class="font-medium">{{ achievement.name }}</div>
+                            <div class="text-sm text-gray-600">{{ achievement.description }}</div>
+                            <div class="text-gray-500 text-sm mt-2">
+                                {{ user.points }}/{{ achievement.points_required }} баллов
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- График активности -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <h3 class="text-xl font-semibold mb-4">Ваша активность</h3>
+                <canvas id="activityChart"></canvas>
+            </div>
+
+            <!-- Сообщения о мусоре -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-semibold mb-4">Ваши сообщения о мусоре</h3>
+                {% if user_reports %}
+                    <div class="space-y-4">
+                        {% for report in user_reports %}
+                        <div class="border rounded-lg p-4 {% if report.status == 'completed' %}bg-green-50{% elif report.status == 'rejected' %}bg-red-50{% endif %}">
+                            <div class="flex items-start">
+                                {% if report.photo %}
+                                    <img src="{{ report.photo.url }}" alt="Фото мусора" class="w-24 h-24 rounded-lg object-cover mr-4">
+                                {% endif %}
+                                <div class="flex-1">
+                                    <p class="font-medium">{{ report.address }}</p>
+                                    <p class="text-sm text-gray-600">{{ report.description }}</p>
+                                    <div class="mt-2 flex items-center justify-between">
+                                        <span class="text-sm text-gray-500">{{ report.created_at|date:"d.m.Y H:i" }}</span>
+                                        <span class="px-3 py-1 rounded-full text-sm 
+                                            {% if report.status == 'new' %}bg-blue-100 text-blue-800
+                                            {% elif report.status == 'in_progress' %}bg-yellow-100 text-yellow-800
+                                            {% elif report.status == 'completed' %}bg-green-100 text-green-800
+                                            {% else %}bg-red-100 text-red-800{% endif %}">
+                                            {{ report.get_status_display }}
+                                        </span>
+                                    </div>
+                                    {% if report.points_awarded %}
+                                        <p class="text-sm text-green-600 mt-2">+{{ report.POINTS_FOR_COMPLETION }} баллов начислено</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-gray-600 text-center py-8">У вас пока нет сообщений о мусоре</p>
+                {% endif %}
+            </div>
+        </div>
     </div>
 </div>
+
+<!-- Добавьте этот скрипт в конец блока content -->
+{% block extra_js %}
+{{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('activityChart').getContext('2d');
+const activityChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн'],
+        datasets: [{
+            label: 'Сообщения о мусоре',
+            data: [12, 19, 3, 5, 2, 3],
+            borderColor: 'rgb(34, 197, 94)',
+            tension: 0.1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+{% endblock %}
 {% endblock %} 

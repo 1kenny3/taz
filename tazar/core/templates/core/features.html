@@ -1,13 +1,79 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block title %}Функции - TAZAR{% endblock %}
 
 {% block content %}
-<h2 class="text-3xl font-bold mb-4">Функции</h2>
-<p>Изучите функции TAZAR.</p>
-<ul class="list-disc pl-5 text-gray-700">
-    <li>Интерактивные карты</li>
-    <li>Запросы на сбор отходов в реальном времени</li>
-    <li>Удобные руководства</li>
-</ul>
+<div class="container mx-auto mt-10 px-4">
+    <h1 class="text-4xl font-bold text-center text-green-600 mb-12">Функции TAZAR</h1>
+    
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Карта пунктов приема -->
+        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300">
+            <div class="text-green-500 text-4xl mb-4">🗺️</div>
+            <h3 class="text-xl font-bold mb-3">Интерактивная карта</h3>
+            <p class="text-gray-600">Находите ближайшие пункты приема отходов на интерактивной карте города.</p>
+        </div>
+
+        <!-- Сообщения о мусоре - Новая функция -->
+        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300">
+            <div class="text-green-500 text-4xl mb-4">📸</div>
+            <h3 class="text-xl font-bold mb-3">Сообщения о мусоре</h3>
+            <p class="text-gray-600">Отправляйте сообщения о местах скопления мусора, прикрепляйте фото и получайте баллы за вклад в чистоту города.</p>
+        </div>
+
+        <!-- Система баллов - Новая функция -->
+        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300">
+            <div class="text-green-500 text-4xl mb-4">🎯</div>
+            <h3 class="text-xl font-bold mb-3">Система баллов</h3>
+            <p class="text-gray-600">Зарабатывайте баллы за активное участие в очистке города. 10 баллов за каждое подтвержденное сообщение.</p>
+        </div>
+
+        <!-- Личный кабинет -->
+        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300">
+            <div class="text-green-500 text-4xl mb-4">👤</div>
+            <h3 class="text-xl font-bold mb-3">Личный кабинет</h3>
+            <p class="text-gray-600">Отслеживайте свои баллы, историю сообщений и статус их обработки.</p>
+        </div>
+
+        <!-- Типы отходов -->
+        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300">
+            <div class="text-green-500 text-4xl mb-4">♻️</div>
+            <h3 class="text-xl font-bold mb-3">Типы отходов</h3>
+            <p class="text-gray-600">Информация о различных типах принимаемых отходов: пластик, бумага, стекло, металл.</p>
+        </div>
+
+        <!-- Статистика -->
+        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300">
+            <div class="text-green-500 text-4xl mb-4">📊</div>
+            <h3 class="text-xl font-bold mb-3">Статистика</h3>
+            <p class="text-gray-600">Следите за статистикой переработки и вашим вкладом в экологию города.</p>
+        </div>
+    </div>
+
+    <!-- Как это работает -->
+    <div class="mt-16">
+        <h2 class="text-3xl font-bold text-center text-green-600 mb-8">Как это работает</h2>
+        <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-8">
+            <ol class="list-decimal list-inside space-y-4 text-gray-700">
+                <li class="mb-4">
+                    <span class="font-bold">Найдите мусор:</span> 
+                    Если вы обнаружили место скопления мусора, сфотографируйте его.
+                </li>
+                <li class="mb-4">
+                    <span class="font-bold">Отправьте сообщение:</span> 
+                    Загрузите фото, укажите местоположение на карте и добавьте описание.
+                </li>
+                <li class="mb-4">
+                    <span class="font-bold">Получите баллы:</span> 
+                    После проверки и подтверждения вашего сообщения, вам начислят 10 баллов.
+                </li>
+                <li class="mb-4">
+                    <span class="font-bold">Следите за статусом:</span> 
+                    В личном кабинете вы можете отслеживать статус ваших сообщений.
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,17 +1,10 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (
-    UserViewSet, 
-    CollectionPointViewSet,
-    home, 
-    features, 
-    register, 
-    login_view, 
-    logout_view, 
-    map_view, 
-    dashboard,
-    add_collection_point, 
-    contact_view
+    UserViewSet, CollectionPointViewSet, TrashReportViewSet,
+    AchievementViewSet, UserAchievementViewSet,
+    home, features, register, login_view, logout_view, map_view,
+    dashboard, add_collection_point, contact_view, report_trash
 )
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -26,6 +19,9 @@ from rest_framework_simplejwt.views import (
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'collection-points', CollectionPointViewSet)
+router.register(r'trash-reports', TrashReportViewSet)
+router.register(r'achievements', AchievementViewSet)
+router.register(r'user-achievements', UserAchievementViewSet)
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -54,5 +50,7 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('contact/', contact_view, name='contact'),
-    path('', include(router.urls)),
+    path('report-trash/', report_trash, name='report_trash'),
+    path('api/', include(router.urls)),
+    path('api/auth/', include('rest_framework.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 

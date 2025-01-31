@@ -1,0 +1,77 @@
+{% extends 'core/base.html' %}
+{% load form_tags %}
+
+{% block title %}Добавить пункт приема - TAZAR{% endblock %}
+
+{% block content %}
+<div class="container mx-auto mt-10 max-w-2xl">
+    <h2 class="text-4xl font-extrabold mb-6 text-center text-green-600 shadow-md">Добавить пункт приема</h2>
+    <form method="POST" enctype="multipart/form-data" class="bg-white p-8 rounded-2xl shadow-lg">
+        {% csrf_token %}
+        
+        <div class="grid grid-cols-1 gap-6">
+            <div>
+                {{ form.name.label_tag }}<br>
+                {{ form.name|add_class:"form-control" }}
+                {% if form.name.errors %}
+                    <div class="text-red-500 text-sm mt-1">
+                        {% for error in form.name.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div>
+                {{ form.address.label_tag }}<br>
+                {{ form.address|add_class:"form-control" }}
+                {% if form.address.errors %}
+                    <div class="text-red-500 text-sm mt-1">
+                        {% for error in form.address.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div>
+                {{ form.waste_types.label_tag }}<br>
+                {{ form.waste_types|add_class:"form-control" }}
+                {% if form.waste_types.errors %}
+                    <div class="text-red-500 text-sm mt-1">
+                        {% for error in form.waste_types.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div>
+                {{ form.working_hours.label_tag }}<br>
+                {{ form.working_hours|add_class:"form-control" }}
+                {% if form.working_hours.errors %}
+                    <div class="text-red-500 text-sm mt-1">
+                        {% for error in form.working_hours.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div>
+                {{ form.photo.label_tag }}<br>
+                {{ form.photo|add_class:"form-control" }}
+                {% if form.photo.errors %}
+                    <div class="text-red-500 text-sm mt-1">
+                        {% for error in form.photo.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300 w-full mt-6">Добавить пункт</button>
+    </form>
+</div>
+{% endblock %} 

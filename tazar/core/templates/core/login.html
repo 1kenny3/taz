@@ -1,35 +1,64 @@
 {% extends 'core/base.html' %}
+{% load static %}
 {% load form_tags %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
 
 {% block title %}Вход - TAZAR{% endblock %}
 
 {% block content %}
 <div class="container mx-auto mt-10 max-w-md">
     <h2 class="text-4xl font-extrabold mb-6 text-center text-green-600 shadow-md">Вход в TAZAR</h2>
+    
+    {% if messages %}
+    <div class="mb-4">
+        {% for message in messages %}
+        <div class="p-4 {% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %} rounded-lg">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
     <form method="POST" class="bg-white p-8 rounded-2xl shadow-lg">
         {% csrf_token %}
-        {{ form.username.label_tag }}<br>
-        {{ form.username|add_class:"border border-gray-300 rounded-lg p-3 w-full" }}<br>
-        {% if form.username.errors %}
-            <div class="text-red-500 text-sm mt-1">
-                {% for error in form.username.errors %}
-                    <p>{{ error }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
         
-        {{ form.password.label_tag }}<br>
-        {{ form.password|add_class:"border border-gray-300 rounded-lg p-3 w-full" }}<br>
-        {% if form.password.errors %}
-            <div class="text-red-500 text-sm mt-1">
-                {% for error in form.password.errors %}
-                    <p>{{ error }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
+        <div class="mb-4">
+            <label for="{{ form.username.id_for_label }}" class="block text-gray-700">Имя пользователя</label>
+            {{ form.username|add_class:"form-control" }}
+            {% if form.username.errors %}
+                <div class="text-red-500 text-sm mt-1">
+                    {% for error in form.username.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
         
-        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300 w-full">Войти</button>
+        <div class="mb-6">
+            <label for="{{ form.password.id_for_label }}" class="block text-gray-700">Пароль</label>
+            {{ form.password|add_class:"form-control" }}
+            {% if form.password.errors %}
+                <div class="text-red-500 text-sm mt-1">
+                    {% for error in form.password.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300 w-full">
+            Войти
+        </button>
     </form>
-    <p class="mt-4 text-center text-gray-600">Нет аккаунта? <a href="{% url 'register' %}" class="text-green-500 hover:underline font-semibold">Зарегистрируйтесь</a></p>
+    
+    <p class="mt-4 text-center text-gray-600">
+        Нет аккаунта? 
+        <a href="{% url 'register' %}" class="text-green-500 hover:underline font-semibold">
+            Зарегистрируйтесь
+        </a>
+    </p>
 </div>
 {% endblock %} 
