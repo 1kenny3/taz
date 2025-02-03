@@ -1,0 +1,133 @@
+.field-photo_display img {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.field-photo_display img:hover {
+    transform: scale(1.05);
+}
+
+.field-map_preview iframe {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.field-get_comments {
+    margin-top: 20px;
+}
+
+/* Общие стили */
+#header {
+    background: #2c3e50;
+    color: white;
+}
+
+.module h2, .module caption {
+    background: #34495e;
+}
+
+/* Карточка отчета */
+.photo-preview img {
+    transition: transform 0.3s ease;
+}
+
+.photo-preview img:hover {
+    transform: scale(1.1);
+}
+
+/* Карточка пользователя */
+.user-details-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    text-align: center;
+    max-width: 300px;
+}
+
+.user-details-card img {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.user-details-card h3 {
+    color: #2c3e50;
+    margin: 10px 0;
+}
+
+.user-details-card p {
+    color: #666;
+    margin: 5px 0;
+}
+
+/* Статус */
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Таблица списка */
+#result_list {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#result_list thead th {
+    background: #34495e;
+    color: white;
+}
+
+#result_list tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Кнопки действий */
+.button, input[type=submit], input[type=button], .submit-row input {
+    background: #3498db;
+    color: white;
+    border-radius: 4px;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.button:hover, input[type=submit]:hover, input[type=button]:hover {
+    background: #2980b9;
+}
+
+/* Фильтры */
+#changelist-filter h2 {
+    background: #34495e;
+    border-radius: 4px 4px 0 0;
+}
+
+#changelist-filter li.selected {
+    border-left: 3px solid #3498db;
+}
+
+/* Формы */
+.form-row {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.form-row img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* Адаптивность */
+@media (max-width: 767px) {
+    .user-details-card {
+        max-width: 100%;
+    }
+    
+    #result_list {
+        font-size: 14px;
+    }
+} 
