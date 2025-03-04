@@ -6,6 +6,9 @@ from .models import (
     TeamCompetition, TeamCompetitionResult, Notification, CleanupEvent,
     Achievement, UserAchievement
 )
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class UserRankSerializer(serializers.ModelSerializer):
     """
@@ -173,4 +176,17 @@ class UserAchievementSerializer(serializers.ModelSerializer):
         swagger_schema_fields = {
             "title": "Достижение пользователя",
             "description": "Связь между пользователем и полученным достижением"
-        } 
+        }
+
+class UserRegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']
+
+    def create(self, validated_data):
+        user = User(**validated_data)
+        user.set_password(validated_data['password'])  # Хранить пароль в зашифрованном виде
+        user.save()
+        return user 

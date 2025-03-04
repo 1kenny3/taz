@@ -2,14 +2,14 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from .models import User, CollectionPoint, TrashReport, Achievement, UserAchievement, UserRank, Team, Challenge, UserChallenge, EcoTip, Comment, DailyTask, UserDailyTask, TeamCompetition, TeamCompetitionResult, Notification, CleanupEvent
 from .forms import UserRegisterForm, CollectionPointForm, LoginForm, TrashReportForm, UserProfileForm
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, generics
 from .serializers import (
     UserSerializer, CollectionPointSerializer, TrashReportSerializer,
     UserRankSerializer, TeamSerializer, ChallengeSerializer,
     UserChallengeSerializer, EcoTipSerializer, CommentSerializer,
     DailyTaskSerializer, UserDailyTaskSerializer, TeamCompetitionSerializer,
     TeamCompetitionResultSerializer, NotificationSerializer, CleanupEventSerializer,
-    AchievementSerializer, UserAchievementSerializer
+    AchievementSerializer, UserAchievementSerializer, UserRegisterSerializer
 )
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -127,6 +127,10 @@ class UserAchievementViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+class UserRegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserRegisterSerializer
 
 def home(request):
     return render(request, 'core/home.html')

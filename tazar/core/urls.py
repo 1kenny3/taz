@@ -4,7 +4,7 @@ from .views import (
     UserViewSet, CollectionPointViewSet, TrashReportViewSet,
     AchievementViewSet, UserAchievementViewSet,
     home, features, register, login_view, logout_view, map_view,
-    dashboard, add_collection_point, contact_view, report_trash
+    dashboard, add_collection_point, contact_view, report_trash, UserRegisterView
 )
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -53,4 +53,5 @@ urlpatterns = [
     path('report-trash/', report_trash, name='report_trash'),
     path('api/', include(router.urls)),
     path('api/auth/', include('rest_framework.urls')),
+    path('api/register/', UserRegisterView.as_view(), name='user_register'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
