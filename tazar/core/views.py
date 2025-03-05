@@ -131,6 +131,7 @@ class UserAchievementViewSet(viewsets.ModelViewSet):
 class UserRegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserRegisterSerializer
+    permission_classes = [permissions.AllowAny]
 
 def home(request):
     return render(request, 'core/home.html')
