@@ -1,0 +1,124 @@
+<resources>
+    <string name="app_name">Tazar</string>
+    
+    <!-- Общее -->
+    <string name="loading">Загрузка...</string>
+    <string name="retry">Повторить</string>
+    <string name="cancel">Отмена</string>
+    <string name="ok">ОК</string>
+    <string name="save">Сохранить</string>
+    <string name="error_occurred">Произошла ошибка</string>
+    <string name="network_error">Ошибка сети. Проверьте подключение к интернету.</string>
+    <string name="permission_denied">Доступ запрещен. Невозможно продолжить без разрешения.</string>
+    <string name="reset">Сбросить</string>
+    
+    <!-- Аутентификация -->
+    <string name="login">Вход</string>
+    <string name="register">Регистрация</string>
+    <string name="username">Имя пользователя</string>
+    <string name="email">Email</string>
+    <string name="password">Пароль</string>
+    <string name="confirm_password">Подтвердите пароль</string>
+    <string name="forgot_password">Забыли пароль?</string>
+    <string name="no_account">Нет аккаунта? Зарегистрируйтесь</string>
+    <string name="have_account">Уже есть аккаунт? Войдите</string>
+    <string name="login_failed">Ошибка входа. Проверьте логин и пароль.</string>
+    <string name="register_success">Регистрация успешна!</string>
+    <string name="logout">Выйти</string>
+    
+    <!-- Главное меню -->
+    <string name="home">Главная</string>
+    <string name="map">Карта</string>
+    <string name="report">Сообщить</string>
+    <string name="profile">Профиль</string>
+    <string name="settings">Настройки</string>
+    
+    <!-- Карта -->
+    <string name="map_title">Карта пунктов сбора</string>
+    <string name="search_hint">Поиск по адресу</string>
+    <string name="waste_type">Тип отходов</string>
+    <string name="collection_points">Пункты сбора</string>
+    <string name="trash_reports">Сообщения о мусоре</string>
+    <string name="add_collection_point">Добавить пункт сбора</string>
+    <string name="address">Адрес</string>
+    <string name="city">Город</string>
+    <string name="plastic">Пластик</string>
+    <string name="paper">Бумага</string>
+    <string name="metal">Металл</string>
+    <string name="glass">Стекло</string>
+    
+    <!-- Отчет о мусоре -->
+    <string name="report_trash">Сообщить о мусоре</string>
+    <string name="description">Описание</string>
+    <string name="take_photo">Сделать фото</string>
+    <string name="choose_location">Выбрать местоположение</string>
+    <string name="submit_report">Отправить сообщение</string>
+    <string name="report_success">Сообщение успешно отправлено!</string>
+    <string name="report_error">Ошибка при отправке сообщения</string>
+    <string name="report_status">Статус сообщения</string>
+    <string name="status_new">Новое</string>
+    <string name="status_in_progress">В обработке</string>
+    <string name="status_completed">Убрано</string>
+    <string name="status_rejected">Отклонено</string>
+    
+    <!-- Профиль -->
+    <string name="edit_profile">Редактировать профиль</string>
+    <string name="points">Баллы</string>
+    <string name="rank">Ранг</string>
+    <string name="achievements">Достижения</string>
+    <string name="bio">О себе</string>
+    <string name="update_photo">Обновить фото</string>
+    <string name="profile_updated">Профиль обновлен</string>
+    
+    <!-- Достижения -->
+    <string name="achievements_title">Мои достижения</string>
+    <string name="points_required">Требуется баллов: %d</string>
+    <string name="achievement_earned">Получено достижение!</string>
+    <string name="achievement_type_reports">За отчеты</string>
+    <string name="achievement_type_points">За баллы</string>
+    <string name="achievement_type_activity">За активность</string>
+    
+    <!-- Эко-советы -->
+    <string name="eco_tips">Эко-советы</string>
+    <string name="category_waste">Отходы</string>
+    <string name="category_energy">Энергия</string>
+    <string name="category_water">Вода</string>
+    <string name="category_transport">Транспорт</string>
+    <string name="difficulty_easy">Легко</string>
+    <string name="difficulty_medium">Средне</string>
+    <string name="difficulty_hard">Сложно</string>
+    
+    <!-- События и мероприятия -->
+    <string name="events">События</string>
+    <string name="cleanup_events">Мероприятия по уборке</string>
+    <string name="event_details">Детали мероприятия</string>
+    <string name="event_date">Дата и время</string>
+    <string name="event_location">Место проведения</string>
+    <string name="event_organizer">Организатор</string>
+    <string name="max_participants">Максимум участников</string>
+    <string name="participants">Участники</string>
+    <string name="join_event">Присоединиться</string>
+    <string name="leave_event">Покинуть</string>
+    
+    <!-- Настройки -->
+    <string name="notification_settings">Настройки уведомлений</string>
+    <string name="language">Язык</string>
+    <string name="about_app">О приложении</string>
+    <string name="privacy_policy">Политика конфиденциальности</string>
+    <string name="terms_of_service">Условия использования</string>
+    <string name="version">Версия</string>
+    
+    <!-- Настройки API -->
+    <string name="api_settings">Настройки API</string>
+    <string name="api_url">URL API-сервера</string>
+    <string name="current_api_url">Текущий URL: %s</string>
+    <string name="api_url_saved">URL API-сервера сохранен</string>
+    <string name="api_url_reset">URL API-сервера сброшен к значению по умолчанию</string>
+    <string name="api_url_empty">URL API-сервера не может быть пустым</string>
+    <string name="api_url_help">Для эмулятора используйте: http://10.0.2.2:8000/\nДля реального устройства: http://[IP вашего компьютера]:8000/</string>
+    <string name="enable_notifications">Включить уведомления</string>
+    <string name="enable_report_notifications">Уведомления о статусе отчетов</string>
+    <string name="enable_achievement_notifications">Уведомления о достижениях</string>
+    <string name="app_description">Tazar Mobile - мобильное приложение для экологического проекта Tazar, позволяющее сообщать о местах скопления мусора, находить точки сбора различных видов отходов, получать достижения и многое другое.</string>
+    <string name="version_info">Версия: 1.0.0</string>
+</resources> 
