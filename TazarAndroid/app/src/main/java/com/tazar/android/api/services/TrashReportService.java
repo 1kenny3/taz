@@ -63,7 +63,7 @@ public interface TrashReportService {
      * @return Созданный отчет
      */
     @Multipart
-    @POST("api/trash-reports/")
+    @POST("api/report-trash/")
     Call<TrashReport> createTrashReport(
             @Part("address") RequestBody address,
             @Part("description") RequestBody description,

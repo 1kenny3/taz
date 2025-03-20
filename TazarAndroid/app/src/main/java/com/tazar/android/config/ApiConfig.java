@@ -1,58 +1,25 @@
 package com.tazar.android.config;
 
+import com.tazar.android.api.ApiClient;
+
 /**
- * Конфигурация API
- * 
- * Содержит константы для работы с API-сервером
+ * Класс с конфигурацией для работы с API
  */
 public class ApiConfig {
-    
-    /**
-     * Базовый URL API сервера
-     * 
-     * Для локальной разработки используйте:
-     * - http://10.0.2.2:8000/ для эмулятора Android (соответствует localhost компьютера)
-     * - http://ваш_локальный_ip:8000/ для физического устройства в той же сети
-     */
+    // Базовый URL для API
+    // Для эмулятора Android использую адрес 10.0.2.2 (соответствует localhost на компьютере разработчика)
     public static final String BASE_URL = "http://10.0.2.2:8000/";
-    
+    public static final int CONNECTION_TIMEOUT = 30; // Таймаут подключения в секундах
+    public static final int READ_TIMEOUT = 30; // Таймаут чтения в секундах
+    public static final int WRITE_TIMEOUT = 30; // Таймаут записи в секундах
+
     /**
-     * URL для авторизации и получения токена
+     * Получение сервиса для работы с API
+     * @param serviceClass Класс сервиса
+     * @param <T> Тип сервиса
+     * @return Сервис
      */
-    public static final String AUTH_TOKEN_URL = "api/token/";
-    
-    /**
-     * URL для обновления токена
-     */
-    public static final String REFRESH_TOKEN_URL = "api/token/refresh/";
-    
-    /**
-     * URL для регистрации
-     */
-    public static final String REGISTER_URL = "api/register/";
-    
-    /**
-     * URL API
-     */
-    public static final String API_URL = "api/";
-    
-    /**
-     * Базовый URL для медиа-файлов
-     */
-    public static final String MEDIA_URL = BASE_URL + "media/";
-    
-    /**
-     * Тайм-аут соединения (в секундах)
-     */
-    public static final int CONNECTION_TIMEOUT = 30;
-    
-    /**
-     * Тайм-аут чтения (в секундах)
-     */
-    public static final int READ_TIMEOUT = 30;
-    
-    /**
-     * Тайм-аут записи (в секундах)
-     */
-    public static final int WRITE_TIMEOUT = 30;
+    public static <T> T getService(Class<T> serviceClass) {
+        return ApiClient.getService(serviceClass);
+    }
 } 

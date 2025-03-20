@@ -50,6 +50,9 @@ public class TrashReport {
     @SerializedName("comments")
     private List<Comment> comments;
     
+    @SerializedName("image_url")
+    private String imageUrl;
+    
     // Геттеры и сеттеры
     public int getId() {
         return id;
@@ -153,6 +156,14 @@ public class TrashReport {
     
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+    
+    public String getImageUrl() {
+        return imageUrl;
+    }
+    
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
     
     // Получить цвет статуса

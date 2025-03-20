@@ -21,6 +21,7 @@ import com.tazar.android.api.ApiClient;
 import com.tazar.android.api.services.AuthService;
 import com.tazar.android.models.auth.LoginRequest;
 import com.tazar.android.models.auth.TokenResponse;
+import com.tazar.android.ui.MainActivity;
 import com.tazar.android.utils.PreferenceManager;
 
 import retrofit2.Call;
@@ -41,12 +42,19 @@ public class LoginActivity extends AppCompatActivity {
     private TextView registerLink;
     private TextView forgotPasswordLink;
     private View progressOverlay;
+    private PreferenceManager preferenceManager;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
         try {
+            // Инициализация PreferenceManager
+            preferenceManager = TazarApplication.getPreferenceManager();
+            if (preferenceManager == null) {
+                throw new IllegalStateException("PreferenceManager не инициализирован");
+            }
+            
             // Устанавливаем макет
             setContentView(R.layout.activity_login);
             
@@ -187,6 +195,11 @@ public class LoginActivity extends AppCompatActivity {
         LoginRequest loginRequest = new LoginRequest(username, password);
         
         try {
+            // Проверяем инициализацию ApiClient
+            if (!ApiClient.isInitialized()) {
+                ApiClient.init(getApplicationContext());
+            }
+            
             // Получаем сервис авторизации
             AuthService authService = ApiClient.getService(AuthService.class);
             
@@ -203,7 +216,6 @@ public class LoginActivity extends AppCompatActivity {
                         TokenResponse tokenResponse = response.body();
                         
                         // Сохраняем токены
-                        PreferenceManager preferenceManager = TazarApplication.getPreferenceManager();
                         preferenceManager.saveTokens(
                                 tokenResponse.getAccessToken(),
                                 tokenResponse.getRefreshToken()
@@ -212,11 +224,18 @@ public class LoginActivity extends AppCompatActivity {
                         // Показываем сообщение об успешном входе
                         Toast.makeText(LoginActivity.this, "Вход выполнен успешно", Toast.LENGTH_SHORT).show();
                         
-                        // TODO: Переходим на главный экран
-                        // navigateToMainActivity();
+                        // Переходим на главный экран
+                        navigateToMainActivity();
                     } else {
-                        // Показываем сообщение об ошибке
-                        Toast.makeText(LoginActivity.this, "Ошибка входа. Проверьте логин и пароль.", Toast.LENGTH_SHORT).show();
+                        String errorMessage = "Ошибка входа";
+                        try {
+                            if (response.errorBody() != null) {
+                                errorMessage = response.errorBody().string();
+                            }
+                        } catch (Exception e) {
+                            Log.e(TAG, "Ошибка при чтении тела ошибки: ", e);
+                        }
+                        Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                     }
                 }
                 
@@ -225,8 +244,12 @@ public class LoginActivity extends AppCompatActivity {
                     // Скрываем индикатор загрузки
                     showProgress(false);
                     
-                    // Показываем сообщение об ошибке
-                    Toast.makeText(LoginActivity.this, "Ошибка сети: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    String errorMessage = "Ошибка сети";
+                    if (t != null) {
+                        errorMessage = t.getMessage();
+                        Log.e(TAG, "Ошибка сети: ", t);
+                    }
+                    Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                 }
             });
         } catch (Exception e) {
@@ -236,6 +259,20 @@ public class LoginActivity extends AppCompatActivity {
             // Логируем ошибку и показываем сообщение
             Log.e(TAG, "Ошибка при выполнении запроса: ", e);
             Toast.makeText(this, "Ошибка: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+    
+    /**
+     * Переход на главный экран
+     */
+    private void navigateToMainActivity() {
+        try {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        } catch (Exception e) {
+            Log.e(TAG, "Ошибка при переходе на главный экран: ", e);
+            Toast.makeText(this, "Ошибка при переходе на главный экран", Toast.LENGTH_SHORT).show();
         }
     }
     

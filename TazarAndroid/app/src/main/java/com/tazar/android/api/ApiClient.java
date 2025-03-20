@@ -17,40 +17,63 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Клиент для работы с API
  */
 public class ApiClient {
-    private static Retrofit retrofit;
+    // Базовый URL для API
+    // Для эмулятора Android использую адрес 10.0.2.2 (соответствует localhost на компьютере разработчика)
+    private static final String BASE_URL = "http://10.0.2.2:8000/";
+    private static Retrofit retrofit = null;
     private static OkHttpClient okHttpClient;
+    private static boolean isInitialized = false;
+    
+    /**
+     * Проверка инициализации ApiClient
+     * @return true, если ApiClient инициализирован
+     */
+    public static boolean isInitialized() {
+        return isInitialized && retrofit != null && okHttpClient != null;
+    }
     
     /**
      * Инициализация API клиента
      * @param context Контекст приложения
      */
     public static void init(Context context) {
-        // Создаем логирующий интерцептор для отладки
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        if (isInitialized()) {
+            return;
+        }
         
-        // Создаем интерцептор для добавления токена в заголовки
-        TokenInterceptor tokenInterceptor = new TokenInterceptor(context);
-        
-        // Создаем аутентификатор для обновления токена при 401 ошибке
-        TokenAuthenticator tokenAuthenticator = new TokenAuthenticator(context);
-        
-        // Настраиваем HTTP клиент
-        okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(ApiConfig.CONNECTION_TIMEOUT, TimeUnit.SECONDS)
-                .readTimeout(ApiConfig.READ_TIMEOUT, TimeUnit.SECONDS)
-                .writeTimeout(ApiConfig.WRITE_TIMEOUT, TimeUnit.SECONDS)
-                .addInterceptor(tokenInterceptor)
-                .addInterceptor(loggingInterceptor)
-                .authenticator(tokenAuthenticator)
-                .build();
-        
-        // Создаем Retrofit клиент
-        retrofit = new Retrofit.Builder()
-                .baseUrl(ApiConfig.BASE_URL)
-                .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        try {
+            // Создаем логирующий интерцептор для отладки
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            
+            // Создаем интерцептор для добавления токена в заголовки
+            TokenInterceptor tokenInterceptor = new TokenInterceptor(context);
+            
+            // Создаем аутентификатор для обновления токена при 401 ошибке
+            TokenAuthenticator tokenAuthenticator = new TokenAuthenticator(context);
+            
+            // Настраиваем HTTP клиент
+            okHttpClient = new OkHttpClient.Builder()
+                    .connectTimeout(ApiConfig.CONNECTION_TIMEOUT, TimeUnit.SECONDS)
+                    .readTimeout(ApiConfig.READ_TIMEOUT, TimeUnit.SECONDS)
+                    .writeTimeout(ApiConfig.WRITE_TIMEOUT, TimeUnit.SECONDS)
+                    .addInterceptor(tokenInterceptor)
+                    .addInterceptor(loggingInterceptor)
+                    .authenticator(tokenAuthenticator)
+                    .build();
+            
+            // Создаем Retrofit клиент
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .client(okHttpClient)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            
+            isInitialized = true;
+        } catch (Exception e) {
+            isInitialized = false;
+            throw new RuntimeException("Ошибка инициализации ApiClient: " + e.getMessage(), e);
+        }
     }
     
     /**
@@ -75,5 +98,15 @@ public class ApiClient {
             throw new IllegalStateException("ApiClient не инициализирован. Вызовите ApiClient.init(context) перед использованием.");
         }
         return okHttpClient;
+    }
+
+    public static Retrofit getClient() {
+        if (retrofit == null) {
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
+        return retrofit;
     }
 } 

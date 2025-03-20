@@ -18,12 +18,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TazarAndroid"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:enableOnBackInvokedCallback="true">
 
         <!-- API ключ для Google Maps -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCexDbGsUt37YhJ7k_2IuwhVFkE2KDjkLM" />
+            android:value="@string/google_maps_key" />
 
         <!-- Экран загрузки -->
         <activity
@@ -37,9 +38,18 @@
         </activity>
 
         <!-- Основные активности приложения -->
-        <activity android:name=".ui.auth.LoginActivity" />
-        <activity android:name=".ui.auth.RegisterActivity" />
-        <activity android:name=".ui.MainActivity" />
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.TazarAndroid.NoActionBar" />
+        <activity
+            android:name=".ui.auth.LoginActivity"
+            android:exported="false"
+            android:theme="@style/Theme.TazarAndroid.NoActionBar" />
+        <activity
+            android:name=".ui.auth.RegisterActivity"
+            android:exported="false"
+            android:theme="@style/Theme.TazarAndroid.NoActionBar" />
         <activity android:name=".ui.profile.ProfileActivity" />
         <activity android:name=".ui.reports.ReportTrashActivity" />
         <activity android:name=".ui.collection.CollectionPointDetailsActivity" />

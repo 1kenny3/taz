@@ -17,21 +17,33 @@ from django.core import serializers
 import json
 from django.conf import settings
 from django.utils import timezone
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
 from django.db.models import Count
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
+    @action(detail=False, methods=['get'])
+    def me(self, request):
+        serializer = self.get_serializer(request.user)
+        return Response(serializer.data)
 
 class CollectionPointViewSet(viewsets.ModelViewSet):
     queryset = CollectionPoint.objects.all()
     serializer_class = CollectionPointSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    authentication_classes = [JWTAuthentication]
 
 class TrashReportViewSet(viewsets.ModelViewSet):
     queryset = TrashReport.objects.all()
     serializer_class = TrashReportSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    authentication_classes = [JWTAuthentication]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -261,3 +273,12 @@ def report_trash(request):
         'form': form,
         'google_maps_api_key': settings.GOOGLE_MAPS_API_KEY
     })
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def report_trash_api(request):
+    serializer = TrashReportSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(user=request.user)
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)

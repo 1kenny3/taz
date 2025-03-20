@@ -8,6 +8,7 @@ import com.tazar.android.models.User;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 /**
@@ -37,4 +38,11 @@ public interface AuthService {
      */
     @POST("api/token/refresh/")
     Call<TokenResponse> refreshToken(@Body RefreshTokenRequest refreshTokenRequest);
+
+    /**
+     * Получение текущего пользователя
+     * @return Текущий пользователь
+     */
+    @GET("api/users/me/")
+    Call<User> getCurrentUser();
 } 

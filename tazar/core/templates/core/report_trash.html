@@ -5,6 +5,7 @@
 {% block title %}Сообщить о мусоре - TAZAR{% endblock %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/main.css' %}">
 <link rel="stylesheet" href="{% static 'css/forms.css' %}">
 {% endblock %}
 
@@ -53,7 +54,6 @@
     </form>
 </div>
 
-<script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script>
 <script>
     function initMap() {
         const map = new google.maps.Map(document.getElementById('map'), {
@@ -85,5 +85,9 @@
             });
         });
     }
+</script>
+
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap">
 </script>
 {% endblock %} 

@@ -1,5 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Tazar</string>
+    
+    <!-- Google Maps -->
+    <string name="google_maps_key">AIzaSyCexDbGsUt37YhJ7k_2IuwhVFkE2KDjkLM</string>
+    
+    <!-- Навигация -->
+    <string name="nav_home">Главная</string>
+    <string name="nav_map">Карта</string>
+    <string name="nav_reports">Отчеты</string>
+    <string name="nav_profile">Профиль</string>
+    
+    <!-- Авторизация -->
+    <string name="login">Вход</string>
+    <string name="register">Регистрация</string>
+    <string name="logout">Выйти</string>
+    <string name="username">Имя пользователя</string>
+    <string name="email">Email</string>
+    <string name="password">Пароль</string>
+    <string name="confirm_password">Подтвердите пароль</string>
+    <string name="have_account">Уже есть аккаунт?</string>
+    <string name="no_account">Нет аккаунта?</string>
+    <string name="forgot_password">Забыли пароль?</string>
+    <string name="login_button">Войти</string>
+    <string name="register_button">Зарегистрироваться</string>
+    <string name="login_error">Ошибка входа</string>
+    <string name="login_success">Вход выполнен успешно</string>
+    <string name="network_error">Ошибка сети</string>
+    <string name="empty_fields">Пожалуйста, заполните все поля</string>
+    
+    <!-- Разрешения -->
+    <string name="permissions_required">Для полной функциональности приложения необходимы все разрешения</string>
+    
+    <!-- Профиль -->
+    <string name="profile_title">Профиль пользователя</string>
+    
+    <!-- Отчеты -->
+    <string name="add_report">Добавить отчет</string>
+    <string name="report_image_description">Фото отчета</string>
+    
+    <!-- Сообщения -->
+    <string name="welcome_message">Добро пожаловать в Tazar!</string>
+    <string name="features_title">Возможности приложения</string>
+    <string name="features_description">Сообщайте о местах скопления мусора, находите пункты сбора и участвуйте в экологических мероприятиях.</string>
+    <string name="achievements_title">Достижения</string>
+    <string name="achievements_description">Получайте достижения за активное участие в улучшении экологической обстановки.</string>
+    
+    <!-- Ошибки -->
+    <string name="error_network">Ошибка сети</string>
+    <string name="error_loading">Ошибка загрузки</string>
+    <string name="error_empty_fields">Пожалуйста, заполните все поля</string>
+    <string name="error_passwords_not_match">Пароли не совпадают</string>
+    <string name="error_password_too_short">Пароль должен содержать минимум 8 символов</string>
+    <string name="error_ui_init">Ошибка инициализации UI</string>
+    <string name="error_app_start">Ошибка при запуске экрана входа</string>
+    <string name="error_ui_load">Не удалось загрузить интерфейс приложения</string>
+    <string name="error_register_screen">Экран регистрации недоступен</string>
+    <string name="error_forgot_password_screen">Экран восстановления пароля недоступен</string>
+    <string name="error_main_screen">Ошибка при переходе на главный экран</string>
+    <string name="forgot_password_in_development">Функция восстановления пароля в разработке</string>
     
     <!-- Общее -->
     <string name="loading">Загрузка...</string>
@@ -8,30 +67,7 @@
     <string name="ok">ОК</string>
     <string name="save">Сохранить</string>
     <string name="error_occurred">Произошла ошибка</string>
-    <string name="network_error">Ошибка сети. Проверьте подключение к интернету.</string>
-    <string name="permission_denied">Доступ запрещен. Невозможно продолжить без разрешения.</string>
     <string name="reset">Сбросить</string>
-    
-    <!-- Аутентификация -->
-    <string name="login">Вход</string>
-    <string name="register">Регистрация</string>
-    <string name="username">Имя пользователя</string>
-    <string name="email">Email</string>
-    <string name="password">Пароль</string>
-    <string name="confirm_password">Подтвердите пароль</string>
-    <string name="forgot_password">Забыли пароль?</string>
-    <string name="no_account">Нет аккаунта? Зарегистрируйтесь</string>
-    <string name="have_account">Уже есть аккаунт? Войдите</string>
-    <string name="login_failed">Ошибка входа. Проверьте логин и пароль.</string>
-    <string name="register_success">Регистрация успешна!</string>
-    <string name="logout">Выйти</string>
-    
-    <!-- Главное меню -->
-    <string name="home">Главная</string>
-    <string name="map">Карта</string>
-    <string name="report">Сообщить</string>
-    <string name="profile">Профиль</string>
-    <string name="settings">Настройки</string>
     
     <!-- Карта -->
     <string name="map_title">Карта пунктов сбора</string>
@@ -61,17 +97,7 @@
     <string name="status_completed">Убрано</string>
     <string name="status_rejected">Отклонено</string>
     
-    <!-- Профиль -->
-    <string name="edit_profile">Редактировать профиль</string>
-    <string name="points">Баллы</string>
-    <string name="rank">Ранг</string>
-    <string name="achievements">Достижения</string>
-    <string name="bio">О себе</string>
-    <string name="update_photo">Обновить фото</string>
-    <string name="profile_updated">Профиль обновлен</string>
-    
     <!-- Достижения -->
-    <string name="achievements_title">Мои достижения</string>
     <string name="points_required">Требуется баллов: %d</string>
     <string name="achievement_earned">Получено достижение!</string>
     <string name="achievement_type_reports">За отчеты</string>
@@ -121,4 +147,7 @@
     <string name="enable_achievement_notifications">Уведомления о достижениях</string>
     <string name="app_description">Tazar Mobile - мобильное приложение для экологического проекта Tazar, позволяющее сообщать о местах скопления мусора, находить точки сбора различных видов отходов, получать достижения и многое другое.</string>
     <string name="version_info">Версия: 1.0.0</string>
+    <string name="settings">Настройки</string>
+    <string name="rating">Рейтинг: %d</string>
+    <string name="achievements_count">Достижений: %d</string>
 </resources> 

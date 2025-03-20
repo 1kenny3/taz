@@ -12,6 +12,12 @@ public class User {
     @SerializedName("email")
     private String email;
     
+    @SerializedName("rating")
+    private int rating;
+    
+    @SerializedName("achievements_count")
+    private int achievementsCount;
+    
     @SerializedName("points")
     private int points;
     
@@ -49,6 +55,10 @@ public class User {
         this.email = email;
     }
     
+    public int getRating() {
+        return rating;
+    }
+    
     public int getPoints() {
         return points;
     }
@@ -79,5 +89,9 @@ public class User {
     
     public void setCollector(boolean collector) {
         isCollector = collector;
+    }
+
+    public int getAchievementsCount() {
+        return achievementsCount;
     }
 } 
