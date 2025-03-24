@@ -70,14 +70,31 @@ public class TrashReportAdapter extends RecyclerView.Adapter<TrashReportAdapter.
 
         void bind(TrashReport report) {
             descriptionTextView.setText(report.getDescription());
-            locationTextView.setText(String.format("%.6f, %.6f", 
-                report.getLatitude(), report.getLongitude()));
+            
+            // Отображаем адрес, если он есть, иначе координаты
+            if (report.getAddress() != null && !report.getAddress().isEmpty()) {
+                locationTextView.setText(report.getAddress());
+            } else {
+                locationTextView.setText(String.format(Locale.getDefault(), "%.6f, %.6f", 
+                    report.getLatitude(), report.getLongitude()));
+            }
+            
             dateTextView.setText(dateFormat.format(report.getCreatedAt()));
-            statusTextView.setText(report.getStatus());
+            
+            // Устанавливаем текст и цвет статуса
+            statusTextView.setText(report.getStatusText());
+            statusTextView.setBackgroundColor(report.getStatusColor());
 
-            if (report.getImageUrl() != null && !report.getImageUrl().isEmpty()) {
+            // Загружаем изображение с помощью Glide
+            String imageUrl = report.getImageUrl();
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                // Если URL не начинается с http, добавляем базовый URL
+                if (!imageUrl.startsWith("http")) {
+                    imageUrl = "http://10.0.2.2:8000" + imageUrl;
+                }
+                
                 Glide.with(itemView.getContext())
-                        .load(report.getImageUrl())
+                        .load(imageUrl)
                         .placeholder(R.drawable.ic_image_placeholder)
                         .error(R.drawable.ic_image_error)
                         .into(imageView);

@@ -159,7 +159,11 @@ public class TrashReport {
     }
     
     public String getImageUrl() {
-        return imageUrl;
+        // Сначала проверяем imageUrl, затем photoUrl
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            return imageUrl;
+        }
+        return photoUrl;
     }
     
     public void setImageUrl(String imageUrl) {
