@@ -1,5 +1,7 @@
 package com.tazar.android.models;
 
+import android.graphics.Color;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
@@ -27,7 +29,7 @@ public class TrashReport {
     private String description;
     
     @SerializedName("photo")
-    private String photoUrl;
+    private String imageUrl;
     
     @SerializedName("latitude")
     private double latitude;
@@ -49,9 +51,6 @@ public class TrashReport {
     
     @SerializedName("comments")
     private List<Comment> comments;
-    
-    @SerializedName("image_url")
-    private String imageUrl;
     
     // Геттеры и сеттеры
     public int getId() {
@@ -94,12 +93,12 @@ public class TrashReport {
         this.description = description;
     }
     
-    public String getPhotoUrl() {
-        return photoUrl;
+    public String getImageUrl() {
+        return imageUrl;
     }
     
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
     
     public double getLatitude() {
@@ -119,7 +118,7 @@ public class TrashReport {
     }
     
     public String getStatus() {
-        return status;
+        return status != null ? status : "pending";
     }
     
     public void setStatus(String status) {
@@ -146,8 +145,8 @@ public class TrashReport {
         return updatedAt;
     }
     
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = new Date(updatedAt);
     }
     
     public List<Comment> getComments() {
@@ -158,47 +157,29 @@ public class TrashReport {
         this.comments = comments;
     }
     
-    public String getImageUrl() {
-        // Сначала проверяем imageUrl, затем photoUrl
-        if (imageUrl != null && !imageUrl.isEmpty()) {
-            return imageUrl;
-        }
-        return photoUrl;
-    }
-    
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-    
-    // Получить цвет статуса
-    public int getStatusColor() {
-        switch (status) {
-            case STATUS_NEW:
-                return android.graphics.Color.BLUE;
-            case STATUS_IN_PROGRESS:
-                return android.graphics.Color.rgb(255, 152, 0); // Оранжевый
-            case STATUS_COMPLETED:
-                return android.graphics.Color.GREEN;
-            case STATUS_REJECTED:
-                return android.graphics.Color.RED;
-            default:
-                return android.graphics.Color.GRAY;
-        }
-    }
-    
-    // Получить текст статуса на русском
     public String getStatusText() {
+        String status = getStatus();
         switch (status) {
-            case STATUS_NEW:
-                return "Новый";
-            case STATUS_IN_PROGRESS:
-                return "В обработке";
-            case STATUS_COMPLETED:
-                return "Убрано";
-            case STATUS_REJECTED:
-                return "Отклонено";
+            case "completed":
+                return "Выполнено";
+            case "in_progress":
+                return "В процессе";
+            case "pending":
             default:
-                return "Неизвестно";
+                return "Ожидает";
+        }
+    }
+    
+    public int getStatusColor() {
+        String status = getStatus();
+        switch (status) {
+            case "completed":
+                return Color.GREEN;
+            case "in_progress":
+                return Color.BLUE;
+            case "pending":
+            default:
+                return Color.GRAY;
         }
     }
 } 

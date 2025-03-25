@@ -1,6 +1,7 @@
 package com.tazar.android.ui.fragments;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,11 +20,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tazar.android.R;
 import com.tazar.android.TazarApplication;
 import com.tazar.android.config.ApiConfig;
 import com.tazar.android.models.CollectionPoint;
 import com.tazar.android.api.CollectionPointService;
+import com.tazar.android.ui.activities.CreateReportActivity;
 
 import java.util.List;
 
@@ -35,11 +38,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private FloatingActionButton fabAddReport;
 
+    @NonNull
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
+        // Инициализация кнопки добавления отчета
+        fabAddReport = view.findViewById(R.id.fab_add_report);
+        fabAddReport.setOnClickListener(v -> openCreateReportActivity());
+
+        // Получение фрагмента карты и настройка обратного вызова
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         if (mapFragment != null) {
@@ -103,5 +113,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
         }
+    }
+
+    private void openCreateReportActivity() {
+        Intent intent = new Intent(getActivity(), CreateReportActivity.class);
+        startActivity(intent);
     }
 } 

@@ -58,6 +58,9 @@
         <activity android:name=".ui.ecotips.EcoTipsActivity" />
         <activity android:name=".ui.events.CleanupEventsActivity" />
         <activity android:name=".ui.settings.SettingsActivity" />
+        <activity
+            android:name=".ui.activities.CreateReportActivity"
+            android:exported="false" />
 
         <!-- Провайдер для доступа к файлам приложения -->
         <provider

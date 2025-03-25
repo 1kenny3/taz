@@ -17,13 +17,7 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-
-        // Инициализация UI элементов
-        TextView welcomeText = view.findViewById(R.id.welcome_text);
-        welcomeText.setText(R.string.welcome_message);
-
-        return view;
+        return inflater.inflate(R.layout.fragment_home, container, false);
     }
     
     @Override
