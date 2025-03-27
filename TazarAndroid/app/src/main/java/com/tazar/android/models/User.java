@@ -12,6 +12,9 @@ public class User {
     @SerializedName("email")
     private String email;
     
+    @SerializedName("avatar")
+    private String avatarUrl;
+    
     @SerializedName("rating")
     private int rating;
     
@@ -93,5 +96,16 @@ public class User {
 
     public int getAchievementsCount() {
         return achievementsCount;
+    }
+
+    public String getAvatarUrl() {
+        if (avatarUrl == null || avatarUrl.isEmpty()) {
+            return profilePhotoUrl;
+        }
+        return avatarUrl;
+    }
+    
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 } 

@@ -3,7 +3,7 @@ package com.tazar.android.models.auth;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Ответ с токенами авторизации
+ * Модель ответа с токенами авторизации
  */
 public class TokenResponse {
     @SerializedName("access")
@@ -11,6 +11,9 @@ public class TokenResponse {
     
     @SerializedName("refresh")
     private String refreshToken;
+    
+    @SerializedName("user_id")
+    private int userId;
     
     /**
      * Получение токена доступа
@@ -42,5 +45,22 @@ public class TokenResponse {
      */
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+    
+    public int getUserId() {
+        return userId;
+    }
+    
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+    
+    @Override
+    public String toString() {
+        return "TokenResponse{" +
+                "accessToken='" + accessToken + '\'' +
+                ", refreshToken='" + refreshToken + '\'' +
+                ", userId=" + userId +
+                '}';
     }
 } 

@@ -151,4 +151,13 @@
     <string name="rating">Рейтинг: %d</string>
     <string name="achievements_count">Достижений: %d</string>
     <string name="add_trash_report">Добавить сообщение о мусоре</string>
+    
+    <!-- Уведомления -->
+    <string name="points_channel_name">Баллы</string>
+    <string name="points_channel_description">Уведомления о пополнении баллов</string>
+    <string name="points_added_notification_title">Баллы начислены!</string>
+    <string name="points_added_notification_text">Вам начислено %d баллов</string>
+    <string name="avatar_description">Аватар пользователя</string>
+    <string name="username_label">Имя пользователя:</string>
+    <string name="email_label">Email:</string>
 </resources> 

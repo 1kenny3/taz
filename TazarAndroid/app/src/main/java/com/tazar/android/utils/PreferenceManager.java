@@ -132,4 +132,22 @@ public class PreferenceManager {
     public String getApiUrl() {
         return preferences.getString(KEY_API_URL, "http://10.0.2.2:8000/");
     }
+    
+    /**
+     * Сохраняет ID пользователя
+     * @param userId ID пользователя
+     */
+    public void saveUserId(int userId) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("userId", userId);
+        editor.apply();
+    }
+    
+    /**
+     * Получает ID пользователя
+     * @return ID пользователя или -1, если не найден
+     */
+    public int getUserIdFromPreferences() {
+        return preferences.getInt("userId", -1);
+    }
 } 

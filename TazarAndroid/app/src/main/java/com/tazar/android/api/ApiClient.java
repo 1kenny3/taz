@@ -3,6 +3,8 @@ package com.tazar.android.api;
 import android.content.Context;
 
 import com.tazar.android.config.ApiConfig;
+import com.tazar.android.models.Report;
+import com.tazar.android.ui.MainActivity;
 import com.tazar.android.utils.TokenAuthenticator;
 import com.tazar.android.utils.TokenInterceptor;
 
@@ -10,6 +12,9 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -23,6 +28,7 @@ public class ApiClient {
     private static Retrofit retrofit = null;
     private static OkHttpClient okHttpClient;
     private static boolean isInitialized = false;
+    private Context context;
     
     /**
      * Проверка инициализации ApiClient
@@ -131,5 +137,38 @@ public class ApiClient {
                     .build();
         }
         return retrofit;
+    }
+
+    public ApiClient(Context context) {
+        this.context = context;
+    }
+
+    public void submitReport(Context context, Report report, final ApiCallback<Report> callback) {
+        Call<Report> call = getService(ApiService.class).submitReport(report);
+        call.enqueue(new Callback<Report>() {
+            @Override
+            public void onResponse(Call<Report> call, Response<Report> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Report submittedReport = response.body();
+                    
+                    // Если отчет принят, баллы начислены
+                    if (submittedReport.getPoints() > 0) {
+                        // Вызываем из активити метод начисления баллов
+                        if (context instanceof MainActivity) {
+                            ((MainActivity) context).onPointsAdded(submittedReport.getPoints());
+                        }
+                    }
+                    
+                    callback.onSuccess(submittedReport);
+                } else {
+                    callback.onError("Ошибка при отправке отчета");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Report> call, Throwable t) {
+                callback.onError("Ошибка сети: " + t.getMessage());
+            }
+        });
     }
 } 

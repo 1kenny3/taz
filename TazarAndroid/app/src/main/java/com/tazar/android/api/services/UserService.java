@@ -65,4 +65,7 @@ public interface UserService {
      */
     @GET("api/users/{id}/achievements/")
     Call<List<Achievement>> getUserAchievements(@Path("id") int id);
+
+    @GET("api/user-profile/")
+    Call<User> getCurrentUserProfile();
 } 

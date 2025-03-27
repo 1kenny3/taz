@@ -23,6 +23,7 @@ import com.tazar.android.models.auth.LoginRequest;
 import com.tazar.android.models.auth.TokenResponse;
 import com.tazar.android.ui.MainActivity;
 import com.tazar.android.utils.PreferenceManager;
+import com.tazar.android.helpers.PreferencesManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -221,6 +222,10 @@ public class LoginActivity extends AppCompatActivity {
                                 tokenResponse.getRefreshToken()
                         );
                         
+                        // Создаем экземпляр PreferencesManager для сохранения ID пользователя
+                        PreferencesManager preferencesManager = new PreferencesManager(LoginActivity.this);
+                        preferencesManager.saveUserId(tokenResponse.getUserId());
+                        
                         // Показываем сообщение об успешном входе
                         Toast.makeText(LoginActivity.this, "Вход выполнен успешно", Toast.LENGTH_SHORT).show();
                         
@@ -309,6 +314,32 @@ public class LoginActivity extends AppCompatActivity {
     private void showProgress(boolean show) {
         if (progressOverlay != null) {
             progressOverlay.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+    }
+    
+    /**
+     * Извлекает ID пользователя из JWT токена
+     * @param token JWT токен
+     * @return ID пользователя или -1 в случае ошибки
+     */
+    private int extractUserIdFromToken(String token) {
+        try {
+            // JWT токен состоит из трёх частей, разделённых точками
+            String[] parts = token.split("\\.");
+            if (parts.length != 3) {
+                Log.e(TAG, "Неверный формат JWT-токена");
+                return -1;
+            }
+            
+            // Декодируем тело токена (вторую часть)
+            String payload = new String(android.util.Base64.decode(parts[1], android.util.Base64.URL_SAFE), "UTF-8");
+            
+            // Используем JSONObject для парсинга
+            org.json.JSONObject jsonPayload = new org.json.JSONObject(payload);
+            return jsonPayload.getInt("user_id");
+        } catch (Exception e) {
+            Log.e(TAG, "Ошибка при извлечении ID пользователя из токена", e);
+            return -1;
         }
     }
 } 
