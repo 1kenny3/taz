@@ -196,12 +196,31 @@ def map_view(request):
             'waste_types_display': point.get_waste_types_display(),
             'city': point.city
         }
-        print(f"Point {point.address}: waste_types = {point.waste_types}")
         points_list.append(point_data)
+    
+    # Получить все отчеты о мусоре
+    trash_reports = TrashReport.objects.all()
+    trash_points = []
+    
+    print(f"Найдено {trash_reports.count()} отчетов о мусоре") # Отладочный вывод
+    
+    for report in trash_reports:
+        report_data = {
+            'latitude': float(report.latitude),
+            'longitude': float(report.longitude),
+            'address': report.address,
+            'description': report.description,
+            'status': report.status,
+            'id': report.id
+        }
+        trash_points.append(report_data)
+        print(f"Добавлен отчет: {report.address} ({report.latitude}, {report.longitude})") # Отладочный вывод
     
     return render(request, 'core/map.html', {
         'collection_points': json.dumps(points_list),
-        'points_list': collection_points
+        'points_list': collection_points,
+        'trash_reports': json.dumps(trash_points),
+        'google_maps_api_key': settings.GOOGLE_MAPS_API_KEY
     })
 
 @login_required
@@ -265,7 +284,8 @@ def report_trash(request):
             report.user = request.user
             report.save()
             messages.success(request, 'Спасибо! Ваше сообщение отправлено.')
-            return redirect('dashboard')
+            # Изменить на 'map' вместо 'map_view'
+            return redirect('map')
     else:
         form = TrashReportForm()
     

@@ -1,0 +1,17 @@
+{% if new_point %}
+    <script>
+        var newPoint = {{ new_point|safe }};
+        var marker = new google.maps.Marker({
+            position: {lat: newPoint.latitude, lng: newPoint.longitude},
+            map: map,
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 8.5,
+                fillColor: "#000000",
+                fillOpacity: 1,
+                strokeWeight: 0.4
+            },
+            title: newPoint.address
+        });
+    </script>
+{% endif %} 

@@ -1,0 +1,42 @@
+<!-- Примерно где-то в вашем javascript коде карты -->
+<script>
+    // Инициализация карты
+    var map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 55.7558, lng: 37.6173}, // Начальные координаты
+        zoom: 10
+    });
+    
+    // Добавить точки сбора отходов
+    var collectionPoints = {{ collection_points|safe }};
+    collectionPoints.forEach(function(point) {
+        new google.maps.Marker({
+            position: {lat: point.latitude, lng: point.longitude},
+            map: map,
+            title: point.address,
+            icon: { // Зеленый маркер для пунктов сбора
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 8,
+                fillColor: "#4CAF50",
+                fillOpacity: 1,
+                strokeWeight: 0.4
+            }
+        });
+    });
+    
+    // Добавить отчеты о мусоре
+    var trashReports = {{ trash_reports|safe }};
+    trashReports.forEach(function(report) {
+        new google.maps.Marker({
+            position: {lat: report.latitude, lng: report.longitude},
+            map: map,
+            title: report.address,
+            icon: { // Черный маркер для отчетов о мусоре
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 8.5,
+                fillColor: "#000000",
+                fillOpacity: 1,
+                strokeWeight: 0.4
+            }
+        });
+    });
+</script> 
