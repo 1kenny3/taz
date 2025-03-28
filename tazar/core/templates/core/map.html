@@ -11,14 +11,26 @@
     <div id="map" class="w-full h-96 rounded-lg shadow-md mb-6"></div>
     
     <!-- Легенда карты -->
-    <div class="flex items-center mb-4">
-        <div class="flex items-center mr-4">
+    <div class="flex flex-wrap items-center mb-4">
+        <div class="flex items-center mr-4 mb-2">
             <div class="w-4 h-4 rounded-full bg-green-500 mr-2"></div>
             <span>Пункты сбора</span>
         </div>
-        <div class="flex items-center">
+        <div class="flex items-center mr-4 mb-2">
             <div class="w-4 h-4 rounded-full bg-black mr-2"></div>
-            <span>Сообщения о мусоре</span>
+            <span>Новые сообщения о мусоре</span>
+        </div>
+        <div class="flex items-center mr-4 mb-2">
+            <div class="w-4 h-4 rounded-full bg-orange-500 mr-2"></div>
+            <span>Убранный мусор</span>
+        </div>
+        <div class="flex items-center mr-4 mb-2">
+            <div class="w-4 h-4 rounded-full bg-blue-500 mr-2"></div>
+            <span>В процессе уборки</span>
+        </div>
+        <div class="flex items-center mb-2">
+            <div class="w-4 h-4 rounded-full bg-red-500 mr-2"></div>
+            <span>Отклоненные сообщения</span>
         </div>
     </div>
 
@@ -149,15 +161,28 @@
             trashReports.forEach(function(report) {
                 console.log("Добавление маркера мусора:", report);
                 
+                // Выбираем цвет маркера в зависимости от статуса отчета
+                let markerColor = "#000000"; // По умолчанию черный для новых отчетов
+                
+                // Определяем цвет в зависимости от статуса
+                if (report.status === 'completed') {
+                    markerColor = "#F97316"; // Оранжевый для убранного мусора
+                } else if (report.status === 'in_progress') {
+                    markerColor = "#3B82F6"; // Синий для "в процессе"
+                } else if (report.status === 'rejected') {
+                    markerColor = "#EF4444"; // Красный для отклоненных
+                }
+                
                 // Создаем маркер
                 const marker = new google.maps.Marker({
                     position: {lat: report.latitude, lng: report.longitude},
                     map: map,
                     title: report.address,
+                    report_status: report.status, // Сохраняем статус отчета
                     icon: {
                         path: google.maps.SymbolPath.CIRCLE,
                         scale: 8.5,
-                        fillColor: "#000000",
+                        fillColor: markerColor,
                         fillOpacity: 1,
                         strokeWeight: 0.4
                     }
@@ -166,13 +191,19 @@
                 // Добавляем маркер в массив
                 trashMarkers.push(marker);
                 
+                // Определяем текст статуса для информационного окна
+                let statusText = "Новый";
+                if (report.status === 'completed') statusText = "Убрано";
+                if (report.status === 'in_progress') statusText = "В процессе уборки";
+                if (report.status === 'rejected') statusText = "Отклонено";
+                
                 // Добавляем информационное окно
                 const infoWindow = new google.maps.InfoWindow({
                     content: `
                         <div style="padding: 10px;">
                             <h3 style="font-weight: bold; margin-bottom: 5px;">${report.address}</h3>
                             <p>${report.description}</p>
-                            <p>Статус: ${report.status}</p>
+                            <p>Статус: <span style="font-weight: bold;">${statusText}</span></p>
                         </div>
                     `
                 });
@@ -275,6 +306,7 @@
         // Центрируем карту на всех маркерах
         const bounds = new google.maps.LatLngBounds();
         markers.forEach(marker => bounds.extend(marker.getPosition()));
+        trashMarkers.forEach(marker => bounds.extend(marker.getPosition()));
         map.fitBounds(bounds);
     }
 
