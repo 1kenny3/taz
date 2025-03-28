@@ -1,92 +1,117 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block title %}Карта пунктов приема{% endblock %}
+{% block title %}Карта пунктов сбора и мусора{% endblock %}
 
 {% block content %}
 <div class="container mx-auto px-4 py-6">
-    <h1 class="text-2xl font-bold mb-4">Карта пунктов сбора и сообщений о мусоре</h1>
+    <h1 class="text-2xl font-bold mb-4 text-center">Интерактивная экологическая карта</h1>
     
-    <!-- Контейнер для карты -->
-    <div id="map" class="w-full h-96 rounded-lg shadow-md mb-6"></div>
+    <!-- Контейнер для карты - увеличиваем высоту для лучшего просмотра -->
+    <div id="map" class="w-full h-[500px] rounded-lg shadow-md mb-6"></div>
     
-    <!-- Легенда карты -->
-    <div class="flex flex-wrap items-center mb-4">
-        <div class="flex items-center mr-4 mb-2">
-            <div class="w-4 h-4 rounded-full bg-green-500 mr-2"></div>
-            <span>Пункты сбора</span>
-        </div>
-        <div class="flex items-center mr-4 mb-2">
-            <div class="w-4 h-4 rounded-full bg-black mr-2"></div>
-            <span>Новые сообщения о мусоре</span>
-        </div>
-        <div class="flex items-center mr-4 mb-2">
-            <div class="w-4 h-4 rounded-full bg-orange-500 mr-2"></div>
-            <span>Убранный мусор</span>
-        </div>
-        <div class="flex items-center mr-4 mb-2">
-            <div class="w-4 h-4 rounded-full bg-blue-500 mr-2"></div>
-            <span>В процессе уборки</span>
-        </div>
-        <div class="flex items-center mb-2">
-            <div class="w-4 h-4 rounded-full bg-red-500 mr-2"></div>
-            <span>Отклоненные сообщения</span>
-        </div>
-    </div>
-
-    <!-- Легенда с кликабельными фильтрами -->
-    <div class="mb-4 p-4 bg-white rounded-lg shadow-md">
-        <h3 class="font-bold mb-2">Фильтр по типу отходов:</h3>
-        <div class="flex flex-wrap gap-4">
-            <button onclick="filterMarkers('plastic')" class="flex items-center hover:bg-gray-100 p-2 rounded transition-colors">
-                <div class="w-4 h-4 rounded-full bg-blue-500 mr-2"></div>
-                <span>Пластик</span>
-            </button>
-            <button onclick="filterMarkers('paper')" class="flex items-center hover:bg-gray-100 p-2 rounded transition-colors">
-                <div class="w-4 h-4 rounded-full bg-green-500 mr-2"></div>
-                <span>Бумага</span>
-            </button>
-            <button onclick="filterMarkers('metal')" class="flex items-center hover:bg-gray-100 p-2 rounded transition-colors">
-                <div class="w-4 h-4 rounded-full bg-yellow-500 mr-2"></div>
-                <span>Металл</span>
-            </button>
-            <button onclick="filterMarkers('glass')" class="flex items-center hover:bg-gray-100 p-2 rounded transition-colors">
-                <div class="w-4 h-4 rounded-full bg-red-500 mr-2"></div>
-                <span>Стекло</span>
-            </button>
-            <button onclick="showAllMarkers()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors">
-                Показать все
-            </button>
-        </div>
-    </div>
-
-    <!-- Добавьте перед картой -->
-    <div class="mb-4 p-4 bg-gray-100 rounded" style="display: none;">
-        <p>Debug info:</p>
-        {% for point in points_list %}
-            <div>
-                Address: {{ point.address }}, 
-                Waste Type: {{ point.waste_types }}, 
-                Display: {{ point.get_waste_types_display }}
+    <!-- Перемещаем фильтры на уровень с легендой для экономии места -->
+    <div class="flex flex-col md:flex-row md:justify-between bg-white rounded-lg shadow-md p-4 mb-4">
+        <!-- Легенда карты - делаем более наглядной -->
+        <div class="mb-4 md:mb-0">
+            <h3 class="font-bold mb-2 text-gray-700">Легенда:</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-4 gap-y-2">
+                <div class="flex items-center">
+                    <div class="w-5 h-5 rounded-full bg-green-500 mr-2 shadow"></div>
+                    <span class="text-sm">Пункты сбора</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-5 h-5 rounded-full bg-black mr-2 shadow"></div>
+                    <span class="text-sm">Новые сообщения</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-5 h-5 rounded-full bg-orange-500 mr-2 shadow"></div>
+                    <span class="text-sm">Убранный мусор</span>
+                </div>
             </div>
-        {% endfor %}
-    </div>
-
-    <!-- Список точек (будет обновляться при фильтрации) -->
-    <div id="points-list" class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {% for point in points_list %}
-            <div class="bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow" data-waste-type="{{ point.waste_types }}">
-                <h3 class="font-bold">{{ point.address }}</h3>
-                <p class="text-gray-600">{{ point.city }}</p>
-                <p class="text-sm text-gray-500 mb-2">Принимает: {{ point.get_waste_types_display }}</p>
-                <button 
-                    onclick="moveToLocation({{ point.latitude }}, {{ point.longitude }})"
-                    class="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600 transition-colors"
-                >
-                    Показать на карте
+        </div>
+        
+        <!-- Фильтры -->
+        <div>
+            <h3 class="font-bold mb-2 text-gray-700">Фильтр по типу отходов:</h3>
+            <div class="flex flex-wrap gap-2">
+                <button onclick="filterMarkers('plastic')" class="flex items-center bg-gray-100 hover:bg-blue-100 p-2 rounded transition-colors">
+                    <div class="w-4 h-4 rounded-full bg-blue-500 mr-2 shadow-sm"></div>
+                    <span class="text-sm">Пластик</span>
+                </button>
+                <button onclick="filterMarkers('paper')" class="flex items-center bg-gray-100 hover:bg-green-100 p-2 rounded transition-colors">
+                    <div class="w-4 h-4 rounded-full bg-green-500 mr-2 shadow-sm"></div>
+                    <span class="text-sm">Бумага</span>
+                </button>
+                <button onclick="filterMarkers('metal')" class="flex items-center bg-gray-100 hover:bg-yellow-100 p-2 rounded transition-colors">
+                    <div class="w-4 h-4 rounded-full bg-yellow-500 mr-2 shadow-sm"></div>
+                    <span class="text-sm">Металл</span>
+                </button>
+                <button onclick="filterMarkers('glass')" class="flex items-center bg-gray-100 hover:bg-red-100 p-2 rounded transition-colors">
+                    <div class="w-4 h-4 rounded-full bg-red-500 mr-2 shadow-sm"></div>
+                    <span class="text-sm">Стекло</span>
+                </button>
+                <button onclick="showAllMarkers()" class="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 transition-colors text-sm">
+                    Показать все
                 </button>
             </div>
-        {% endfor %}
+        </div>
+    </div>
+
+    <!-- Переключатель режимов отображения -->
+    <div class="mb-4 flex justify-center">
+        <div class="inline-flex rounded-md shadow-sm" role="group">
+            <button 
+                onclick="showMapView()" 
+                id="map-toggle-btn" 
+                class="px-4 py-2 text-sm font-medium text-white bg-green-600 border border-green-600 rounded-l-lg hover:bg-green-700"
+            >
+                Карта
+            </button>
+            <button 
+                onclick="showListView()" 
+                id="list-toggle-btn" 
+                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100"
+            >
+                Список
+            </button>
+        </div>
+    </div>
+
+    <!-- Список пунктов сбора - более информативный и удобный -->
+    <div id="points-list-container" class="hidden">
+        <h2 class="text-xl font-bold mb-4 text-center">Все пункты сбора отходов</h2>
+        <div id="points-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for point in points_list %}
+                <div class="bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow" data-waste-type="{{ point.waste_types }}">
+                    <div class="flex items-center mb-2">
+                        <div class="w-4 h-4 rounded-full mr-2" 
+                            style="background-color: {% if point.waste_types == 'plastic' %}#3B82F6{% elif point.waste_types == 'paper' %}#10B981{% elif point.waste_types == 'metal' %}#F59E0B{% elif point.waste_types == 'glass' %}#EF4444{% else %}#9CA3AF{% endif %};">
+                        </div>
+                        <h3 class="font-bold text-lg">{{ point.address }}</h3>
+                    </div>
+                    <p class="text-gray-600 mb-1">{{ point.city }}</p>
+                    <p class="text-sm text-gray-500 mb-3">
+                        <span class="font-medium">Принимает:</span> 
+                        {{ point.get_waste_types_display }}
+                    </p>
+                    <button 
+                        onclick="moveToLocation({{ point.latitude }}, {{ point.longitude }})"
+                        class="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600 transition-colors"
+                    >
+                        Показать на карте
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Индикатор загрузки -->
+    <div id="loading" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50" style="display: none;">
+        <div class="bg-white p-5 rounded-lg shadow-lg flex flex-col items-center">
+            <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-green-500 mb-3"></div>
+            <p class="text-gray-700">Загрузка карты...</p>
+        </div>
     </div>
 </div>
 
@@ -99,6 +124,9 @@
     let markers = [];
     let trashMarkers = [];
     let currentFilter = null;
+    
+    // Показать индикатор загрузки
+    document.getElementById('loading').style.display = 'flex';
 
     // Функция инициализации карты
     function initMap() {
@@ -107,10 +135,21 @@
         // Определяем центр карты (Бишкек по умолчанию)
         var mapCenter = {lat: 42.8746, lng: 74.5698};
         
-        // Создаем карту
+        // Создаем карту с улучшенными настройками для пользовательского опыта
         map = new google.maps.Map(document.getElementById('map'), {
             center: mapCenter,
-            zoom: 12
+            zoom: 12,
+            mapTypeControl: true,
+            mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+                position: google.maps.ControlPosition.TOP_RIGHT
+            },
+            fullscreenControl: true,
+            streetViewControl: true,
+            zoomControl: true,
+            zoomControlOptions: {
+                position: google.maps.ControlPosition.RIGHT_CENTER
+            },
         });
         
         // Добавляем пункты сбора отходов
@@ -125,19 +164,27 @@
                     map: map,
                     title: point.address,
                     waste_type: point.waste_types, // Сохраняем тип отходов в маркере
-                    icon: getMarkerIcon(point.waste_types)
+                    icon: getMarkerIcon(point.waste_types),
+                    animation: google.maps.Animation.DROP // Добавляем анимацию появления
                 });
                 
                 // Добавляем маркер в массив
                 markers.push(marker);
                 
-                // Добавляем информационное окно
+                // Добавляем улучшенное информационное окно
                 const infoWindow = new google.maps.InfoWindow({
                     content: `
-                        <div style="padding: 10px;">
-                            <h3 style="font-weight: bold; margin-bottom: 5px;">${point.address}</h3>
-                            <p>Город: ${point.city}</p>
-                            <p>Принимает: ${point.waste_types_display}</p>
+                        <div style="padding: 10px; max-width: 300px;">
+                            <h3 style="font-weight: bold; margin-bottom: 8px; font-size: 16px;">${point.address}</h3>
+                            <p style="margin-bottom: 5px;"><strong>Город:</strong> ${point.city}</p>
+                            <p style="margin-bottom: 5px;"><strong>Принимает:</strong> ${point.waste_types_display}</p>
+                            <div style="margin-top: 8px; text-align: center;">
+                                <a href="https://www.google.com/maps/dir/?api=1&destination=${point.latitude},${point.longitude}" 
+                                   target="_blank" 
+                                   style="display: inline-block; padding: 5px 10px; background-color: #10B981; color: white; text-decoration: none; border-radius: 4px;">
+                                   Построить маршрут
+                                </a>
+                            </div>
                         </div>
                     `
                 });
@@ -158,6 +205,9 @@
         console.log("Отчеты о мусоре:", trashReports);
         
         if (trashReports && trashReports.length > 0) {
+            // Задержка для последовательного появления маркеров
+            let delay = 0;
+            
             trashReports.forEach(function(report) {
                 console.log("Добавление маркера мусора:", report);
                 
@@ -173,45 +223,69 @@
                     markerColor = "#EF4444"; // Красный для отклоненных
                 }
                 
-                // Создаем маркер
-                const marker = new google.maps.Marker({
-                    position: {lat: report.latitude, lng: report.longitude},
-                    map: map,
-                    title: report.address,
-                    report_status: report.status, // Сохраняем статус отчета
-                    icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 8.5,
-                        fillColor: markerColor,
-                        fillOpacity: 1,
-                        strokeWeight: 0.4
-                    }
-                });
+                // Задержка для лучшего UX
+                setTimeout(() => {
+                    // Создаем маркер
+                    const marker = new google.maps.Marker({
+                        position: {lat: report.latitude, lng: report.longitude},
+                        map: map,
+                        title: report.address,
+                        report_status: report.status, // Сохраняем статус отчета
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 8.5,
+                            fillColor: markerColor,
+                            fillOpacity: 1,
+                            strokeWeight: 0.4
+                        },
+                        animation: google.maps.Animation.DROP
+                    });
+                    
+                    // Добавляем маркер в массив
+                    trashMarkers.push(marker);
+                    
+                    // Определяем текст статуса для информационного окна
+                    let statusText = "Новый";
+                    if (report.status === 'completed') statusText = "Убрано";
+                    if (report.status === 'in_progress') statusText = "В процессе уборки";
+                    if (report.status === 'rejected') statusText = "Отклонено";
+                    
+                    // Добавляем информационное окно с фото
+                    const infoWindow = new google.maps.InfoWindow({
+                        content: `
+                            <div style="padding: 10px; max-width: 300px;">
+                                <h3 style="font-weight: bold; margin-bottom: 8px; font-size: 16px;">${report.address}</h3>
+                                <p style="margin-bottom: 8px;">${report.description}</p>
+                                <p style="margin-bottom: 12px;">
+                                    <strong>Статус:</strong> 
+                                    <span style="font-weight: bold; color: ${report.status === 'completed' ? '#F97316' : '#000'}">
+                                        ${statusText}
+                                    </span>
+                                </p>
+                                ${report.photo ? `
+                                <div style="text-align: center; margin-top: 8px;">
+                                    <a href="/media/${report.photo}" target="_blank" style="color: #3B82F6;">
+                                        Посмотреть фото
+                                    </a>
+                                </div>` : ''}
+                            </div>
+                        `
+                    });
+                    
+                    marker.addListener('click', function() {
+                        infoWindow.open(map, marker);
+                    });
+                }, delay);
                 
-                // Добавляем маркер в массив
-                trashMarkers.push(marker);
-                
-                // Определяем текст статуса для информационного окна
-                let statusText = "Новый";
-                if (report.status === 'completed') statusText = "Убрано";
-                if (report.status === 'in_progress') statusText = "В процессе уборки";
-                if (report.status === 'rejected') statusText = "Отклонено";
-                
-                // Добавляем информационное окно
-                const infoWindow = new google.maps.InfoWindow({
-                    content: `
-                        <div style="padding: 10px;">
-                            <h3 style="font-weight: bold; margin-bottom: 5px;">${report.address}</h3>
-                            <p>${report.description}</p>
-                            <p>Статус: <span style="font-weight: bold;">${statusText}</span></p>
-                        </div>
-                    `
-                });
-                
-                marker.addListener('click', function() {
-                    infoWindow.open(map, marker);
-                });
+                delay += 100; // Увеличиваем задержку для каждого следующего маркера
             });
+            
+            // Скрываем индикатор загрузки после добавления всех маркеров
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+            }, delay + 500);
+        } else {
+            document.getElementById('loading').style.display = 'none';
         }
     }
 
@@ -250,40 +324,44 @@
         console.log('Фильтрация по типу отходов:', wasteType);
         currentFilter = wasteType;
         
-        // Фильтруем маркеры на карте
-        markers.forEach(marker => {
-            console.log('Тип отходов маркера:', marker.waste_type);
-            
-            const shouldShow = marker.waste_type === wasteType;
-            marker.setVisible(shouldShow);
-            
-            if (shouldShow) {
-                marker.setAnimation(google.maps.Animation.BOUNCE);
-                setTimeout(() => marker.setAnimation(null), 1500);
-            }
-        });
-
-        // Фильтруем список точек
-        const pointsList = document.getElementById('points-list');
-        const points = pointsList.querySelectorAll('[data-waste-type]');
+        // Показываем индикатор загрузки
+        document.getElementById('loading').style.display = 'flex';
         
-        points.forEach(point => {
-            console.log('Тип отходов точки:', point.getAttribute('data-waste-type'));
-            
-            if (point.getAttribute('data-waste-type') === wasteType) {
-                point.style.display = '';
-            } else {
-                point.style.display = 'none';
-            }
-        });
+        setTimeout(() => {
+            // Фильтруем маркеры на карте
+            markers.forEach(marker => {
+                const shouldShow = marker.waste_type === wasteType;
+                marker.setVisible(shouldShow);
+                
+                if (shouldShow) {
+                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                    setTimeout(() => marker.setAnimation(null), 1500);
+                }
+            });
 
-        // Центрируем карту на видимых маркерах
-        const visibleMarkers = markers.filter(marker => marker.getVisible());
-        if (visibleMarkers.length > 0) {
-            const bounds = new google.maps.LatLngBounds();
-            visibleMarkers.forEach(marker => bounds.extend(marker.getPosition()));
-            map.fitBounds(bounds);
-        }
+            // Фильтруем список точек
+            const pointsList = document.getElementById('points-list');
+            const points = pointsList.querySelectorAll('[data-waste-type]');
+            
+            points.forEach(point => {
+                if (point.getAttribute('data-waste-type') === wasteType) {
+                    point.style.display = '';
+                } else {
+                    point.style.display = 'none';
+                }
+            });
+
+            // Центрируем карту на видимых маркерах
+            const visibleMarkers = markers.filter(marker => marker.getVisible());
+            if (visibleMarkers.length > 0) {
+                const bounds = new google.maps.LatLngBounds();
+                visibleMarkers.forEach(marker => bounds.extend(marker.getPosition()));
+                map.fitBounds(bounds);
+            }
+            
+            // Скрываем индикатор загрузки
+            document.getElementById('loading').style.display = 'none';
+        }, 300);
     }
 
     // Функция отображения всех маркеров
@@ -291,23 +369,31 @@
         console.log('Показать все маркеры');
         currentFilter = null;
         
-        // Показываем все маркеры
-        markers.forEach(marker => {
-            marker.setVisible(true);
-        });
+        // Показываем индикатор загрузки
+        document.getElementById('loading').style.display = 'flex';
+        
+        setTimeout(() => {
+            // Показываем все маркеры
+            markers.forEach(marker => {
+                marker.setVisible(true);
+            });
 
-        // Показываем все точки в списке
-        const pointsList = document.getElementById('points-list');
-        const points = pointsList.querySelectorAll('[data-waste-type]');
-        points.forEach(point => {
-            point.style.display = '';
-        });
+            // Показываем все точки в списке
+            const pointsList = document.getElementById('points-list');
+            const points = pointsList.querySelectorAll('[data-waste-type]');
+            points.forEach(point => {
+                point.style.display = '';
+            });
 
-        // Центрируем карту на всех маркерах
-        const bounds = new google.maps.LatLngBounds();
-        markers.forEach(marker => bounds.extend(marker.getPosition()));
-        trashMarkers.forEach(marker => bounds.extend(marker.getPosition()));
-        map.fitBounds(bounds);
+            // Центрируем карту на всех маркерах
+            const bounds = new google.maps.LatLngBounds();
+            markers.forEach(marker => bounds.extend(marker.getPosition()));
+            trashMarkers.forEach(marker => bounds.extend(marker.getPosition()));
+            map.fitBounds(bounds);
+            
+            // Скрываем индикатор загрузки
+            document.getElementById('loading').style.display = 'none';
+        }, 300);
     }
 
     // Функция перемещения карты к указанным координатам
@@ -316,6 +402,29 @@
         const position = new google.maps.LatLng(lat, lng);
         map.setCenter(position);
         map.setZoom(15);
+        
+        // Переключаемся на вид карты
+        showMapView();
+    }
+    
+    // Функция для переключения на вид карты
+    function showMapView() {
+        document.getElementById('map').style.display = 'block';
+        document.getElementById('points-list-container').style.display = 'none';
+        document.getElementById('map-toggle-btn').classList.add('bg-green-600', 'text-white');
+        document.getElementById('map-toggle-btn').classList.remove('bg-white', 'text-gray-700');
+        document.getElementById('list-toggle-btn').classList.add('bg-white', 'text-gray-700');
+        document.getElementById('list-toggle-btn').classList.remove('bg-green-600', 'text-white');
+    }
+    
+    // Функция для переключения на вид списка
+    function showListView() {
+        document.getElementById('map').style.display = 'none';
+        document.getElementById('points-list-container').style.display = 'block';
+        document.getElementById('list-toggle-btn').classList.add('bg-green-600', 'text-white');
+        document.getElementById('list-toggle-btn').classList.remove('bg-white', 'text-gray-700');
+        document.getElementById('map-toggle-btn').classList.add('bg-white', 'text-gray-700');
+        document.getElementById('map-toggle-btn').classList.remove('bg-green-600', 'text-white');
     }
 </script>
 {% endblock %}
