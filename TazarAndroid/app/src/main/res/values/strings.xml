@@ -165,4 +165,7 @@
     <string name="news_image_description">Изображение новости</string>
     <string name="welcome_text">Добро пожаловать!</string>
     <string name="news_section_title">Экологические новости</string>
+    
+    <!-- Новый ресурс -->
+    <string name="date_not_available">Дата не указана</string>
 </resources> 

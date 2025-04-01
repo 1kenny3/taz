@@ -14,18 +14,19 @@ import com.tazar.android.R;
 import com.tazar.android.models.TrashReport;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 public class TrashReportAdapter extends RecyclerView.Adapter<TrashReportAdapter.ReportViewHolder> {
 
     private List<TrashReport> reports;
-    private final SimpleDateFormat dateFormat;
+    private static final SimpleDateFormat INPUT_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.getDefault());
+    private static final SimpleDateFormat OUTPUT_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
 
     public TrashReportAdapter(List<TrashReport> reports) {
         this.reports = reports;
-        this.dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
     }
 
     @NonNull
@@ -38,8 +39,7 @@ public class TrashReportAdapter extends RecyclerView.Adapter<TrashReportAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ReportViewHolder holder, int position) {
-        TrashReport report = reports.get(position);
-        holder.bind(report);
+        holder.bind(reports.get(position));
     }
 
     @Override
@@ -52,7 +52,7 @@ public class TrashReportAdapter extends RecyclerView.Adapter<TrashReportAdapter.
         notifyDataSetChanged();
     }
 
-    class ReportViewHolder extends RecyclerView.ViewHolder {
+    static class ReportViewHolder extends RecyclerView.ViewHolder {
         private final ImageView imageView;
         private final TextView descriptionTextView;
         private final TextView locationTextView;
@@ -79,10 +79,26 @@ public class TrashReportAdapter extends RecyclerView.Adapter<TrashReportAdapter.
                     report.getLatitude(), report.getLongitude()));
             }
             
-            dateTextView.setText(dateFormat.format(report.getCreatedAt()));
+            // Форматирование даты
+            try {
+                String createdAt = report.getCreatedAt();
+                if (createdAt != null && !createdAt.isEmpty()) {
+                    Date date = INPUT_FORMAT.parse(createdAt);
+                    if (date != null) {
+                        dateTextView.setText(OUTPUT_FORMAT.format(date));
+                    } else {
+                        dateTextView.setText(createdAt); // Показываем исходную строку, если парсинг не удался
+                    }
+                } else {
+                    dateTextView.setText(R.string.date_not_available);
+                }
+            } catch (ParseException e) {
+                // В случае ошибки парсинга показываем исходную строку
+                dateTextView.setText(report.getCreatedAt());
+            }
             
             // Устанавливаем текст и цвет статуса
-            statusTextView.setText(report.getStatusText());
+            statusTextView.setText(getStatusText(report.getStatus()));
             statusTextView.setBackgroundColor(report.getStatusColor());
 
             // Загружаем изображение с помощью Glide
@@ -100,6 +116,19 @@ public class TrashReportAdapter extends RecyclerView.Adapter<TrashReportAdapter.
                         .into(imageView);
             } else {
                 imageView.setImageResource(R.drawable.ic_image_placeholder);
+            }
+        }
+
+        private String getStatusText(String status) {
+            switch (status) {
+                case "new":
+                    return itemView.getContext().getString(R.string.status_new);
+                case "in_progress":
+                    return itemView.getContext().getString(R.string.status_in_progress);
+                case "completed":
+                    return itemView.getContext().getString(R.string.status_completed);
+                default:
+                    return status;
             }
         }
     }
