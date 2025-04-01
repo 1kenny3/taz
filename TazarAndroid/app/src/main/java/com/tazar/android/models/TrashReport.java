@@ -44,13 +44,16 @@ public class TrashReport {
     private boolean pointsAwarded;
     
     @SerializedName("created_at")
-    private Date createdAt;
+    private String createdAt;
     
     @SerializedName("updated_at")
     private Date updatedAt;
     
     @SerializedName("comments")
     private List<Comment> comments;
+    
+    @SerializedName("photo_url")
+    private String photoUrl;
     
     // Геттеры и сеттеры
     public int getId() {
@@ -133,11 +136,11 @@ public class TrashReport {
         this.pointsAwarded = pointsAwarded;
     }
     
-    public Date getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
     
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
     
@@ -181,5 +184,13 @@ public class TrashReport {
             default:
                 return Color.GRAY;
         }
+    }
+    
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+    
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 } 

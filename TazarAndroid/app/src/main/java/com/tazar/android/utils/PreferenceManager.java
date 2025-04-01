@@ -15,6 +15,7 @@ public class PreferenceManager {
     private static final String KEY_EMAIL = "email";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
     private static final String KEY_API_URL = "api_url";
+    private static final String SERVER_URL_KEY = "server_url";
     
     private final SharedPreferences preferences;
     
@@ -149,5 +150,15 @@ public class PreferenceManager {
      */
     public int getUserIdFromPreferences() {
         return preferences.getInt("userId", -1);
+    }
+
+    public String getServerUrl(String defaultUrl) {
+        return preferences.getString(SERVER_URL_KEY, defaultUrl);
+    }
+
+    public void saveServerUrl(String url) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(SERVER_URL_KEY, url);
+        editor.apply();
     }
 } 
