@@ -7,17 +7,15 @@ import android.content.SharedPreferences;
  * Менеджер настроек приложения
  */
 public class PreferenceManager {
-    private static final String PREF_NAME = "tazar_preferences";
-    private static final String KEY_ACCESS_TOKEN = "access_token";
-    private static final String KEY_REFRESH_TOKEN = "refresh_token";
-    private static final String KEY_USER_ID = "user_id";
-    private static final String KEY_USERNAME = "username";
-    private static final String KEY_EMAIL = "email";
-    private static final String KEY_IS_LOGGED_IN = "is_logged_in";
-    private static final String KEY_API_URL = "api_url";
+    private static final String PREF_NAME = "tazar_prefs";
+    private static final String ACCESS_TOKEN_KEY = "access_token";
+    private static final String REFRESH_TOKEN_KEY = "refresh_token";
+    private static final String USER_ID_KEY = "user_id";
     private static final String SERVER_URL_KEY = "server_url";
+    private static final String KEY_API_URL = "api_url";
+    private static final String DEFAULT_API_URL = "http://10.0.2.2:8000/";
     
-    private final SharedPreferences preferences;
+    private SharedPreferences preferences;
     
     /**
      * Конструктор
@@ -33,18 +31,18 @@ public class PreferenceManager {
      * @param refreshToken Токен обновления
      */
     public void saveTokens(String accessToken, String refreshToken) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(KEY_ACCESS_TOKEN, accessToken);
-        editor.putString(KEY_REFRESH_TOKEN, refreshToken);
-        editor.apply();
+        preferences.edit()
+                .putString(ACCESS_TOKEN_KEY, accessToken)
+                .putString(REFRESH_TOKEN_KEY, refreshToken)
+                .apply();
     }
     
     /**
-     * Получение токена доступа
-     * @return Токен доступа
+     * Получение токена авторизации
+     * @return Токен авторизации
      */
     public String getAccessToken() {
-        return preferences.getString(KEY_ACCESS_TOKEN, null);
+        return preferences.getString(ACCESS_TOKEN_KEY, null);
     }
     
     /**
@@ -52,46 +50,18 @@ public class PreferenceManager {
      * @return Токен обновления
      */
     public String getRefreshToken() {
-        return preferences.getString(KEY_REFRESH_TOKEN, null);
+        return preferences.getString(REFRESH_TOKEN_KEY, null);
     }
     
     /**
-     * Сохранение информации о пользователе
-     * @param id ID пользователя
-     * @param username Имя пользователя
-     * @param email Email пользователя
+     * Очистка сессии пользователя
      */
-    public void saveUserInfo(int id, String username, String email) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(KEY_USER_ID, id);
-        editor.putString(KEY_USERNAME, username);
-        editor.putString(KEY_EMAIL, email);
-        editor.putBoolean(KEY_IS_LOGGED_IN, true);
-        editor.apply();
-    }
-    
-    /**
-     * Получение ID пользователя
-     * @return ID пользователя
-     */
-    public int getUserId() {
-        return preferences.getInt(KEY_USER_ID, -1);
-    }
-    
-    /**
-     * Получение имени пользователя
-     * @return Имя пользователя
-     */
-    public String getUsername() {
-        return preferences.getString(KEY_USERNAME, "");
-    }
-    
-    /**
-     * Получение email пользователя
-     * @return Email пользователя
-     */
-    public String getEmail() {
-        return preferences.getString(KEY_EMAIL, "");
+    public void logout() {
+        preferences.edit()
+                .remove(ACCESS_TOKEN_KEY)
+                .remove(REFRESH_TOKEN_KEY)
+                .remove(USER_ID_KEY)
+                .apply();
     }
     
     /**
@@ -99,66 +69,65 @@ public class PreferenceManager {
      * @return true, если пользователь авторизован
      */
     public boolean isLoggedIn() {
-        return preferences.getBoolean(KEY_IS_LOGGED_IN, false);
+        return getAccessToken() != null;
     }
     
     /**
-     * Выход из системы (удаление всех данных авторизации)
-     */
-    public void logout() {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.remove(KEY_ACCESS_TOKEN);
-        editor.remove(KEY_REFRESH_TOKEN);
-        editor.remove(KEY_USER_ID);
-        editor.remove(KEY_USERNAME);
-        editor.remove(KEY_EMAIL);
-        editor.putBoolean(KEY_IS_LOGGED_IN, false);
-        editor.apply();
-    }
-    
-    /**
-     * Установка адреса API сервера
-     * @param apiUrl Адрес API сервера
-     */
-    public void setApiUrl(String apiUrl) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(KEY_API_URL, apiUrl);
-        editor.apply();
-    }
-    
-    /**
-     * Получение адреса API сервера
-     * @return Адрес API сервера
-     */
-    public String getApiUrl() {
-        return preferences.getString(KEY_API_URL, "http://10.0.2.2:8000/");
-    }
-    
-    /**
-     * Сохраняет ID пользователя
+     * Сохранение ID пользователя
      * @param userId ID пользователя
      */
     public void saveUserId(int userId) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("userId", userId);
-        editor.apply();
+        preferences.edit().putInt(USER_ID_KEY, userId).apply();
     }
     
     /**
-     * Получает ID пользователя
-     * @return ID пользователя или -1, если не найден
+     * Получение ID пользователя
+     * @return ID пользователя
      */
-    public int getUserIdFromPreferences() {
-        return preferences.getInt("userId", -1);
+    public int getUserId() {
+        return preferences.getInt(USER_ID_KEY, -1);
     }
-
+    
+    /**
+     * Сохранение адреса сервера
+     * @param url Адрес сервера
+     */
+    public void saveServerUrl(String url) {
+        preferences.edit().putString(SERVER_URL_KEY, url).apply();
+    }
+    
+    /**
+     * Получение адреса сервера
+     * @param defaultUrl Дефолтный адрес сервера
+     * @return Адрес сервера
+     */
     public String getServerUrl(String defaultUrl) {
         return preferences.getString(SERVER_URL_KEY, defaultUrl);
     }
 
-    public void saveServerUrl(String url) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(SERVER_URL_KEY, url);
-        editor.apply();
+    public String getApiUrl() {
+        return preferences.getString(KEY_API_URL, DEFAULT_API_URL);
+    }
+
+    public void saveApiUrl(String url) {
+        preferences.edit().putString(KEY_API_URL, url).apply();
+    }
+
+    public String getAuthToken() {
+        return getAccessToken();
+    }
+
+    /**
+     * Очистка всех данных сессии пользователя
+     */
+    public void clearSession() {
+        preferences.edit()
+                .remove(ACCESS_TOKEN_KEY)
+                .remove(REFRESH_TOKEN_KEY)
+                .remove(USER_ID_KEY)
+                .remove(SERVER_URL_KEY)
+                .remove(KEY_API_URL)
+                .clear()
+                .apply();
     }
 } 

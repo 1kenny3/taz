@@ -21,19 +21,19 @@ public class TazarApplication extends Application {
     private static final String DEFAULT_SERVER_URL = "http://10.0.2.2:8000/";
     
     private static Context appContext;
-    private static PreferenceManager preferenceManager;
     private static TazarApplication instance;
+    private PreferenceManager preferenceManager;
     
     @Override
     public void onCreate() {
         super.onCreate();
         try {
             appContext = getApplicationContext();
-            preferenceManager = new PreferenceManager(appContext);
+            instance = this;
+            preferenceManager = new PreferenceManager(this);
             
             // Инициализация ApiClient
             ApiClient.init(appContext);
-            instance = this;
         } catch (Exception e) {
             Log.e(TAG, "Ошибка при инициализации приложения: ", e);
             // Не крашим приложение, а просто логируем ошибку
@@ -44,20 +44,21 @@ public class TazarApplication extends Application {
         return appContext;
     }
     
-    public static PreferenceManager getPreferenceManager() {
-        return preferenceManager;
-    }
-
     public static TazarApplication getInstance() {
         return instance;
     }
 
     public String getAuthToken() {
-        return preferenceManager.getAccessToken();
+        return preferenceManager.getAuthToken();
+    }
+
+    public boolean isLoggedIn() {
+        return preferenceManager.isLoggedIn();
     }
 
     public void setAuthToken(String authToken) {
-        preferenceManager.saveTokens(authToken, preferenceManager.getRefreshToken());
+        String currentRefreshToken = preferenceManager.getRefreshToken();
+        preferenceManager.saveTokens(authToken, currentRefreshToken);
     }
 
     public void clearAuthToken() {
@@ -142,5 +143,9 @@ public class TazarApplication extends Application {
 
     public void setServerUrl(String url) {
         preferenceManager.saveServerUrl(url);
+    }
+
+    public PreferenceManager getPreferenceManager() {
+        return preferenceManager;
     }
 } 

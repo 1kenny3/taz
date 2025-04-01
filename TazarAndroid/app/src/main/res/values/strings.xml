@@ -168,4 +168,13 @@
     
     <!-- Новый ресурс -->
     <string name="date_not_available">Дата не указана</string>
+    
+    <!-- Settings -->
+    <string name="api_url_settings">Настройки API</string>
+    <string name="enter_api_url">Введите URL API</string>
+    <string name="theme">Тема</string>
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Темная</string>
+    <string name="theme_system">Системная</string>
+    <string name="save_settings">Сохранить настройки</string>
 </resources> 

@@ -49,13 +49,17 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        // Инициализируем PreferenceManager
+        preferenceManager = ((TazarApplication) getApplication()).getPreferenceManager();
+        
+        // Проверяем, авторизован ли пользователь
+        if (preferenceManager.isLoggedIn()) {
+            startMainActivity();
+            finish();
+            return;
+        }
+        
         try {
-            // Инициализация PreferenceManager
-            preferenceManager = TazarApplication.getPreferenceManager();
-            if (preferenceManager == null) {
-                throw new IllegalStateException("PreferenceManager не инициализирован");
-            }
-            
             // Устанавливаем макет
             setContentView(R.layout.activity_login);
             
@@ -230,7 +234,7 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, "Вход выполнен успешно", Toast.LENGTH_SHORT).show();
                         
                         // Переходим на главный экран
-                        navigateToMainActivity();
+                        startMainActivity();
                     } else {
                         String errorMessage = "Ошибка входа";
                         try {
@@ -270,7 +274,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Переход на главный экран
      */
-    private void navigateToMainActivity() {
+    private void startMainActivity() {
         try {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

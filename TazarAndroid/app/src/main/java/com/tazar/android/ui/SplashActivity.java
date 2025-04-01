@@ -27,13 +27,13 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         
         try {
-            // Не устанавливаем setContentView, так как используем тему с фоном
+            // Получаем PreferenceManager через getInstance
+            PreferenceManager preferenceManager = ((TazarApplication) getApplication()).getPreferenceManager();
             
             // Задержка для отображения splash screen
             new Handler(Looper.getMainLooper()).postDelayed(this::navigateToNextScreen, SPLASH_DELAY);
         } catch (Exception e) {
             Log.e(TAG, "Ошибка при инициализации: ", e);
-            // Если произошла ошибка, сразу переходим к следующему экрану
             navigateToLoginActivity();
         }
     }
@@ -43,7 +43,7 @@ public class SplashActivity extends AppCompatActivity {
      */
     private void navigateToNextScreen() {
         try {
-            PreferenceManager preferenceManager = TazarApplication.getPreferenceManager();
+            PreferenceManager preferenceManager = ((TazarApplication) getApplication()).getPreferenceManager();
             
             // Проверяем, авторизован ли пользователь
             if (preferenceManager != null && preferenceManager.isLoggedIn()) {

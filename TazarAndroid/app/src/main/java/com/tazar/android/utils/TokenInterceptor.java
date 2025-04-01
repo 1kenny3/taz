@@ -26,14 +26,15 @@ public class TokenInterceptor implements Interceptor {
     
     @Override
     public Response intercept(Chain chain) throws IOException {
-        Request originalRequest = chain.request();
+        Request original = chain.request();
         
-        // Получаем токен доступа
-        String accessToken = TazarApplication.getPreferenceManager().getAccessToken();
+        // Получаем экземпляр приложения через контекст
+        TazarApplication app = (TazarApplication) context.getApplicationContext();
+        String accessToken = app.getPreferenceManager().getAccessToken();
         
         // Если токен существует, добавляем его в заголовок запроса
         if (accessToken != null && !accessToken.isEmpty()) {
-            Request.Builder builder = originalRequest.newBuilder()
+            Request.Builder builder = original.newBuilder()
                     .header("Authorization", "Bearer " + accessToken);
             
             Request newRequest = builder.build();
@@ -41,6 +42,6 @@ public class TokenInterceptor implements Interceptor {
         }
         
         // Если токена нет, отправляем запрос без изменений
-        return chain.proceed(originalRequest);
+        return chain.proceed(original);
     }
 } 

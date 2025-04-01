@@ -3,6 +3,7 @@ package com.tazar.android.utils;
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.text.format.Formatter;
+import android.os.Build;
 
 import java.lang.reflect.Method;
 import java.net.InetAddress;
@@ -41,9 +42,7 @@ public class ApiUrlUtil {
      * @return true, если приложение запущено в эмуляторе
      */
     public static boolean isEmulator() {
-        return android.os.Build.MODEL.contains("sdk") 
-                || android.os.Build.MODEL.contains("Emulator") 
-                || android.os.Build.MODEL.contains("Android SDK");
+        return Build.PRODUCT.contains("sdk") || Build.PRODUCT.contains("genymotion");
     }
     
     /**
@@ -91,10 +90,14 @@ public class ApiUrlUtil {
     /**
      * Сохраняет URL API сервера в настройках
      * @param context Контекст приложения
-     * @param apiUrl URL API сервера
+     * @param url URL API сервера
      */
-    public static void saveApiUrl(Context context, String apiUrl) {
+    public static void saveApiUrl(Context context, String url) {
         PreferenceManager preferenceManager = new PreferenceManager(context);
-        preferenceManager.setApiUrl(apiUrl);
+        preferenceManager.saveApiUrl(url);
+    }
+
+    public static String getDefaultApiUrl() {
+        return isEmulator() ? "http://10.0.2.2:8000/" : "http://192.168.1.100:8000/";
     }
 } 

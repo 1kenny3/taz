@@ -5,11 +5,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.tazar.android.R;
 import com.tazar.android.TazarApplication;
@@ -28,35 +30,57 @@ public class SettingsActivity extends AppCompatActivity {
     private Button resetApiUrlButton;
     private TextView currentApiUrlTextView;
     private PreferenceManager preferenceManager;
+    private RadioGroup themeGroup;
+    private Button saveButton;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         
-        // Настройка ActionBar
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.settings);
+        // Правильное получение PreferenceManager через getInstance()
+        preferenceManager = ((TazarApplication) getApplication()).getPreferenceManager();
+        
+        setupToolbar();
+        initViews();
+        setupListeners();
+    }
+    
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.settings);
         }
-        
-        preferenceManager = TazarApplication.getPreferenceManager();
-        
-        // Инициализация UI-элементов
+    }
+    
+    private void initViews() {
         apiUrlEditText = findViewById(R.id.api_url_edit_text);
         saveApiUrlButton = findViewById(R.id.save_api_url_button);
         resetApiUrlButton = findViewById(R.id.reset_api_url_button);
         currentApiUrlTextView = findViewById(R.id.current_api_url_text_view);
+        themeGroup = findViewById(R.id.theme_group);
+        saveButton = findViewById(R.id.save_button);
         
         // Загрузка текущего URL API
         String currentApiUrl = preferenceManager.getApiUrl();
         currentApiUrlTextView.setText(getString(R.string.current_api_url, currentApiUrl));
         apiUrlEditText.setText(currentApiUrl);
         
-        // Установка обработчиков
+        // Загружаем сохраненные настройки
+        loadSettings();
+    }
+    
+    private void setupListeners() {
         saveApiUrlButton.setOnClickListener(view -> saveApiUrl());
         resetApiUrlButton.setOnClickListener(view -> resetApiUrl());
+        saveButton.setOnClickListener(v -> saveSettings());
+    }
+    
+    private void loadSettings() {
+        // Загрузка настроек
+        // Здесь можно добавить загрузку других настроек
     }
     
     /**
@@ -117,10 +141,16 @@ public class SettingsActivity extends AppCompatActivity {
         ApiClient.init(this);
     }
     
+    private void saveSettings() {
+        // Сохранение настроек
+        // Здесь можно добавить сохранение других настроек
+        finish();
+    }
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);

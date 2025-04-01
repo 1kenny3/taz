@@ -35,21 +35,22 @@ public class TokenAuthenticator implements Authenticator {
     
     @Override
     public Request authenticate(Route route, Response response) throws IOException {
+        // Получаем экземпляр приложения через контекст
+        TazarApplication app = (TazarApplication) context.getApplicationContext();
+        PreferenceManager preferenceManager = app.getPreferenceManager();
+
+        String refreshToken = preferenceManager.getRefreshToken();
+        if (refreshToken == null) {
+            preferenceManager.logout();
+            return null;
+        }
+        
         // Если уже пытались обновить токен, чтобы избежать бесконечного цикла
         if (response.request().header("Authorization") != null && 
             response.request().header("Authorization").contains("Bearer") && 
             response.code() == 401) {
             // Выход из аккаунта, т.к. токен не удалось обновить
-            TazarApplication.getPreferenceManager().logout();
-            return null;
-        }
-        
-        // Попытка обновить токен
-        String refreshToken = TazarApplication.getPreferenceManager().getRefreshToken();
-        
-        if (refreshToken == null || refreshToken.isEmpty()) {
-            // Выход из аккаунта, т.к. нет токена для обновления
-            TazarApplication.getPreferenceManager().logout();
+            preferenceManager.logout();
             return null;
         }
         
@@ -78,7 +79,7 @@ public class TokenAuthenticator implements Authenticator {
                 TokenResponse tokens = tokenResponse.body();
                 
                 // Сохраняем новые токены
-                TazarApplication.getPreferenceManager().saveTokens(
+                preferenceManager.saveTokens(
                         tokens.getAccessToken(),
                         tokens.getRefreshToken()
                 );
@@ -89,12 +90,12 @@ public class TokenAuthenticator implements Authenticator {
                         .build();
             } else {
                 // Выход из аккаунта при неудаче
-                TazarApplication.getPreferenceManager().logout();
+                preferenceManager.logout();
                 return null;
             }
         } catch (Exception e) {
             // Выход из аккаунта при ошибке
-            TazarApplication.getPreferenceManager().logout();
+            preferenceManager.logout();
             return null;
         }
     }
