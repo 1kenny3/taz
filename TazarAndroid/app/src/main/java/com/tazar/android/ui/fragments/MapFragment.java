@@ -601,7 +601,41 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     }
 
     private void showAddReportDialog() {
-        Toast.makeText(requireContext(), "Функция добавления отчета в разработке", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "Открытие экрана создания отчета");
+        
+        // Проверяем авторизацию пользователя
+        if (TazarApplication.getInstance().getAuthToken() == null) {
+            Toast.makeText(requireContext(), "Для создания отчета необходимо авторизоваться", 
+                Toast.LENGTH_LONG).show();
+            return;
+        }
+        
+        // Проверяем разрешение на геолокацию
+        if (!checkLocationPermission()) {
+            Toast.makeText(requireContext(), "Для создания отчета необходим доступ к геолокации", 
+                Toast.LENGTH_LONG).show();
+            return;
+        }
+        
+        // Создаем Intent для перехода к активности создания отчета
+        Intent intent = new Intent(getActivity(), CreateReportActivity.class);
+        
+        // Если есть текущая позиция камеры на карте, передаем её
+        if (mMap != null) {
+            LatLng center = mMap.getCameraPosition().target;
+            intent.putExtra("latitude", center.latitude);
+            intent.putExtra("longitude", center.longitude);
+        }
+        
+        // Запускаем активность
+        try {
+            startActivity(intent);
+        } catch (Exception e) {
+            Log.e(TAG, "Ошибка при открытии экрана создания отчета", e);
+            Toast.makeText(requireContext(), 
+                "Не удалось открыть экран создания отчета: " + e.getMessage(), 
+                Toast.LENGTH_SHORT).show();
+        }
     }
 
     private List<String> getSelectedWasteTypes() {

@@ -64,7 +64,13 @@
         <activity android:name=".ui.settings.SettingsActivity" />
         <activity
             android:name=".ui.activities.CreateReportActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/create_report"
+            android:parentActivityName=".ui.activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.MainActivity" />
+        </activity>
 
         <!-- Провайдер для доступа к файлам приложения -->
         <provider
