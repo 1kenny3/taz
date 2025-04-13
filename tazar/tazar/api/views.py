@@ -43,16 +43,21 @@ class CollectionPointViewSet(viewsets.ModelViewSet):
                 openapi.IN_QUERY,
                 description="""
                 Фильтр по типу отходов:
+                
+                Основные типы:
                 - plastic (Пластик)
                 - paper (Бумага)
                 - metal (Металл)
                 - glass (Стекло)
+                
+                Новые типы:
                 - medical (Медицинские отходы)
                 - construction (Строительные отходы)
                 - agricultural (Сельские отходы)
                 """,
                 type=openapi.TYPE_STRING,
-                required=False
+                required=False,
+                enum=['plastic', 'paper', 'metal', 'glass', 'medical', 'construction', 'agricultural']
             ),
             openapi.Parameter(
                 'city',
@@ -66,7 +71,16 @@ class CollectionPointViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         """
         Получить список всех пунктов приема отходов.
-        Поддерживает фильтрацию по типу отходов и городу.
+        
+        Поддерживает фильтрацию по:
+        - Типу отходов (waste_types)
+        - Городу (city)
+        - Поиску по адресу (search)
+        
+        Примеры:
+        - /api/collection-points/?waste_types=medical
+        - /api/collection-points/?city=Бишкек
+        - /api/collection-points/?search=ул.+Ленина
         """
         return super().list(request, *args, **kwargs)
 

@@ -177,4 +177,5 @@
     <string name="theme_dark">Темная</string>
     <string name="theme_system">Системная</string>
     <string name="save_settings">Сохранить настройки</string>
+    <string name="error_loading_recycling_points">Ошибка при загрузке пунктов приема</string>
 </resources> 

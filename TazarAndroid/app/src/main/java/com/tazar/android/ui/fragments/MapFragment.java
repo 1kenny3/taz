@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -36,6 +37,8 @@ import com.tazar.android.api.ApiConfig;
 import com.tazar.android.models.TrashReport;
 import com.tazar.android.api.services.TrashReportService;
 import com.tazar.android.ui.activities.CreateReportActivity;
+import com.tazar.android.models.RecyclingPoint;
+import com.tazar.android.api.services.RecyclingPointsService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,7 +55,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private ProgressBar progressBar;
     private ChipGroup statusFilterGroup;
     private List<TrashReport> allReports = new ArrayList<>();
-    private Map<Marker, TrashReport> markerReportMap = new HashMap<>();
+    private Map<Marker, RecyclingPoint> markerPointMap = new HashMap<>();
+    private List<RecyclingPoint> recyclingPoints = new ArrayList<>();
+    private RecyclingPointsService recyclingPointsService;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        recyclingPointsService = ApiConfig.getService(RecyclingPointsService.class);
+    }
 
     @NonNull
     @Override
@@ -68,17 +79,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             mapFragment.getMapAsync(this);
         }
 
-        setupFilterListeners();
+        setupFilters();
 
-        view.findViewById(R.id.fab_add_report).setOnClickListener(v -> 
-            startActivity(new Intent(getActivity(), CreateReportActivity.class))
-        );
+        view.findViewById(R.id.fab_add_report).setOnClickListener(v -> {
+            showAddReportDialog();
+        });
 
         return view;
     }
 
-    private void setupFilterListeners() {
-        statusFilterGroup.setOnCheckedStateChangeListener((group, checkedIds) -> updateMarkers());
+    private void setupFilters() {
+        statusFilterGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            updateMapMarkers();
+        });
     }
 
     @Override
@@ -91,105 +104,86 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         mMap.setOnMarkerClickListener(this::onMarkerClick);
 
-        // Загружаем точки
-        loadTrashReports();
+        // Загружаем точки после инициализации карты
+        loadRecyclingPoints();
     }
 
-    private void loadTrashReports() {
-        showLoading(true);
-
-        TrashReportService service = ApiConfig.getService(TrashReportService.class);
+    private void loadRecyclingPoints() {
         String token = "Bearer " + TazarApplication.getInstance().getAuthToken();
-
-        service.getTrashReports(token).enqueue(new Callback<List<TrashReport>>() {
+        recyclingPointsService.getRecyclingPoints(token).enqueue(new Callback<List<RecyclingPoint>>() {
             @Override
-            public void onResponse(@NonNull Call<List<TrashReport>> call, 
-                                 @NonNull Response<List<TrashReport>> response) {
-                showLoading(false);
-                
+            public void onResponse(Call<List<RecyclingPoint>> call, Response<List<RecyclingPoint>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    allReports = response.body();
-                    updateMarkers();
-                    zoomToFitMarkers();
+                    recyclingPoints = response.body();
+                    updateMapMarkers();
                 } else {
-                    Toast.makeText(getContext(), R.string.error_loading, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), 
+                        R.string.error_loading_recycling_points, 
+                        Toast.LENGTH_SHORT).show();
                 }
             }
-            
+
             @Override
-            public void onFailure(@NonNull Call<List<TrashReport>> call, @NonNull Throwable t) {
-                showLoading(false);
-                Toast.makeText(getContext(), R.string.error_network, Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<List<RecyclingPoint>> call, Throwable t) {
+                Toast.makeText(getContext(), 
+                    R.string.error_network, 
+                    Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void updateMarkers() {
+    private void updateMapMarkers() {
         if (mMap == null) return;
         
         mMap.clear();
-        markerReportMap.clear();
+        markerPointMap.clear();
         
-        List<String> activeFilters = new ArrayList<>();
-        if (((Chip) statusFilterGroup.findViewById(R.id.chip_new)).isChecked()) 
-            activeFilters.add("new");
-        if (((Chip) statusFilterGroup.findViewById(R.id.chip_in_progress)).isChecked()) 
-            activeFilters.add("in_progress");
-        if (((Chip) statusFilterGroup.findViewById(R.id.chip_completed)).isChecked()) 
-            activeFilters.add("completed");
+        List<String> selectedTypes = new ArrayList<>();
         
-        for (TrashReport report : allReports) {
-            if (activeFilters.contains(report.getStatus())) {
-                LatLng position = new LatLng(report.getLatitude(), report.getLongitude());
-                
-                BitmapDescriptor icon = getMarkerIcon(report.getStatus());
+        if (((Chip) statusFilterGroup.findViewById(R.id.chip_new)).isChecked()) {
+            selectedTypes.add("plastic");
+        }
+        if (((Chip) statusFilterGroup.findViewById(R.id.chip_in_progress)).isChecked()) {
+            selectedTypes.add("paper");
+        }
+        if (((Chip) statusFilterGroup.findViewById(R.id.chip_completed)).isChecked()) {
+            selectedTypes.add("metal");
+        }
+        if (((Chip) statusFilterGroup.findViewById(R.id.chip_glass)).isChecked()) {
+            selectedTypes.add("glass");
+        }
+        if (((Chip) statusFilterGroup.findViewById(R.id.chip_medical)).isChecked()) {
+            selectedTypes.add("medical");
+        }
+        if (((Chip) statusFilterGroup.findViewById(R.id.chip_construction)).isChecked()) {
+            selectedTypes.add("construction");
+        }
+        if (((Chip) statusFilterGroup.findViewById(R.id.chip_agricultural)).isChecked()) {
+            selectedTypes.add("agricultural");
+        }
+        
+        for (RecyclingPoint point : recyclingPoints) {
+            if (selectedTypes.isEmpty() || selectedTypes.contains(point.getWasteTypes())) {
+                LatLng position = new LatLng(point.getLatitude(), point.getLongitude());
                 
                 Marker marker = mMap.addMarker(new MarkerOptions()
                         .position(position)
-                        .title(report.getAddress())
-                        .snippet(report.getDescription())
-                        .icon(icon));
+                        .title(point.getName())
+                        .snippet(point.getAddress())
+                        .icon(point.getMarkerIcon(requireContext())));
                 
                 if (marker != null) {
-                    markerReportMap.put(marker, report);
+                    markerPointMap.put(marker, point);
                 }
             }
         }
     }
 
-    private BitmapDescriptor getMarkerIcon(String status) {
-        int drawableRes;
-        switch (status) {
-            case "new":
-                drawableRes = R.drawable.ic_marker_new;
-                break;
-            case "in_progress":
-                drawableRes = R.drawable.ic_marker_in_progress;
-                break;
-            case "completed":
-                drawableRes = R.drawable.ic_marker_completed;
-                break;
-            default:
-                return BitmapDescriptorFactory.defaultMarker();
-        }
-        
-        Drawable drawable = ContextCompat.getDrawable(requireContext(), drawableRes);
-        if (drawable == null) return BitmapDescriptorFactory.defaultMarker();
-        
-        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), 
-                drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.draw(canvas);
-        
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
-    }
-
     private void zoomToFitMarkers() {
-        if (mMap == null || markerReportMap.isEmpty()) return;
+        if (mMap == null || markerPointMap.isEmpty()) return;
         
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for (Marker marker : markerReportMap.keySet()) {
+        for (Marker marker : markerPointMap.keySet()) {
             builder.include(marker.getPosition());
         }
         
@@ -198,18 +192,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private boolean onMarkerClick(Marker marker) {
-        TrashReport report = markerReportMap.get(marker);
-        if (report != null) {
-            // Показываем детали точки
-            showReportDetails(report);
+        RecyclingPoint point = markerPointMap.get(marker);
+        if (point != null) {
+            // Показываем детали точки переработки
+            showPointDetails(point);
             return true;
         }
         return false;
     }
 
-    private void showReportDetails(TrashReport report) {
-        // TODO: Показать диалог с деталями точки
+    private void showPointDetails(RecyclingPoint point) {
+        // TODO: Показать диалог с деталями точки переработки
         // Можно использовать BottomSheetDialog
+        Toast.makeText(requireContext(), 
+            point.getName() + "\n" + point.getAddress(), 
+            Toast.LENGTH_LONG).show();
     }
 
     private void showLoading(boolean show) {
@@ -227,5 +224,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             return false;
         }
         return true;
+    }
+
+    private void showAddReportDialog() {
+        // TODO: Реализация диалога добавления нового отчета
     }
 } 

@@ -1,74 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/filter_card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
-        app:layout_constraintTop_toTopOf="parent">
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/status_filter_group"
+        <HorizontalScrollView
+            android:id="@+id/filters_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp">
+            android:layout_margin="8dp"
+            android:scrollbars="none">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_new"
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/status_filter_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/status_new"
-                android:checkable="true"
-                android:checked="true" />
+                app:singleSelection="false"
+                app:chipSpacingHorizontal="8dp">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_in_progress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/status_in_progress"
-                android:checkable="true"
-                android:checked="true" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_new"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Пластик"
+                    app:chipBackgroundColor="@color/waste_plastic"
+                    app:chipStrokeWidth="0dp"
+                    android:textColor="@color/white"/>
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_completed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/status_completed"
-                android:checkable="true"
-                android:checked="true" />
-        </com.google.android.material.chip.ChipGroup>
-    </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_in_progress"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Бумага"
+                    app:chipBackgroundColor="@color/waste_paper"
+                    app:chipStrokeWidth="0dp"
+                    android:textColor="@color/white"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_completed"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Металл"
+                    app:chipBackgroundColor="@color/waste_metal"
+                    app:chipStrokeWidth="0dp"
+                    android:textColor="@color/white"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_glass"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Стекло"
+                    app:chipBackgroundColor="@color/waste_glass"
+                    app:chipStrokeWidth="0dp"
+                    android:textColor="@color/white"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_medical"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Медицинские"
+                    app:chipBackgroundColor="@color/waste_medical"
+                    app:chipStrokeWidth="0dp"
+                    android:textColor="@color/white"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_construction"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Строительные"
+                    app:chipBackgroundColor="@color/waste_construction"
+                    app:chipStrokeWidth="0dp"
+                    android:textColor="@color/white"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_agricultural"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Сельские"
+                    app:chipBackgroundColor="@color/waste_agricultural"
+                    app:chipStrokeWidth="0dp"
+                    android:textColor="@color/white"/>
+
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_report"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:contentDescription="@string/add_trash_report"
         android:src="@drawable/ic_add"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:tint="@color/white"
+        app:backgroundTint="@color/colorPrimary"/>
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout> 
+</androidx.coordinatorlayout.widget.CoordinatorLayout> 

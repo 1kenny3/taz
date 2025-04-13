@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Основные цвета темы -->
     <color name="primary">#4CAF50</color>
     <color name="primary_dark">#388E3C</color>
-    <color name="primary_light">#C8E6C9</color>
     <color name="accent">#8BC34A</color>
+    
+    <color name="colorPrimary">#4CAF50</color>
+    <color name="colorPrimaryDark">#388E3C</color>
+    <color name="colorAccent">#8BC34A</color>
+    
+    <color name="textColorPrimary">#212121</color>
+    <color name="textColorSecondary">#757575</color>
+    <color name="textColorDisabled">#BDBDBD</color>
+    
+    <color name="primary_light">#C8E6C9</color>
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
     <color name="icons">#FFFFFF</color>
@@ -27,6 +37,10 @@
     <color name="waste_paper">#FFC107</color>
     <color name="waste_metal">#9E9E9E</color>
     <color name="waste_glass">#00BCD4</color>
+    <color name="waste_medical">#E91E63</color>
+    <color name="waste_construction">#FF5722</color>
+    <color name="waste_agricultural">#8BC34A</color>
+    
     <color name="gray">#CCCCCC</color>
     <color name="gray_light">#EEEEEE</color>
     <color name="ripple_color">#1F000000</color>

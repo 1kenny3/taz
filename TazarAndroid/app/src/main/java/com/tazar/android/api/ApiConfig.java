@@ -9,7 +9,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiConfig {
-    private static final String BASE_URL = "http://10.0.2.2:8000/"; // URL для эмулятора
+    private static final String BASE_URL = "https://your-api-url.com/"; // Замените на ваш URL
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {
@@ -24,7 +24,7 @@ public class ApiConfig {
             }
 
             retrofit = new Retrofit.Builder()
-                    .baseUrl(getBaseUrl())
+                    .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(httpClient.build())
                     .build();
