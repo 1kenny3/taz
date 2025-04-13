@@ -36,6 +36,9 @@ class CollectionPoint(models.Model):
         ('paper', 'Бумага'),
         ('metal', 'Металл'),
         ('glass', 'Стекло'),
+        ('medical', 'Медицинские отходы'),
+        ('construction', 'Строительные отходы'),
+        ('agricultural', 'Сельские отходы'),
     ]
     
     waste_types = models.CharField(
