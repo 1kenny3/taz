@@ -31,6 +31,9 @@ public class RecyclingPoint {
     
     @SerializedName("waste_type_display")
     private String wasteTypeDisplay;
+    
+    // Поле для хранения массива типов отходов
+    private String[] acceptedTypes;
 
     // Константы для типов отходов
     public static final String TYPE_PLASTIC = "plastic";
@@ -58,10 +61,56 @@ public class RecyclingPoint {
     public void setLongitude(double longitude) { this.longitude = longitude; }
     
     public String getWasteTypes() { return wasteTypes; }
-    public void setWasteTypes(String wasteTypes) { this.wasteTypes = wasteTypes; }
+    public void setWasteTypes(String wasteTypes) { 
+        this.wasteTypes = wasteTypes;
+        
+        // Обновляем массив acceptedTypes при установке строки wasteTypes
+        if (wasteTypes != null && !wasteTypes.isEmpty()) {
+            this.acceptedTypes = wasteTypes.split(",");
+            for (int i = 0; i < this.acceptedTypes.length; i++) {
+                this.acceptedTypes[i] = this.acceptedTypes[i].trim();
+            }
+        } else {
+            this.acceptedTypes = new String[0];
+        }
+    }
     
     public String getWasteTypeDisplay() { return wasteTypeDisplay; }
     public void setWasteTypeDisplay(String wasteTypeDisplay) { this.wasteTypeDisplay = wasteTypeDisplay; }
+
+    // Новые методы для работы с массивом типов отходов
+    public String[] getAcceptedTypes() {
+        if (acceptedTypes == null) {
+            // Если массив еще не инициализирован, но есть строка типов отходов
+            if (wasteTypes != null && !wasteTypes.isEmpty()) {
+                acceptedTypes = wasteTypes.split(",");
+                for (int i = 0; i < acceptedTypes.length; i++) {
+                    acceptedTypes[i] = acceptedTypes[i].trim();
+                }
+            } else {
+                acceptedTypes = new String[0];
+            }
+        }
+        return acceptedTypes;
+    }
+    
+    public void setAcceptedTypes(String[] acceptedTypes) {
+        this.acceptedTypes = acceptedTypes;
+        
+        // Обновляем строку wasteTypes
+        if (acceptedTypes != null && acceptedTypes.length > 0) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < acceptedTypes.length; i++) {
+                if (i > 0) {
+                    sb.append(",");
+                }
+                sb.append(acceptedTypes[i]);
+            }
+            this.wasteTypes = sb.toString();
+        } else {
+            this.wasteTypes = "";
+        }
+    }
 
     public BitmapDescriptor getMarkerIcon(Context context) {
         int drawableRes;

@@ -14,7 +14,7 @@ public class TrashReport {
     public static final String STATUS_REJECTED = "rejected";
     
     @SerializedName("id")
-    private int id;
+    private long id;
     
     @SerializedName("user")
     private int userId;
@@ -55,12 +55,15 @@ public class TrashReport {
     @SerializedName("photo_url")
     private String photoUrl;
     
+    @SerializedName("waste_type")
+    private String wasteType;
+    
     // Геттеры и сеттеры
-    public int getId() {
+    public long getId() {
         return id;
     }
     
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
     
@@ -121,7 +124,7 @@ public class TrashReport {
     }
     
     public String getStatus() {
-        return status != null ? status : "pending";
+        return status;
     }
     
     public void setStatus(String status) {
@@ -192,5 +195,13 @@ public class TrashReport {
     
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+    
+    public String getWasteType() {
+        return wasteType;
+    }
+    
+    public void setWasteType(String wasteType) {
+        this.wasteType = wasteType;
     }
 } 
