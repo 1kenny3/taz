@@ -29,49 +29,70 @@
                 style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Пластик" />
+                android:text="Пластик"
+                android:textColor="@color/white"
+                app:chipBackgroundColor="@color/waste_plastic"
+                app:chipStrokeWidth="0dp"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_paper"
                 style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Бумага" />
+                android:text="Бумага"
+                android:textColor="@color/white"
+                app:chipBackgroundColor="@color/waste_paper"
+                app:chipStrokeWidth="0dp"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_metal"
                 style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Металл" />
+                android:text="Металл"
+                android:textColor="@color/white"
+                app:chipBackgroundColor="@color/waste_metal"
+                app:chipStrokeWidth="0dp"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_glass"
                 style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Стекло" />
+                android:text="Стекло"
+                android:textColor="@color/white"
+                app:chipBackgroundColor="@color/waste_glass"
+                app:chipStrokeWidth="0dp"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_medical"
                 style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Медицинские" />
+                android:text="Медицинские"
+                android:textColor="@color/white"
+                app:chipBackgroundColor="@color/waste_medical"
+                app:chipStrokeWidth="0dp"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_construction"
                 style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Строительные" />
+                android:text="Строительные"
+                android:textColor="@color/white"
+                app:chipBackgroundColor="@color/waste_construction"
+                app:chipStrokeWidth="0dp"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_agricultural"
                 style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Сельские" />
+                android:text="Сельские"
+                android:textColor="@color/white"
+                app:chipBackgroundColor="@color/waste_agricultural"
+                app:chipStrokeWidth="0dp"/>
 
         </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>
