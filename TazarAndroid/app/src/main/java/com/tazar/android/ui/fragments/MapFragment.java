@@ -55,10 +55,11 @@ import retrofit2.Response;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
+    private static final String TAG = "MapFragment";
+    
     private GoogleMap mMap;
     private ProgressBar progressBar;
     private ChipGroup wasteTypeFilterGroup;
-    private ChipGroup statusFilterGroup;
     private List<TrashReport> trashReports = new ArrayList<>();
     private List<RecyclingPoint> recyclingPoints = new ArrayList<>();
     private Map<Marker, Object> markerMap = new HashMap<>();
@@ -79,7 +80,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         progressBar = view.findViewById(R.id.progress_bar);
         wasteTypeFilterGroup = view.findViewById(R.id.waste_type_filter_group);
-        statusFilterGroup = view.findViewById(R.id.status_filter_group);
+
+        // Добавляем слушатели для кнопок масштабирования
+        view.findViewById(R.id.btn_zoom_in).setOnClickListener(v -> {
+            if (mMap != null) {
+                mMap.animateCamera(CameraUpdateFactory.zoomIn());
+                Log.d(TAG, "Нажата кнопка приближения");
+            }
+        });
+
+        view.findViewById(R.id.btn_zoom_out).setOnClickListener(v -> {
+            if (mMap != null) {
+                mMap.animateCamera(CameraUpdateFactory.zoomOut());
+                Log.d(TAG, "Нажата кнопка отдаления");
+            }
+        });
+
+        // Добавляем слушатель для кнопки добавления отчета
+        view.findViewById(R.id.fab_add_report).setOnClickListener(v -> {
+            Log.d(TAG, "Нажата кнопка добавления отчета");
+            showAddReportDialog();
+        });
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
@@ -89,10 +110,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         setupFilterListeners();
 
-        view.findViewById(R.id.fab_add_report).setOnClickListener(v -> {
-            showAddReportDialog();
-        });
-
         // Добавим тестовые данные для отладки
         addTestData();
 
@@ -100,14 +117,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     }
 
     private void setupFilterListeners() {
-        wasteTypeFilterGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
-            Log.d("MapFragment", "Выбрано типов отходов: " + checkedIds.size());
-            updateMarkers();
-        });
-        
-        statusFilterGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
-            Log.d("MapFragment", "Выбрано статусов: " + checkedIds.size());
-            updateMarkers();
+        wasteTypeFilterGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            updateMapMarkers();
         });
     }
 
@@ -115,15 +126,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
         
-        // Устанавливаем слушатель нажатий на маркеры
-        mMap.setOnMarkerClickListener(this);
-        
-        // Настраиваем карту
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        
-        // Центрируем карту на России
-        LatLng russia = new LatLng(55.751244, 37.618423);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(russia, 10));
+        // Настройка элементов управления на карте
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setCompassEnabled(true);
+        mMap.getUiSettings().setMapToolbarEnabled(true);
         
         // Загружаем данные
         loadTrashReports();
@@ -131,7 +137,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         
         // Если данных нет (для тестирования), обновляем маркеры с тестовыми данными
         if (!dataLoaded) {
-            updateMarkers();
+            updateMapMarkers();
         }
     }
 
@@ -163,14 +169,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                         allRecyclingPoints.addAll(points);
                     }
                     
-                    updateMarkers();
+                    updateMapMarkers();
                 } else {
                     Log.e("MapFragment", "Ошибка получения пунктов переработки: " + 
                         (response.errorBody() != null ? "Код: " + response.code() : "Нет тела ответа"));
                     
                     // Добавляем тестовые данные, если произошла ошибка
                     addTestRecyclingPoints();
-                    updateMarkers();
+                    updateMapMarkers();
                     
                     Toast.makeText(getContext(), "Используются демо-данные для пунктов переработки", 
                         Toast.LENGTH_SHORT).show();
@@ -184,7 +190,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 
                 // Добавляем тестовые данные при сбое сети
                 addTestRecyclingPoints();
-                updateMarkers();
+                updateMapMarkers();
                 
                 Toast.makeText(getContext(), "Используются демо-данные для пунктов переработки", 
                     Toast.LENGTH_SHORT).show();
@@ -334,69 +340,50 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         Log.d("MapFragment", "Добавлено " + allRecyclingPoints.size() + " тестовых пунктов переработки");
     }
 
-    private void updateMarkers() {
+    private void updateMapMarkers() {
         if (mMap == null) return;
         
-        Log.d("MapFragment", "Обновление маркеров на карте");
         mMap.clear();
         markerMap.clear();
 
-        // Получаем активные фильтры типов отходов
-        List<String> activeWasteTypes = new ArrayList<>();
+        // Получаем выбранные типы отходов
+        List<String> selectedTypes = new ArrayList<>();
+        
+        // Проверяем выбранные чипы
         if (wasteTypeFilterGroup.findViewById(R.id.chip_plastic) != null && 
-            ((Chip) wasteTypeFilterGroup.findViewById(R.id.chip_plastic)).isChecked()) 
-            activeWasteTypes.add("plastic");
-            
+            ((Chip) wasteTypeFilterGroup.findViewById(R.id.chip_plastic)).isChecked()) {
+            selectedTypes.add("plastic");
+        }
         if (wasteTypeFilterGroup.findViewById(R.id.chip_paper) != null && 
-            ((Chip) wasteTypeFilterGroup.findViewById(R.id.chip_paper)).isChecked()) 
-            activeWasteTypes.add("paper");
-            
+            ((Chip) wasteTypeFilterGroup.findViewById(R.id.chip_paper)).isChecked()) {
+            selectedTypes.add("paper");
+        }
         if (wasteTypeFilterGroup.findViewById(R.id.chip_glass) != null && 
-            ((Chip) wasteTypeFilterGroup.findViewById(R.id.chip_glass)).isChecked()) 
-            activeWasteTypes.add("glass");
-            
+            ((Chip) wasteTypeFilterGroup.findViewById(R.id.chip_glass)).isChecked()) {
+            selectedTypes.add("glass");
+        }
         if (wasteTypeFilterGroup.findViewById(R.id.chip_metal) != null && 
-            ((Chip) wasteTypeFilterGroup.findViewById(R.id.chip_metal)).isChecked()) 
-            activeWasteTypes.add("metal");
-            
+            ((Chip) wasteTypeFilterGroup.findViewById(R.id.chip_metal)).isChecked()) {
+            selectedTypes.add("metal");
+        }
         if (wasteTypeFilterGroup.findViewById(R.id.chip_medical) != null && 
-            ((Chip) wasteTypeFilterGroup.findViewById(R.id.chip_medical)).isChecked()) 
-            activeWasteTypes.add("medical");
-            
+            ((Chip) wasteTypeFilterGroup.findViewById(R.id.chip_medical)).isChecked()) {
+            selectedTypes.add("medical");
+        }
         if (wasteTypeFilterGroup.findViewById(R.id.chip_construction) != null && 
-            ((Chip) wasteTypeFilterGroup.findViewById(R.id.chip_construction)).isChecked()) 
-            activeWasteTypes.add("construction");
-            
+            ((Chip) wasteTypeFilterGroup.findViewById(R.id.chip_construction)).isChecked()) {
+            selectedTypes.add("construction");
+        }
         if (wasteTypeFilterGroup.findViewById(R.id.chip_agricultural) != null && 
-            ((Chip) wasteTypeFilterGroup.findViewById(R.id.chip_agricultural)).isChecked()) 
-            activeWasteTypes.add("agricultural");
+            ((Chip) wasteTypeFilterGroup.findViewById(R.id.chip_agricultural)).isChecked()) {
+            selectedTypes.add("agricultural");
+        }
 
-        Log.d("MapFragment", "Активные типы отходов: " + activeWasteTypes);
-
-        // Получаем активные фильтры статусов
-        List<String> activeStatuses = new ArrayList<>();
-        if (statusFilterGroup.findViewById(R.id.chip_new) != null && 
-            ((Chip) statusFilterGroup.findViewById(R.id.chip_new)).isChecked()) 
-            activeStatuses.add("new");
-            
-        if (statusFilterGroup.findViewById(R.id.chip_in_progress) != null && 
-            ((Chip) statusFilterGroup.findViewById(R.id.chip_in_progress)).isChecked()) 
-            activeStatuses.add("in_progress");
-            
-        if (statusFilterGroup.findViewById(R.id.chip_completed) != null && 
-            ((Chip) statusFilterGroup.findViewById(R.id.chip_completed)).isChecked()) 
-            activeStatuses.add("completed");
-
-        Log.d("MapFragment", "Активные статусы: " + activeStatuses);
-
-        // Если ни один фильтр не выбран, показываем все точки
-        boolean showAllTypes = activeWasteTypes.isEmpty();
-        boolean showAllStatuses = activeStatuses.isEmpty();
+        Log.d("MapFragment", "Выбранные типы отходов: " + selectedTypes);
 
         // Отображаем точки с мусором согласно фильтрам
         for (TrashReport report : trashReports) {
-            if ((showAllStatuses || activeStatuses.contains(report.getStatus())) && 
-                (showAllTypes || activeWasteTypes.contains(report.getWasteType()))) {
+            if (selectedTypes.isEmpty() || selectedTypes.contains(report.getWasteType())) {
                 addTrashMarker(report);
                 Log.d("MapFragment", "Добавлен маркер мусора: " + report.getDescription() + ", тип: " + report.getWasteType());
             }
@@ -407,7 +394,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             if (point.getAcceptedTypes() != null) {
                 boolean hasMatchingType = false;
                 for (String type : point.getAcceptedTypes()) {
-                    if (showAllTypes || activeWasteTypes.contains(type)) {
+                    if (selectedTypes.isEmpty() || selectedTypes.contains(type)) {
                         hasMatchingType = true;
                         break;
                     }
@@ -630,6 +617,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     }
 
     private void showAddReportDialog() {
-        // TODO: Реализация диалога добавления нового отчета
+        Toast.makeText(requireContext(), "Функция добавления отчета в разработке", Toast.LENGTH_SHORT).show();
     }
 } 
