@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'colorfield',
     # 'admin_interface',
     'corsheaders',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -153,8 +154,12 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+    ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',  # Измените на более строгие настройки в продакшене
+        'rest_framework.permissions.AllowAny',  # Изменяем на AllowAny для публичного доступа
     ]
 }
 
