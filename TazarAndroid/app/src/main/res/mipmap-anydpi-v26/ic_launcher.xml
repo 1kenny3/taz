@@ -1,0 +1,6 @@
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Задний фон иконки, можно задать цвет или использовать png -->
+    <background android:drawable="@android:color/white" />
+    <!-- Передний план: используем наш drawable ic_ecoup_foreground -->
+    <foreground android:drawable="@drawable/ic_ecoup_foreground" />
+</adaptive-icon> 
