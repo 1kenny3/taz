@@ -2,90 +2,257 @@
 
 {% block title %}Главная{% endblock %}
 
+{% block extra_css %}
+<style>
+    .hero-section {
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1526951521990-620dc14c214b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+        background-size: cover;
+        background-position: center;
+        height: 80vh;
+        display: flex;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .feature-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .news-card {
+        overflow: hidden;
+        border-radius: 0.5rem;
+        transition: transform 0.3s ease;
+    }
+    
+    .news-card:hover {
+        transform: scale(1.03);
+    }
+    
+    .news-image {
+        height: 220px;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    
+    .news-card:hover .news-image {
+        transform: scale(1.1);
+    }
+    
+    .btn-action {
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+    
+    .btn-action::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: -1;
+    }
+    
+    .btn-action:hover::after {
+        transform: translateX(0);
+    }
+    
+    .stats-section {
+        background-color: #f8fafc;
+    }
+    
+    .stat-item {
+        text-align: center;
+        padding: 2rem;
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #22c55e;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animated {
+        animation: fadeIn 0.8s ease forwards;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<!-- Existing header content -->
-<header class="bg-primary text-white text-center py-5">
-    <div class="container">
-        <h1 class="display-4">TAZAR</h1>
-        <p class="lead">Платформа для управления отходами и экологических инициатив</p>
-        <div class="mt-4">
-            <a href="{% url 'register' %}" class="btn btn-light btn-lg mx-2">Регистрация</a>
-            <a href="{% url 'map' %}" class="btn btn-outline-light btn-lg mx-2">Карта пунктов сбора</a>
+<!-- Hero Section -->
+<section class="hero-section text-white">
+    <div class="container mx-auto px-4">
+        <div class="animated" style="animation-delay: 0.2s; opacity: 0;">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6">TAZAR</h1>
+            <p class="text-xl md:text-2xl mb-10 max-w-2xl mx-auto">Инновационная платформа для управления отходами и поддержки экологических инициатив</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="{% url 'register' %}" class="btn-action bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full transition duration-300 shadow-lg">Присоединиться</a>
+                <a href="{% url 'map' %}" class="btn-action bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-full hover:bg-white hover:text-green-500 transition duration-300">Найти пункт сбора</a>
+            </div>
         </div>
     </div>
-</header>
+</section>
+
+<!-- Статистика -->
+<section class="stats-section py-16">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Наше воздействие</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="stat-item bg-white rounded-lg shadow-md animated" style="animation-delay: 0.3s; opacity: 0;">
+                <div class="stat-number">1200+</div>
+                <div class="text-gray-600">Пунктов сбора</div>
+            </div>
+            <div class="stat-item bg-white rounded-lg shadow-md animated" style="animation-delay: 0.4s; opacity: 0;">
+                <div class="stat-number">5000+</div>
+                <div class="text-gray-600">Активных пользователей</div>
+            </div>
+            <div class="stat-item bg-white rounded-lg shadow-md animated" style="animation-delay: 0.5s; opacity: 0;">
+                <div class="stat-number">15т</div>
+                <div class="text-gray-600">Отходов переработано</div>
+            </div>
+            <div class="stat-item bg-white rounded-lg shadow-md animated" style="animation-delay: 0.6s; opacity: 0;">
+                <div class="stat-number">100+</div>
+                <div class="text-gray-600">Экологических акций</div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- Последние новости -->
 {% if latest_news %}
-<section class="py-5 bg-light">
-    <div class="container">
-        <h2 class="text-center mb-4">Последние новости</h2>
-        <div class="row">
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Последние новости</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             {% for item in latest_news %}
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100">
+                <div class="news-card bg-white shadow-lg rounded-lg overflow-hidden animated" style="animation-delay: {{ forloop.counter|add:"0.6" }}s; opacity: 0;">
+                    <div class="overflow-hidden">
                         {% if item.image %}
-                            <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.title }}" style="height: 200px; object-fit: cover;">
+                            <img src="{{ item.image.url }}" class="news-image w-full" alt="{{ item.title }}">
                         {% else %}
-                            <div class="bg-light text-center py-5" style="height: 200px;">
-                                <i class="fas fa-newspaper fa-3x text-muted"></i>
+                            <div class="bg-green-100 flex items-center justify-center h-56">
+                                <svg class="w-16 h-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+                                </svg>
                             </div>
                         {% endif %}
-                        <div class="card-body">
-                            <h5 class="card-title">{{ item.title }}</h5>
-                            <p class="card-text text-muted">
-                                <small>{{ item.created_at|date:"d.m.Y" }}</small>
-                            </p>
-                            <p class="card-text">{{ item.content|truncatewords:15 }}</p>
-                            <a href="{% url 'news_detail' item.id %}" class="btn btn-primary">Подробнее</a>
-                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="text-sm text-green-500 font-semibold mb-2">{{ item.created_at|date:"d.m.Y" }}</div>
+                        <h3 class="text-xl font-bold mb-3">{{ item.title }}</h3>
+                        <p class="text-gray-600 mb-4">{{ item.content|truncatewords:15 }}</p>
+                        <a href="{% url 'news_detail' item.id %}" class="inline-block text-green-500 font-semibold hover:text-green-700 transition duration-300">
+                            Читать далее
+                            <svg class="w-4 h-4 inline-block ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                            </svg>
+                        </a>
                     </div>
                 </div>
             {% endfor %}
         </div>
-        <div class="text-center mt-3">
-            <a href="{% url 'news_list' %}" class="btn btn-outline-primary">Все новости</a>
+        <div class="text-center mt-10">
+            <a href="{% url 'news_list' %}" class="btn-action inline-block bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-8 rounded-full transition duration-300 shadow">Все новости</a>
         </div>
     </div>
 </section>
 {% endif %}
 
-<!-- Existing features section -->
-<section class="py-5">
-    <div class="container">
-        <h2 class="text-center mb-4">Наши возможности</h2>
-        <div class="row text-center">
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 p-4">
-                    <div class="card-body">
-                        <i class="fas fa-map-marker-alt fa-3x mb-3 text-primary"></i>
-                        <h3 class="card-title h4">Пункты сбора</h3>
-                        <p class="card-text">Находите ближайшие пункты сбора отходов на интерактивной карте</p>
-                    </div>
+<!-- Наши возможности -->
+<section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Наши возможности</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="feature-card bg-white p-8 rounded-lg shadow-md animated" style="animation-delay: 0.8s; opacity: 0;">
+                <div class="bg-green-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-6 mx-auto">
+                    <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-center mb-4">Интерактивная карта</h3>
+                <p class="text-gray-600 text-center">Находите ближайшие пункты сбора отходов и сообщайте о местах скопления мусора</p>
+                <div class="text-center mt-6">
+                    <a href="{% url 'map' %}" class="text-green-500 hover:text-green-700 font-semibold transition duration-300">Открыть карту</a>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 p-4">
-                    <div class="card-body">
-                        <i class="fas fa-medal fa-3x mb-3 text-primary"></i>
-                        <h3 class="card-title h4">Достижения</h3>
-                        <p class="card-text">Зарабатывайте баллы и получайте награды за экологические действия</p>
-                    </div>
+            
+            <div class="feature-card bg-white p-8 rounded-lg shadow-md animated" style="animation-delay: 0.9s; opacity: 0;">
+                <div class="bg-green-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-6 mx-auto">
+                    <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-center mb-4">Система достижений</h3>
+                <p class="text-gray-600 text-center">Зарабатывайте баллы и получайте награды за экологические действия и активность</p>
+                <div class="text-center mt-6">
+                    <a href="{% url 'dashboard' %}" class="text-green-500 hover:text-green-700 font-semibold transition duration-300">Мои достижения</a>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 p-4">
-                    <div class="card-body">
-                        <i class="fas fa-users fa-3x mb-3 text-primary"></i>
-                        <h3 class="card-title h4">Сообщество</h3>
-                        <p class="card-text">Присоединяйтесь к командам и участвуйте в экологических акциях</p>
-                    </div>
+            
+            <div class="feature-card bg-white p-8 rounded-lg shadow-md animated" style="animation-delay: 1s; opacity: 0;">
+                <div class="bg-green-100 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-6 mx-auto">
+                    <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-center mb-4">Сообщество</h3>
+                <p class="text-gray-600 text-center">Присоединяйтесь к командам и участвуйте в экологических акциях вместе с другими</p>
+                <div class="text-center mt-6">
+                    <a href="{% url 'features' %}" class="text-green-500 hover:text-green-700 font-semibold transition duration-300">Узнать больше</a>
                 </div>
             </div>
-        </div>
-        <div class="text-center mt-3">
-            <a href="{% url 'features' %}" class="btn btn-primary">Узнать больше</a>
         </div>
     </div>
 </section>
+
+<!-- Призыв к действию -->
+<section class="py-16 bg-green-500 text-white text-center">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold mb-6 animated" style="animation-delay: 1.1s; opacity: 0;">Начните делать мир чище вместе с нами!</h2>
+        <p class="text-xl mb-10 max-w-2xl mx-auto animated" style="animation-delay: 1.2s; opacity: 0;">Присоединяйтесь к нашему сообществу экологически ответственных людей и внесите свой вклад в сохранение окружающей среды.</p>
+        <div class="animated" style="animation-delay: 1.3s; opacity: 0;">
+            <a href="{% url 'register' %}" class="btn-action bg-white text-green-500 hover:bg-green-50 font-bold py-3 px-10 rounded-full transition duration-300 shadow-lg">Зарегистрироваться</a>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Анимация появления элементов при прокрутке
+        const animatedElements = document.querySelectorAll('.animated');
+        
+        function checkView() {
+            animatedElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        }
+        
+        // Начальная проверка видимости элементов
+        checkView();
+        
+        // Проверка при прокрутке
+        window.addEventListener('scroll', checkView);
+    });
+</script>
 {% endblock %}
