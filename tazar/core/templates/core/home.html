@@ -139,7 +139,7 @@
         <h2 class="text-3xl font-bold text-center mb-12">Последние новости</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             {% for item in latest_news %}
-                <div class="news-card bg-white shadow-lg rounded-lg overflow-hidden animated" style="animation-delay: {{ forloop.counter|add:"0.6" }}s; opacity: 0;">
+                <div class="news-card bg-white shadow-lg rounded-lg overflow-hidden animated" style="animation-delay: 0.6s; opacity: 0;">
                     <div class="overflow-hidden">
                         {% if item.image %}
                             <img src="{{ item.image.url }}" class="news-image w-full" alt="{{ item.title }}">

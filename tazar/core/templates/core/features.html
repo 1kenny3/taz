@@ -3,77 +3,288 @@
 
 {% block title %}Функции - TAZAR{% endblock %}
 
-{% block content %}
-<div class="container mx-auto mt-10 px-4">
-    <h1 class="text-4xl font-bold text-center text-green-600 mb-12">Функции TAZAR</h1>
+{% block extra_css %}
+<style>
+    .feature-section {
+        background-color: #f8fafc;
+    }
     
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Карта пунктов приема -->
-        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300">
-            <div class="text-green-500 text-4xl mb-4">🗺️</div>
-            <h3 class="text-xl font-bold mb-3">Интерактивная карта</h3>
-            <p class="text-gray-600">Находите ближайшие пункты приема отходов на интерактивной карте города.</p>
-        </div>
+    .feature-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 1rem;
+        overflow: hidden;
+        animation: fadeIn 1s ease forwards;
+        opacity: 0;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .feature-icon {
+        width: 64px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+        position: relative;
+        box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+    }
+    
+    .feature-icon::after {
+        content: '';
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        right: -5px;
+        bottom: -5px;
+        border-radius: 50%;
+        border: 2px dashed rgba(16, 185, 129, 0.3);
+        animation: spin 12s linear infinite;
+    }
+    
+    .step-card {
+        border-left: 4px solid #10b981;
+        padding-left: 1.5rem;
+        position: relative;
+        animation: slideRight 0.8s ease forwards;
+        opacity: 0;
+    }
+    
+    .step-card::before {
+        content: '';
+        position: absolute;
+        left: -12px;
+        top: 0;
+        width: 20px;
+        height: 20px;
+        background-color: #10b981;
+        border-radius: 50%;
+    }
+    
+    .step-number {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        background-color: #10b981;
+        color: white;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 32px;
+        font-weight: bold;
+        margin-right: 0.75rem;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes slideRight {
+        from { opacity: 0; transform: translateX(-20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    
+    .banner {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1534629938736-b0fbc1d05930?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+        background-size: cover;
+        background-position: center;
+    }
+</style>
+{% endblock %}
 
-        <!-- Сообщения о мусоре - Новая функция -->
-        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300">
-            <div class="text-green-500 text-4xl mb-4">📸</div>
-            <h3 class="text-xl font-bold mb-3">Сообщения о мусоре</h3>
-            <p class="text-gray-600">Отправляйте сообщения о местах скопления мусора, прикрепляйте фото и получайте баллы за вклад в чистоту города.</p>
-        </div>
+{% block content %}
+<!-- Баннер -->
+<section class="banner py-16 text-white text-center">
+    <div class="container mx-auto px-4">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">Возможности TAZAR</h1>
+        <p class="text-xl md:text-2xl max-w-3xl mx-auto">Инновационные функции для управления отходами и улучшения экологии города</p>
+    </div>
+</section>
 
-        <!-- Система баллов - Новая функция -->
-        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300">
-            <div class="text-green-500 text-4xl mb-4">🎯</div>
-            <h3 class="text-xl font-bold mb-3">Система баллов</h3>
-            <p class="text-gray-600">Зарабатывайте баллы за активное участие в очистке города. 10 баллов за каждое подтвержденное сообщение.</p>
-        </div>
+<!-- Основные возможности -->
+<section class="feature-section py-16">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Наши основные возможности</h2>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Карта пунктов приема -->
+            <div class="feature-card bg-white shadow-md p-8" style="animation-delay: 0.1s;">
+                <div class="feature-icon mx-auto">
+                    <i class="fas fa-map-marked-alt"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4 text-center">Интерактивная карта</h3>
+                <p class="text-gray-600 text-center">Находите ближайшие пункты приема отходов на интерактивной карте с подробной информацией о каждом пункте.</p>
+                <div class="text-center mt-6">
+                    <a href="{% url 'map' %}" class="text-green-500 hover:text-green-700 flex items-center justify-center font-semibold transition duration-300">
+                        Открыть карту <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
 
-        <!-- Личный кабинет -->
-        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300">
-            <div class="text-green-500 text-4xl mb-4">👤</div>
-            <h3 class="text-xl font-bold mb-3">Личный кабинет</h3>
-            <p class="text-gray-600">Отслеживайте свои баллы, историю сообщений и статус их обработки.</p>
-        </div>
+            <!-- Сообщения о мусоре -->
+            <div class="feature-card bg-white shadow-md p-8" style="animation-delay: 0.2s;">
+                <div class="feature-icon mx-auto">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4 text-center">Сообщения о мусоре</h3>
+                <p class="text-gray-600 text-center">Отправляйте сообщения о местах скопления мусора, прикрепляйте фото и получайте баллы за вклад в чистоту города.</p>
+                <div class="text-center mt-6">
+                    <a href="{% url 'report_trash' %}" class="text-green-500 hover:text-green-700 flex items-center justify-center font-semibold transition duration-300">
+                        Сообщить о мусоре <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
 
-        <!-- Типы отходов -->
-        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300">
-            <div class="text-green-500 text-4xl mb-4">♻️</div>
-            <h3 class="text-xl font-bold mb-3">Типы отходов</h3>
-            <p class="text-gray-600">Информация о различных типах принимаемых отходов: пластик, бумага, стекло, металл.</p>
-        </div>
+            <!-- Система баллов -->
+            <div class="feature-card bg-white shadow-md p-8" style="animation-delay: 0.3s;">
+                <div class="feature-icon mx-auto">
+                    <i class="fas fa-medal"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4 text-center">Система баллов</h3>
+                <p class="text-gray-600 text-center">Зарабатывайте баллы за активное участие в очистке города. 10 баллов за каждое подтвержденное сообщение о мусоре.</p>
+                <div class="text-center mt-6">
+                    <a href="{% url 'dashboard' %}" class="text-green-500 hover:text-green-700 flex items-center justify-center font-semibold transition duration-300">
+                        Мои баллы <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
 
-        <!-- Статистика -->
-        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300">
-            <div class="text-green-500 text-4xl mb-4">📊</div>
-            <h3 class="text-xl font-bold mb-3">Статистика</h3>
-            <p class="text-gray-600">Следите за статистикой переработки и вашим вкладом в экологию города.</p>
+            <!-- Личный кабинет -->
+            <div class="feature-card bg-white shadow-md p-8" style="animation-delay: 0.4s;">
+                <div class="feature-icon mx-auto">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4 text-center">Личный кабинет</h3>
+                <p class="text-gray-600 text-center">Отслеживайте свои баллы, историю сообщений, достижения и управляйте своим профилем в удобном интерфейсе.</p>
+                <div class="text-center mt-6">
+                    <a href="{% url 'dashboard' %}" class="text-green-500 hover:text-green-700 flex items-center justify-center font-semibold transition duration-300">
+                        Мой кабинет <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Типы отходов -->
+            <div class="feature-card bg-white shadow-md p-8" style="animation-delay: 0.5s;">
+                <div class="feature-icon mx-auto">
+                    <i class="fas fa-recycle"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4 text-center">Типы отходов</h3>
+                <p class="text-gray-600 text-center">Подробная информация о различных типах принимаемых отходов: пластик, бумага, стекло, металл и правилах их сортировки.</p>
+                <div class="text-center mt-6">
+                    <a href="#" class="text-green-500 hover:text-green-700 flex items-center justify-center font-semibold transition duration-300">
+                        Узнать больше <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Статистика -->
+            <div class="feature-card bg-white shadow-md p-8" style="animation-delay: 0.6s;">
+                <div class="feature-icon mx-auto">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4 text-center">Статистика</h3>
+                <p class="text-gray-600 text-center">Следите за статистикой переработки и вашим личным вкладом в экологию города в наглядных диаграммах и графиках.</p>
+                <div class="text-center mt-6">
+                    <a href="{% url 'dashboard' %}" class="text-green-500 hover:text-green-700 flex items-center justify-center font-semibold transition duration-300">
+                        Моя статистика <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
+</section>
 
-    <!-- Как это работает -->
-    <div class="mt-16">
-        <h2 class="text-3xl font-bold text-center text-green-600 mb-8">Как это работает</h2>
-        <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-8">
-            <ol class="list-decimal list-inside space-y-4 text-gray-700">
-                <li class="mb-4">
-                    <span class="font-bold">Найдите мусор:</span> 
-                    Если вы обнаружили место скопления мусора, сфотографируйте его.
-                </li>
-                <li class="mb-4">
-                    <span class="font-bold">Отправьте сообщение:</span> 
-                    Загрузите фото, укажите местоположение на карте и добавьте описание.
-                </li>
-                <li class="mb-4">
-                    <span class="font-bold">Получите баллы:</span> 
-                    После проверки и подтверждения вашего сообщения, вам начислят 10 баллов.
-                </li>
-                <li class="mb-4">
-                    <span class="font-bold">Следите за статусом:</span> 
-                    В личном кабинете вы можете отслеживать статус ваших сообщений.
-                </li>
-            </ol>
+<!-- Как это работает -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Как это работает</h2>
+        
+        <div class="max-w-3xl mx-auto space-y-8">
+            <div class="step-card bg-white p-6 rounded-lg shadow-md" style="animation-delay: 0.8s;">
+                <h3 class="text-xl font-bold flex items-center mb-3">
+                    <span class="step-number">1</span>
+                    Найдите мусор
+                </h3>
+                <p class="text-gray-600 ml-10">Обнаружили место скопления мусора? Сфотографируйте его и отметьте геолокацию.</p>
+            </div>
+            
+            <div class="step-card bg-white p-6 rounded-lg shadow-md" style="animation-delay: 1s;">
+                <h3 class="text-xl font-bold flex items-center mb-3">
+                    <span class="step-number">2</span>
+                    Отправьте сообщение
+                </h3>
+                <p class="text-gray-600 ml-10">Загрузите фото в приложение, укажите местоположение на карте и добавьте описание проблемы.</p>
+            </div>
+            
+            <div class="step-card bg-white p-6 rounded-lg shadow-md" style="animation-delay: 1.2s;">
+                <h3 class="text-xl font-bold flex items-center mb-3">
+                    <span class="step-number">3</span>
+                    Получите баллы
+                </h3>
+                <p class="text-gray-600 ml-10">После проверки и подтверждения вашего сообщения модераторами, вам будут начислены 10 баллов за вклад в чистоту города.</p>
+            </div>
+            
+            <div class="step-card bg-white p-6 rounded-lg shadow-md" style="animation-delay: 1.4s;">
+                <h3 class="text-xl font-bold flex items-center mb-3">
+                    <span class="step-number">4</span>
+                    Следите за статусом
+                </h3>
+                <p class="text-gray-600 ml-10">В личном кабинете вы можете отслеживать статус ваших сообщений и процесс их обработки коммунальными службами.</p>
+            </div>
         </div>
     </div>
-</div>
+</section>
+
+<!-- Призыв к действию -->
+<section class="py-12 bg-green-500 text-white text-center">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold mb-4">Готовы начать?</h2>
+        <p class="text-xl mb-8 max-w-2xl mx-auto">Присоединяйтесь к TAZAR сегодня и станьте частью движения за чистый и экологичный город!</p>
+        <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+            <a href="{% url 'register' %}" class="bg-white text-green-500 hover:bg-green-50 font-bold py-3 px-8 rounded-full transition duration-300 shadow-lg">
+                Зарегистрироваться
+            </a>
+            <a href="{% url 'map' %}" class="bg-transparent border-2 border-white text-white hover:bg-white hover:text-green-500 font-bold py-3 px-8 rounded-full transition duration-300">
+                Открыть карту
+            </a>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Анимация появления элементов при прокрутке
+        const featureCards = document.querySelectorAll('.feature-card');
+        const stepCards = document.querySelectorAll('.step-card');
+        
+        function checkCards() {
+            [...featureCards, ...stepCards].forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+                const cardVisible = 150;
+                
+                if (cardTop < window.innerHeight - cardVisible) {
+                    card.style.opacity = '1';
+                }
+            });
+        }
+        
+        // Начальная проверка видимости элементов
+        setTimeout(checkCards, 100);
+        
+        // Проверка при прокрутке
+        window.addEventListener('scroll', checkCards);
+    });
+</script>
 {% endblock %}

@@ -2,13 +2,196 @@
 
 {% block title %}Контакты - TAZAR{% endblock %}
 
+{% block extra_css %}
+<style>
+    .contact-section {
+        background-color: #f8fafc;
+    }
+    
+    .contact-card {
+        border-radius: 1rem;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        animation: fadeIn 0.8s ease forwards;
+    }
+    
+    .contact-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .contact-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin-bottom: 1rem;
+        font-size: 1.25rem;
+        transition: transform 0.3s ease;
+    }
+    
+    .contact-item:hover .contact-icon {
+        transform: scale(1.1);
+    }
+    
+    .contact-form input,
+    .contact-form textarea {
+        background-color: #f8fafc;
+        border: 2px solid transparent;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        width: 100%;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+        border-color: #10b981;
+        background-color: white;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+    
+    .contact-submit {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        border: none;
+        padding: 0.875rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .contact-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+    
+    .map-container {
+        height: 400px;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<section class="bg-white p-6 rounded-lg shadow-md">
-    <h1 class="text-3xl font-bold mb-4">Контакты</h1>
-    <p>Если у вас есть вопросы или предложения, свяжитесь с нами:</p>
-    <ul class="text-gray-700">
-        <li>Email: support@tazar.com</li>
-        <li>Телефон: +123 456 7890</li>
-    </ul>
+<!-- Баннер -->
+<section class="bg-green-500 text-white py-16 text-center">
+    <div class="container mx-auto px-4">
+        <h1 class="text-4xl font-bold mb-4">Свяжитесь с нами</h1>
+        <p class="text-xl max-w-2xl mx-auto">Есть вопросы или предложения? Мы всегда рады выслушать вас и помочь с любыми проблемами</p>
+    </div>
+</section>
+
+<!-- Контактная информация -->
+<section class="py-16 contact-section">
+    <div class="container mx-auto px-4">
+        <div class="grid md:grid-cols-3 gap-8 mb-16">
+            <div class="contact-item text-center">
+                <div class="contact-icon mx-auto">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Адрес</h3>
+                <p class="text-gray-600">
+                    ул. Манаса 40<br>
+                    Бишкек, Кыргызстан
+                </p>
+            </div>
+            
+            <div class="contact-item text-center">
+                <div class="contact-icon mx-auto">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Email</h3>
+                <p class="text-gray-600">
+                    <a href="mailto:info@tazar.kg" class="text-green-500 hover:text-green-700 transition duration-300">info@tazar.kg</a><br>
+                    <a href="mailto:support@tazar.kg" class="text-green-500 hover:text-green-700 transition duration-300">support@tazar.kg</a>
+                </p>
+            </div>
+            
+            <div class="contact-item text-center">
+                <div class="contact-icon mx-auto">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Телефон</h3>
+                <p class="text-gray-600">
+                    <a href="tel:+996555123456" class="text-green-500 hover:text-green-700 transition duration-300">+996 555 123 456</a><br>
+                    <a href="tel:+996312123456" class="text-green-500 hover:text-green-700 transition duration-300">+996 312 123 456</a>
+                </p>
+            </div>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-12">
+            <div class="contact-card bg-white shadow-md p-8 animate-fade-in">
+                <h2 class="text-2xl font-bold mb-6">Напишите нам</h2>
+                <form class="contact-form space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="name" class="block text-gray-700 font-medium mb-2">Ваше имя</label>
+                            <input type="text" id="name" name="name" required placeholder="Введите ваше имя">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
+                            <input type="email" id="email" name="email" required placeholder="Введите ваш email">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="subject" class="block text-gray-700 font-medium mb-2">Тема</label>
+                        <input type="text" id="subject" name="subject" required placeholder="Тема вашего сообщения">
+                    </div>
+                    
+                    <div>
+                        <label for="message" class="block text-gray-700 font-medium mb-2">Сообщение</label>
+                        <textarea id="message" name="message" rows="5" required placeholder="Введите ваше сообщение"></textarea>
+                    </div>
+                    
+                    <div class="text-right">
+                        <button type="submit" class="contact-submit">
+                            <i class="fas fa-paper-plane mr-2"></i> Отправить сообщение
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2925.1222456989397!2d74.5925801760141!3d42.856900971135446!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x389ec825790b80f9%3A0x3f7add5da7799fe!2z0YPQuy4g0JzQsNC90LDRgdCwIDQwLCDQkdC40YjQutC10Lo!5e0!3m2!1sru!2skg!4v1634720538000!5m2!1sru!2skg" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Социальные сети -->
+<section class="py-12 bg-white">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-2xl font-bold mb-8">Присоединяйтесь к нам в социальных сетях</h2>
+        <div class="flex justify-center space-x-8">
+            <a href="#" class="text-gray-600 hover:text-green-500 transition duration-300 text-3xl">
+                <i class="fab fa-facebook"></i>
+            </a>
+            <a href="#" class="text-gray-600 hover:text-green-500 transition duration-300 text-3xl">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="text-gray-600 hover:text-green-500 transition duration-300 text-3xl">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="text-gray-600 hover:text-green-500 transition duration-300 text-3xl">
+                <i class="fab fa-youtube"></i>
+            </a>
+        </div>
+    </div>
 </section>
 {% endblock %} 

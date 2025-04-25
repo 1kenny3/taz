@@ -6,43 +6,231 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}TAZAR{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <style>
+        .nav-link {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: white;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            transform: translateX(0);
+        }
+        
+        .menu-btn {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background-color: #10b981;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: 0.5s;
+                z-index: 20;
+                padding: 2rem;
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .menu-btn {
+                display: block;
+                z-index: 30;
+            }
+            
+            .nav-link {
+                margin: 0.5rem 0;
+                font-size: 1.1rem;
+                width: 100%;
+                text-align: center;
+            }
+            
+            .nav-link::after {
+                display: none;
+            }
+        }
+        
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .shadow-primary {
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.25);
+        }
+        
+        .page-transition {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
     {% block extra_css %}{% endblock %}
 </head>
-<body class="bg-gray-100 font-sans leading-normal tracking-normal">
-    <header class="bg-green-500 p-4">
-        <nav class="container mx-auto flex justify-between items-center">
-            <a class="text-white text-2xl font-bold" href="{% url 'home' %}">TAZAR</a>
-            <div class="flex space-x-4">
-                <a class="text-white hover:bg-green-600 px-3 py-2 rounded transition duration-300" href="{% url 'features' %}">Функции</a>
-                <a class="text-white hover:bg-green-600 px-3 py-2 rounded transition duration-300" href="{% url 'map' %}">Карта</a>
-                {% if user.is_authenticated %}
-                    <a class="text-white hover:bg-green-600 px-3 py-2 rounded transition duration-300" href="{% url 'dashboard' %}">Личный кабинет</a>
-                    <a class="text-white hover:bg-green-600 px-3 py-2 rounded transition duration-300" href="{% url 'logout' %}">Выход</a>
+<body class="bg-gray-50 font-sans leading-normal tracking-normal min-h-screen flex flex-col">
+    <header class="bg-gradient-primary shadow-primary sticky top-0 z-10">
+        <nav class="container mx-auto py-4 px-4 md:px-0">
+            <div class="flex justify-between items-center">
+                <a class="text-white text-2xl font-bold flex items-center space-x-2" href="{% url 'home' %}">
+                    <i class="fas fa-leaf"></i>
+                    <span>TAZAR</span>
+                </a>
+                
+                <div class="nav-links flex space-x-6 items-center">
+                    <a class="nav-link text-white hover:text-green-100 py-2 transition duration-300" href="{% url 'features' %}">
+                        <i class="fas fa-list-ul mr-1"></i> Функции
+                    </a>
+                    <a class="nav-link text-white hover:text-green-100 py-2 transition duration-300" href="{% url 'map' %}">
+                        <i class="fas fa-map-marker-alt mr-1"></i> Карта
+                    </a>
                     {% if user.is_authenticated %}
-                        <a class="text-white hover:bg-green-600 px-3 py-2 rounded transition duration-300" 
-                           href="{% url 'report_trash' %}">Сообщить о мусоре</a>
+                        <a class="nav-link text-white hover:text-green-100 py-2 transition duration-300" href="{% url 'dashboard' %}">
+                            <i class="fas fa-user mr-1"></i> Профиль
+                        </a>
+                        <a class="nav-link text-white hover:text-green-100 py-2 transition duration-300" href="{% url 'report_trash' %}">
+                            <i class="fas fa-trash mr-1"></i> Сообщить о мусоре
+                        </a>
+                        <a class="bg-white text-green-500 hover:bg-green-50 py-2 px-4 rounded-full shadow-sm transition duration-300" href="{% url 'logout' %}">
+                            <i class="fas fa-sign-out-alt mr-1"></i> Выход
+                        </a>
+                    {% else %}
+                        <a class="nav-link text-white hover:text-green-100 py-2 transition duration-300" href="{% url 'contact' %}">
+                            <i class="fas fa-envelope mr-1"></i> Контакты
+                        </a>
+                        <a class="bg-white text-green-500 hover:bg-green-50 py-2 px-4 rounded-full shadow-sm transition duration-300" href="{% url 'login' %}">
+                            <i class="fas fa-sign-in-alt mr-1"></i> Вход
+                        </a>
+                        <a class="bg-green-400 text-white hover:bg-green-300 py-2 px-4 rounded-full shadow-sm transition duration-300 ml-2" href="{% url 'register' %}">
+                            <i class="fas fa-user-plus mr-1"></i> Регистрация
+                        </a>
                     {% endif %}
-                {% else %}
-                    <a class="text-white hover:bg-green-600 px-3 py-2 rounded transition duration-300" href="{% url 'login' %}">Вход</a>
-                    <a class="text-white hover:bg-green-600 px-3 py-2 rounded transition duration-300" href="{% url 'register' %}">Регистрация</a>
-                {% endif %}
-                <a class="text-white hover:bg-green-600 px-3 py-2 rounded transition duration-300" href="{% url 'contact' %}">Контакты</a>
+                </div>
+                
+                <button class="menu-btn focus:outline-none">
+                    <i class="fas fa-bars text-white text-2xl"></i>
+                </button>
             </div>
         </nav>
     </header>
-    <main class="container mx-auto mt-8">
+    
+    <main class="flex-grow page-transition">
         {% if messages %}
-            <div class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3" role="alert">
+            <div class="container mx-auto mt-4 px-4">
                 {% for message in messages %}
-                    <p>{{ message }}</p>
+                    <div class="bg-{% if message.tags == 'error' %}red-100 border-red-400 text-red-700{% else %}blue-100 border-blue-400 text-blue-700{% endif %} px-4 py-3 rounded-lg border shadow-sm mb-4 flex items-center" role="alert">
+                        <i class="{% if message.tags == 'error' %}fas fa-exclamation-circle{% else %}fas fa-info-circle{% endif %} mr-3"></i>
+                        <p>{{ message }}</p>
+                        <button class="ml-auto text-gray-400 hover:text-gray-600" onclick="this.parentElement.style.display='none'">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
                 {% endfor %}
             </div>
         {% endif %}
+        
         {% block content %}{% endblock %}
     </main>
-    <footer class="bg-green-500 text-white text-center p-4 mt-8">
-        <p>&copy; 2023 TAZAR. Все права защищены.</p>
+    
+    <footer class="bg-gradient-primary text-white mt-8">
+        <div class="container mx-auto py-8 px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">О нас</h3>
+                    <p class="mb-4">TAZAR - это платформа для экологически ответственных людей, которые хотят сделать мир чище и лучше.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-white hover:text-green-200 transition duration-300">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-white hover:text-green-200 transition duration-300">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-white hover:text-green-200 transition duration-300">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Ссылки</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'home' %}" class="text-white hover:text-green-200 transition duration-300">Главная</a></li>
+                        <li><a href="{% url 'features' %}" class="text-white hover:text-green-200 transition duration-300">Функции</a></li>
+                        <li><a href="{% url 'map' %}" class="text-white hover:text-green-200 transition duration-300">Карта</a></li>
+                        <li><a href="{% url 'contact' %}" class="text-white hover:text-green-200 transition duration-300">Контакты</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Контакты</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-map-marker-alt mr-2"></i>
+                            <span>Бишкек, Кыргызстан</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-2"></i>
+                            <span>contact@tazar.kg</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone mr-2"></i>
+                            <span>+996 555 123 456</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-green-400 mt-8 pt-6 text-center">
+                <p>&copy; 2023 TAZAR. Все права защищены.</p>
+            </div>
+        </div>
     </footer>
+    
+    <script>
+        // Мобильное меню
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuBtn = document.querySelector('.menu-btn');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (menuBtn) {
+                menuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                    // Изменение иконки меню
+                    const icon = menuBtn.querySelector('i');
+                    if (icon.classList.contains('fa-bars')) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                    } else {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+            }
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

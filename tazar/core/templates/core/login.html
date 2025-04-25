@@ -4,61 +4,174 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+<style>
+    .form-container {
+        max-width: 480px;
+        margin: 0 auto;
+        animation: slideUp 0.6s ease;
+    }
+    
+    .form-card {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .form-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    }
+    
+    .form-header {
+        background: linear-gradient(135deg, #10b981, #059669);
+        padding: 2rem;
+        color: white;
+        text-align: center;
+    }
+    
+    .form-input {
+        background-color: #f8fafc;
+        border: 2px solid transparent;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        width: 100%;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .form-input:focus {
+        border-color: #10b981;
+        background-color: white;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #374151;
+        transition: color 0.3s ease;
+    }
+    
+    .form-group:focus-within .form-label {
+        color: #10b981;
+    }
+    
+    .submit-btn {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        border: none;
+        padding: 0.875rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        width: 100%;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+    
+    .submit-btn::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: -1;
+    }
+    
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+    
+    .submit-btn:hover::after {
+        transform: translateX(0);
+    }
+    
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
 {% endblock %}
 
 {% block title %}Вход - TAZAR{% endblock %}
 
 {% block content %}
-<div class="container mx-auto mt-10 max-w-md">
-    <h2 class="text-4xl font-extrabold mb-6 text-center text-green-600 shadow-md">Вход в TAZAR</h2>
-    
-    {% if messages %}
-    <div class="mb-4">
-        {% for message in messages %}
-        <div class="p-4 {% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %} rounded-lg">
-            {{ message }}
+<div class="container mx-auto px-4 py-16">
+    <div class="form-container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mb-6 bg-{% if message.tags == 'error' %}red-100 text-red-700 border-red-300{% else %}green-100 text-green-700 border-green-300{% endif %} px-4 py-3 rounded-lg border flex items-center shadow-sm">
+                    <i class="{% if message.tags == 'error' %}fas fa-exclamation-circle{% else %}fas fa-check-circle{% endif %} mr-3"></i>
+                    <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <div class="form-card">
+            <div class="form-header">
+                <i class="fas fa-leaf text-4xl mb-4"></i>
+                <h2 class="text-3xl font-bold">Вход в систему</h2>
+                <p class="mt-2 text-green-100">Добро пожаловать назад в TAZAR</p>
+            </div>
+            
+            <form method="POST" class="p-8">
+                {% csrf_token %}
+                
+                <div class="form-group mb-6">
+                    <label for="{{ form.username.id_for_label }}" class="form-label">
+                        <i class="fas fa-user mr-2"></i>Имя пользователя
+                    </label>
+                    {{ form.username|add_class:"form-input" }}
+                    {% if form.username.errors %}
+                        <div class="text-red-500 text-sm mt-2 flex items-center">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            {% for error in form.username.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group mb-8">
+                    <label for="{{ form.password.id_for_label }}" class="form-label">
+                        <i class="fas fa-lock mr-2"></i>Пароль
+                    </label>
+                    {{ form.password|add_class:"form-input" }}
+                    {% if form.password.errors %}
+                        <div class="text-red-500 text-sm mt-2 flex items-center">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    Войти <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </form>
         </div>
-        {% endfor %}
+        
+        <div class="mt-8 text-center">
+            <p class="text-gray-600">
+                Еще нет учетной записи? 
+                <a href="{% url 'register' %}" class="text-green-500 hover:text-green-700 font-semibold transition duration-300">
+                    Зарегистрируйтесь сейчас <i class="fas fa-user-plus ml-1"></i>
+                </a>
+            </p>
+        </div>
     </div>
-    {% endif %}
-    
-    <form method="POST" class="bg-white p-8 rounded-2xl shadow-lg">
-        {% csrf_token %}
-        
-        <div class="mb-4">
-            <label for="{{ form.username.id_for_label }}" class="block text-gray-700">Имя пользователя</label>
-            {{ form.username|add_class:"form-control" }}
-            {% if form.username.errors %}
-                <div class="text-red-500 text-sm mt-1">
-                    {% for error in form.username.errors %}
-                        <p>{{ error }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
-        
-        <div class="mb-6">
-            <label for="{{ form.password.id_for_label }}" class="block text-gray-700">Пароль</label>
-            {{ form.password|add_class:"form-control" }}
-            {% if form.password.errors %}
-                <div class="text-red-500 text-sm mt-1">
-                    {% for error in form.password.errors %}
-                        <p>{{ error }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
-        
-        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300 w-full">
-            Войти
-        </button>
-    </form>
-    
-    <p class="mt-4 text-center text-gray-600">
-        Нет аккаунта? 
-        <a href="{% url 'register' %}" class="text-green-500 hover:underline font-semibold">
-            Зарегистрируйтесь
-        </a>
-    </p>
 </div>
 {% endblock %} 
