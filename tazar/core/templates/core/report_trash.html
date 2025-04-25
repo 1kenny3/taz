@@ -7,61 +7,159 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/main.css' %}">
 <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+<link rel="stylesheet" href="{% static 'css/report_trash.css' %}">
+<style>
+    .photo-preview {
+        display: none;
+        max-width: 100%;
+        border-radius: 0.75rem;
+        margin-top: 1rem;
+    }
+    .custom-file-upload {
+        border: 2px dashed #E5E7EB;
+        border-radius: 0.75rem;
+        padding: 2rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .custom-file-upload:hover {
+        border-color: #22C55E;
+        background-color: #F0FDF4;
+    }
+    .map-container {
+        position: relative;
+        border-radius: 0.75rem;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    .location-marker {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background-color: white;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+        display: none;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="container mx-auto mt-10 max-w-2xl">
-    <h2 class="text-4xl font-extrabold mb-6 text-center text-green-600">Сообщить о мусоре</h2>
-    
-    <form method="POST" enctype="multipart/form-data" class="bg-white p-8 rounded-2xl shadow-lg">
-        {% csrf_token %}
-        
-        <div class="mb-6">
-            <label class="block text-gray-700 mb-2">Выберите местоположение на карте</label>
-            <div id="map" class="w-full h-64 rounded-lg mb-4"></div>
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-3xl mx-auto">
+        <!-- Заголовок и описание -->
+        <div class="text-center mb-8 animate-slide-in">
+            <h2 class="text-4xl font-extrabold mb-4 text-gray-800">
+                <i class="fas fa-trash-alt text-green-500 mr-3"></i>
+                Сообщить о мусоре
+            </h2>
+            <p class="text-gray-600 text-lg">
+                Помогите сделать наш город чище! Отметьте место на карте и добавьте фотографию мусора.
+            </p>
         </div>
 
-        <div class="mb-4">
-            <label for="{{ form.address.id_for_label }}" class="block text-gray-700 mb-2">Адрес</label>
-            {{ form.address|add_class:"w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-green-500" }}
-            {% if form.address.errors %}
-                <div class="text-red-500 text-sm mt-1">{{ form.address.errors }}</div>
-            {% endif %}
-        </div>
+        <!-- Основная форма -->
+        <form method="POST" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+            
+            <!-- Карта -->
+            <div class="bg-white p-6 rounded-2xl shadow-lg animate-slide-in" style="animation-delay: 0.1s">
+                <label class="block text-gray-700 text-lg font-semibold mb-4">
+                    <i class="fas fa-map-marker-alt text-green-500 mr-2"></i>
+                    Выберите местоположение на карте
+                </label>
+                <div class="map-container">
+                    <div id="map" class="w-full h-96 rounded-xl"></div>
+                    <div class="location-marker" id="location-info">
+                        <i class="fas fa-map-pin text-green-500 mr-2"></i>
+                        <span id="coordinates-text" class="text-sm text-gray-600"></span>
+                    </div>
+                </div>
+            </div>
 
-        <div class="mb-4">
-            <label for="{{ form.description.id_for_label }}" class="block text-gray-700 mb-2">Описание</label>
-            {{ form.description|add_class:"w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-green-500" }}
-            {% if form.description.errors %}
-                <div class="text-red-500 text-sm mt-1">{{ form.description.errors }}</div>
-            {% endif %}
-        </div>
+            <!-- Адрес -->
+            <div class="bg-white p-6 rounded-2xl shadow-lg animate-slide-in" style="animation-delay: 0.2s">
+                <label for="{{ form.address.id_for_label }}" class="block text-gray-700 text-lg font-semibold mb-4">
+                    <i class="fas fa-location-dot text-green-500 mr-2"></i>
+                    Адрес
+                </label>
+                {{ form.address|add_class:"w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-green-500 focus:ring focus:ring-green-200 transition duration-300" }}
+                {% if form.address.errors %}
+                    <div class="text-red-500 text-sm mt-2">{{ form.address.errors }}</div>
+                {% endif %}
+            </div>
 
-        <div class="mb-4">
-            <label for="{{ form.photo.id_for_label }}" class="block text-gray-700 mb-2">Фото</label>
-            {{ form.photo|add_class:"w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-green-500" }}
-            {% if form.photo.errors %}
-                <div class="text-red-500 text-sm mt-1">{{ form.photo.errors }}</div>
-            {% endif %}
-        </div>
+            <!-- Описание -->
+            <div class="bg-white p-6 rounded-2xl shadow-lg animate-slide-in" style="animation-delay: 0.3s">
+                <label for="{{ form.description.id_for_label }}" class="block text-gray-700 text-lg font-semibold mb-4">
+                    <i class="fas fa-comment-alt text-green-500 mr-2"></i>
+                    Описание проблемы
+                </label>
+                {{ form.description|add_class:"w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-green-500 focus:ring focus:ring-green-200 transition duration-300 h-32" }}
+                {% if form.description.errors %}
+                    <div class="text-red-500 text-sm mt-2">{{ form.description.errors }}</div>
+                {% endif %}
+            </div>
 
-        {{ form.latitude }}
-        {{ form.longitude }}
+            <!-- Фото -->
+            <div class="bg-white p-6 rounded-2xl shadow-lg animate-slide-in" style="animation-delay: 0.4s">
+                <label class="block text-gray-700 text-lg font-semibold mb-4">
+                    <i class="fas fa-camera text-green-500 mr-2"></i>
+                    Фотография
+                </label>
+                <label for="{{ form.photo.id_for_label }}" class="custom-file-upload">
+                    <input type="file" 
+                           name="{{ form.photo.name }}" 
+                           id="{{ form.photo.id_for_label }}"
+                           class="hidden" 
+                           accept="image/*">
+                    <div class="text-gray-500">
+                        <i class="fas fa-cloud-upload-alt text-4xl mb-3"></i>
+                        <p class="text-lg">Перетащите фото сюда или нажмите для выбора</p>
+                        <p class="text-sm mt-2">JPG, PNG или GIF до 10MB</p>
+                    </div>
+                </label>
+                <img id="photo-preview" class="photo-preview" src="#" alt="Предпросмотр фото">
+                {% if form.photo.errors %}
+                    <div class="text-red-500 text-sm mt-2">{{ form.photo.errors }}</div>
+                {% endif %}
+            </div>
 
-        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300 w-full">
-            Отправить сообщение
-        </button>
-    </form>
+            {{ form.latitude }}
+            {{ form.longitude }}
+
+            <!-- Кнопка отправки -->
+            <div class="animate-slide-in" style="animation-delay: 0.5s">
+                <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-4 rounded-xl hover:from-green-600 hover:to-green-700 transition duration-300 shadow-lg flex items-center justify-center space-x-2 text-lg font-semibold">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Отправить сообщение</span>
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script>
     function initMap() {
         const map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: 42.8746, lng: 74.6122},
-            zoom: 13
+            zoom: 13,
+            styles: [
+                {
+                    "featureType": "poi",
+                    "elementType": "labels",
+                    "stylers": [
+                        { "visibility": "off" }
+                    ]
+                }
+            ]
         });
 
         let marker = null;
+        const locationInfo = document.getElementById('location-info');
 
         map.addListener('click', function(e) {
             if (marker) {
@@ -69,11 +167,25 @@
             }
             marker = new google.maps.Marker({
                 position: e.latLng,
-                map: map
+                map: map,
+                animation: google.maps.Animation.DROP,
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    fillColor: '#22C55E',
+                    fillOpacity: 1,
+                    strokeColor: '#ffffff',
+                    strokeWeight: 2,
+                    scale: 10
+                }
             });
 
             document.getElementById('id_latitude').value = e.latLng.lat();
             document.getElementById('id_longitude').value = e.latLng.lng();
+
+            // Показываем координаты
+            locationInfo.style.display = 'block';
+            document.getElementById('coordinates-text').textContent = 
+                `${e.latLng.lat().toFixed(6)}, ${e.latLng.lng().toFixed(6)}`;
 
             const geocoder = new google.maps.Geocoder();
             geocoder.geocode({location: e.latLng}, function(results, status) {
@@ -84,6 +196,64 @@
                 }
             });
         });
+    }
+
+    // Предпросмотр фото
+    document.getElementById('{{ form.photo.id_for_label }}').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            const preview = document.getElementById('photo-preview');
+            
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Drag and drop для фото
+    const dropZone = document.querySelector('.custom-file-upload');
+    
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight(e) {
+        dropZone.classList.add('border-green-500', 'bg-green-50');
+    }
+
+    function unhighlight(e) {
+        dropZone.classList.remove('border-green-500', 'bg-green-50');
+    }
+
+    dropZone.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        const fileInput = document.getElementById('{{ form.photo.id_for_label }}');
+        
+        fileInput.files = files;
+        
+        // Trigger change event
+        const event = new Event('change', { bubbles: true });
+        fileInput.dispatchEvent(event);
     }
 </script>
 
