@@ -279,6 +279,22 @@ class CleanupEvent(models.Model):
     def __str__(self):
         return self.title
 
+class News(models.Model):
+    title = models.CharField(max_length=200, verbose_name='Заголовок')
+    content = models.TextField(verbose_name='Содержание')
+    image = models.ImageField(upload_to='news/', blank=True, null=True, verbose_name='Изображение')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
+    is_published = models.BooleanField(default=True, verbose_name='Опубликовано')
+    
+    class Meta:
+        verbose_name = 'Новость'
+        verbose_name_plural = 'Новости'
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return self.title
+
 @receiver(pre_save, sender=TrashReport)
 def handle_status_change(sender, instance, **kwargs):
     if instance.id:  # если это существующий объект

@@ -1,56 +1,90 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Главная - TAZAR{% endblock %}
+{% block title %}Главная{% endblock %}
 
 {% block content %}
-<section class="bg-gradient-to-r from-green-400 to-blue-500 p-8 rounded-lg shadow-lg">
-    <h1 class="text-4xl font-bold mb-4 text-white text-center">Добро пожаловать в TAZAR</h1>
-    <p class="mb-6 text-center text-white">Ваша платформа для переработки и экологической ответственности.</p>
-    <div class="flex justify-center">
-        <a class="bg-white text-green-500 px-6 py-3 rounded-lg hover:bg-gray-200 transition duration-300" href="{% url 'register' %}">Присоединиться</a>
+<!-- Existing header content -->
+<header class="bg-primary text-white text-center py-5">
+    <div class="container">
+        <h1 class="display-4">TAZAR</h1>
+        <p class="lead">Платформа для управления отходами и экологических инициатив</p>
+        <div class="mt-4">
+            <a href="{% url 'register' %}" class="btn btn-light btn-lg mx-2">Регистрация</a>
+            <a href="{% url 'map' %}" class="btn btn-outline-light btn-lg mx-2">Карта пунктов сбора</a>
+        </div>
+    </div>
+</header>
+
+<!-- Последние новости -->
+{% if latest_news %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-4">Последние новости</h2>
+        <div class="row">
+            {% for item in latest_news %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        {% if item.image %}
+                            <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.title }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                            <div class="bg-light text-center py-5" style="height: 200px;">
+                                <i class="fas fa-newspaper fa-3x text-muted"></i>
+                            </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.title }}</h5>
+                            <p class="card-text text-muted">
+                                <small>{{ item.created_at|date:"d.m.Y" }}</small>
+                            </p>
+                            <p class="card-text">{{ item.content|truncatewords:15 }}</p>
+                            <a href="{% url 'news_detail' item.id %}" class="btn btn-primary">Подробнее</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-3">
+            <a href="{% url 'news_list' %}" class="btn btn-outline-primary">Все новости</a>
+        </div>
     </div>
 </section>
+{% endif %}
 
-<section class="mt-8">
-    <h2 class="text-3xl font-bold mb-4">О нас</h2>
-    <p class="text-gray-700">TAZAR - это платформа, которая помогает пользователям эффективно управлять отходами и способствует переработке. Мы стремимся сделать мир чище и помочь вам в этом.</p>
-</section>
-
-<section class="mt-8">
-    <h2 class="text-3xl font-bold mb-4">Часто задаваемые вопросы</h2>
-    <ul class="list-disc pl-5 text-gray-700">
-        <li><strong>Где находятся пункты приема?</strong> - Вы можете найти их на странице "Карта".</li>
-        <li><strong>Как я могу зарегистрироваться?</strong> - Нажмите на кнопку "Регистрация" и заполните форму.</li>
-        <li><strong>Как найти ближайший пункт приема?</strong> - Воспользуйтесь интерактивной картой в разделе "Карта".</li>
-    </ul>
-</section>
-
-<section class="mt-8">
-    <h2 class="text-3xl font-bold mb-4">Отзывы пользователей</h2>
-    <div class="space-y-4">
-        <blockquote class="border-l-4 border-green-500 pl-4 text-gray-700">
-            <p>"TAZAR помог мне найти ближайшие пункты приема!" - Анна</p>
-        </blockquote>
-        <blockquote class="border-l-4 border-green-500 pl-4 text-gray-700">
-            <p>"Отличная платформа для тех, кто заботится об экологии!" - Сергей</p>
-        </blockquote>
-    </div>
-</section>
-
-<section class="mt-8">
-    <h2 class="text-3xl font-bold mb-4">Последние новости</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300">
-            <h3 class="font-bold">Экологические инициативы в вашем городе</h3>
-            <p>Узнайте больше о том, как вы можете помочь.</p>
+<!-- Existing features section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Наши возможности</h2>
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 p-4">
+                    <div class="card-body">
+                        <i class="fas fa-map-marker-alt fa-3x mb-3 text-primary"></i>
+                        <h3 class="card-title h4">Пункты сбора</h3>
+                        <p class="card-text">Находите ближайшие пункты сбора отходов на интерактивной карте</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 p-4">
+                    <div class="card-body">
+                        <i class="fas fa-medal fa-3x mb-3 text-primary"></i>
+                        <h3 class="card-title h4">Достижения</h3>
+                        <p class="card-text">Зарабатывайте баллы и получайте награды за экологические действия</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 p-4">
+                    <div class="card-body">
+                        <i class="fas fa-users fa-3x mb-3 text-primary"></i>
+                        <h3 class="card-title h4">Сообщество</h3>
+                        <p class="card-text">Присоединяйтесь к командам и участвуйте в экологических акциях</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300">
-            <h3 class="font-bold">Советы по переработке отходов</h3>
-            <p>Эффективные способы сортировки и переработки.</p>
-        </div>
-        <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300">
-            <h3 class="font-bold">Новости от наших партнеров</h3>
-            <p>Последние обновления и предложения.</p>
+        <div class="text-center mt-3">
+            <a href="{% url 'features' %}" class="btn btn-primary">Узнать больше</a>
         </div>
     </div>
 </section>

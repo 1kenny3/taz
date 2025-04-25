@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
-from .models import User, CollectionPoint, TrashReport, Achievement, UserAchievement, UserRank, Team, Challenge, UserChallenge, EcoTip, Comment, DailyTask, UserDailyTask, TeamCompetition, TeamCompetitionResult, Notification, CleanupEvent
+from .models import User, CollectionPoint, TrashReport, Achievement, UserAchievement, UserRank, Team, Challenge, UserChallenge, EcoTip, Comment, DailyTask, UserDailyTask, TeamCompetition, TeamCompetitionResult, Notification, CleanupEvent, News
 from .forms import UserRegisterForm, CollectionPointForm, LoginForm, TrashReportForm, UserProfileForm
 from rest_framework import viewsets, permissions, generics
 from .serializers import (
@@ -9,7 +9,8 @@ from .serializers import (
     UserChallengeSerializer, EcoTipSerializer, CommentSerializer,
     DailyTaskSerializer, UserDailyTaskSerializer, TeamCompetitionSerializer,
     TeamCompetitionResultSerializer, NotificationSerializer, CleanupEventSerializer,
-    AchievementSerializer, UserAchievementSerializer, UserRegisterSerializer
+    AchievementSerializer, UserAchievementSerializer, UserRegisterSerializer,
+    NewsSerializer
 )
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -145,8 +146,20 @@ class UserRegisterView(generics.CreateAPIView):
     serializer_class = UserRegisterSerializer
     permission_classes = [permissions.AllowAny]
 
+class NewsViewSet(viewsets.ModelViewSet):
+    queryset = News.objects.filter(is_published=True)
+    serializer_class = NewsSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    authentication_classes = [JWTAuthentication]
+
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [permissions.IsAdminUser()]
+        return [permissions.AllowAny()]
+
 def home(request):
-    return render(request, 'core/home.html')
+    latest_news = News.objects.filter(is_published=True).order_by('-created_at')[:3]
+    return render(request, 'core/home.html', {'latest_news': latest_news})
 
 def features(request):
     return render(request, 'core/features.html')
@@ -302,3 +315,11 @@ def report_trash_api(request):
         serializer.save(user=request.user)
         return Response(serializer.data, status=201)
     return Response(serializer.errors, status=400)
+
+def news_list(request):
+    news = News.objects.filter(is_published=True).order_by('-created_at')
+    return render(request, 'core/news_list.html', {'news': news})
+
+def news_detail(request, pk):
+    news = News.objects.get(pk=pk, is_published=True)
+    return render(request, 'core/news_detail.html', {'news': news})

@@ -4,7 +4,7 @@ from .models import (
     User, CollectionPoint, TrashReport, UserRank, Team, Challenge, 
     UserChallenge, EcoTip, Comment, DailyTask, UserDailyTask,
     TeamCompetition, TeamCompetitionResult, Notification, CleanupEvent,
-    Achievement, UserAchievement
+    Achievement, UserAchievement, News
 )
 from django.contrib.auth import get_user_model
 
@@ -189,4 +189,9 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user = User(**validated_data)
         user.set_password(validated_data['password'])  # Хранить пароль в зашифрованном виде
         user.save()
-        return user 
+        return user
+
+class NewsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = News
+        fields = '__all__' 
