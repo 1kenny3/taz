@@ -1,125 +1,154 @@
 {% extends 'core/base.html' %}
 {% load static %}
-{% load dashboard_tags %}
+{% load form_tags %}
 
-{% block title %}Личный кабинет - TAZAR{% endblock %}
+{% block title %}Личный кабинет - TAZAR{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
 
 {% block content %}
-<div class="container mx-auto mt-10">
-    <div class="grid md:grid-cols-4 gap-6">
+<div class="container mx-auto px-4 py-8">
+    <div class="grid lg:grid-cols-4 gap-8">
         <!-- Левая колонка - Профиль -->
-        <div class="md:col-span-1">
-            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-                <div class="text-center mb-6">
-                    {% if user.profile_photo %}
-                        <img src="{{ user.profile_photo.url }}" alt="Фото профиля" 
-                             class="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-green-500">
-                    {% else %}
-                        <div class="w-32 h-32 rounded-full mx-auto mb-4 bg-gray-200 flex items-center justify-center">
-                            <span class="text-4xl text-gray-500">👤</span>
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-2xl shadow-lg p-6 mb-6 animate-slide-in">
+                <div class="text-center mb-8">
+                    <div class="relative inline-block">
+                        {% if user.profile_photo %}
+                            <img src="{{ user.profile_photo.url }}" alt="Фото профиля" 
+                                 class="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-green-500 shadow-lg">
+                        {% else %}
+                            <div class="w-32 h-32 rounded-full mx-auto mb-4 bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-lg">
+                                <span class="text-4xl text-white">{{ user.username|first|upper }}</span>
+                            </div>
+                        {% endif %}
+                        <div class="absolute bottom-4 right-0 bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg cursor-pointer hover:bg-green-600 transition-colors">
+                            <i class="fas fa-camera"></i>
                         </div>
-                    {% endif %}
-                    <h2 class="text-2xl font-bold">{{ user.username }}</h2>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800">{{ user.username }}</h2>
                     <p class="text-gray-600">{{ user.email }}</p>
-                    <p class="text-3xl font-bold text-green-600 mt-2">
-                        {{ user.points }} баллов
-                    </p>
+                    <div class="mt-4 bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-4 shadow-lg">
+                        <p class="text-sm text-green-100">Всего баллов</p>
+                        <p class="text-3xl font-bold text-white">{{ user.points }}</p>
+                    </div>
                 </div>
 
                 <!-- Форма редактирования профиля -->
-                <form method="POST" enctype="multipart/form-data" class="mt-6">
+                <form method="POST" enctype="multipart/form-data" class="space-y-6">
                     {% csrf_token %}
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            Фото профиля
-                        </label>
-                        <div class="flex items-center space-x-4">
-                            <div class="flex-1">
-                                <input type="file" 
-                                       name="{{ form.profile_photo.name }}" 
-                                       id="{{ form.profile_photo.id_for_label }}"
-                                       class="hidden" 
-                                       accept="image/*">
-                                <label for="{{ form.profile_photo.id_for_label }}" 
-                                       class="cursor-pointer bg-white border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-50 transition duration-300 block text-center">
-                                    Выбрать фото
-                                </label>
-                                <div id="selected-file" class="text-sm text-gray-600 mt-1"></div>
-                            </div>
-                            {% if user.profile_photo %}
-                                <div class="flex items-center">
-                                    <label class="inline-flex items-center">
-                                        <input type="checkbox" name="clear_photo" class="form-checkbox text-red-500">
-                                        <span class="ml-2 text-sm text-red-500">Удалить</span>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 text-sm font-semibold mb-2">
+                                Фото профиля
+                            </label>
+                            <div class="flex items-center space-x-4">
+                                <div class="flex-1">
+                                    <input type="file" 
+                                           name="{{ form.profile_photo.name }}" 
+                                           id="{{ form.profile_photo.id_for_label }}"
+                                           class="hidden" 
+                                           accept="image/*">
+                                    <label for="{{ form.profile_photo.id_for_label }}" 
+                                           class="cursor-pointer bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 hover:bg-gray-100 transition duration-300 block text-center text-sm font-medium text-gray-700">
+                                        <i class="fas fa-cloud-upload-alt mr-2"></i>
+                                        Выбрать фото
                                     </label>
+                                    <div id="selected-file" class="text-sm text-gray-600 mt-2"></div>
                                 </div>
+                            </div>
+                            {% if form.profile_photo.errors %}
+                                <div class="text-red-500 text-sm mt-2">{{ form.profile_photo.errors }}</div>
                             {% endif %}
                         </div>
-                        {% if form.profile_photo.errors %}
-                            <div class="text-red-500 text-sm mt-1">{{ form.profile_photo.errors }}</div>
-                        {% endif %}
+
+                        <div id="image-preview" class="mt-4 hidden">
+                            <img src="" alt="Предпросмотр" class="max-w-full rounded-xl shadow-lg">
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-700 text-sm font-semibold mb-2" for="{{ form.bio.id_for_label }}">
+                                О себе
+                            </label>
+                            {{ form.bio|add_class:"w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-green-500 focus:ring focus:ring-green-200 transition duration-300" }}
+                            {% if form.bio.errors %}
+                                <div class="text-red-500 text-sm mt-2">{{ form.bio.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-700 text-sm font-semibold mb-2" for="{{ form.email.id_for_label }}">
+                                Email
+                            </label>
+                            {{ form.email|add_class:"w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-green-500 focus:ring focus:ring-green-200 transition duration-300" }}
+                            {% if form.email.errors %}
+                                <div class="text-red-500 text-sm mt-2">{{ form.email.errors }}</div>
+                            {% endif %}
+                        </div>
                     </div>
-                    <div id="image-preview" class="mt-2 hidden">
-                        <img src="" alt="Предпросмотр" class="max-w-xs rounded-lg">
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ form.bio.id_for_label }}">
-                            О себе
-                        </label>
-                        {{ form.bio }}
-                        {% if form.bio.errors %}
-                            <div class="text-red-500 text-sm mt-1">{{ form.bio.errors }}</div>
-                        {% endif %}
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ form.email.id_for_label }}">
-                            Email
-                        </label>
-                        {{ form.email }}
-                        {% if form.email.errors %}
-                            <div class="text-red-500 text-sm mt-1">{{ form.email.errors }}</div>
-                        {% endif %}
-                    </div>
-                    <button type="submit" class="w-full bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">
-                        Сохранить изменения
+
+                    <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-xl hover:from-green-600 hover:to-green-700 transition duration-300 shadow-lg flex items-center justify-center space-x-2">
+                        <i class="fas fa-save"></i>
+                        <span>Сохранить изменения</span>
                     </button>
                 </form>
             </div>
         </div>
 
         <!-- Правая колонка - Основной контент -->
-        <div class="md:col-span-3">
+        <div class="lg:col-span-3 space-y-8">
             <!-- Статистика -->
-            <div class="grid grid-cols-4 gap-4 mb-6">
-                <!-- Статистика -->
-                <div class="bg-white rounded-lg shadow p-4 text-center">
-                    <div class="text-3xl text-green-500 mb-2">{{ stats.total_reports }}</div>
-                    <div class="text-gray-600">Всего сообщений</div>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="profile-stat bg-white rounded-2xl shadow-lg p-6 text-center">
+                    <div class="text-4xl text-green-500 mb-2">
+                        <i class="fas fa-flag"></i>
+                    </div>
+                    <div class="text-3xl font-bold text-gray-800 mb-1">{{ stats.total_reports }}</div>
+                    <div class="text-sm text-gray-600">Всего сообщений</div>
                 </div>
-                <div class="bg-white rounded-lg shadow p-4 text-center">
-                    <div class="text-3xl text-green-500 mb-2">{{ stats.completed_reports }}</div>
-                    <div class="text-gray-600">Выполнено</div>
+                <div class="profile-stat bg-white rounded-2xl shadow-lg p-6 text-center">
+                    <div class="text-4xl text-green-500 mb-2">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="text-3xl font-bold text-gray-800 mb-1">{{ stats.completed_reports }}</div>
+                    <div class="text-sm text-gray-600">Выполнено</div>
                 </div>
-                <div class="bg-white rounded-lg shadow p-4 text-center">
-                    <div class="text-3xl text-green-500 mb-2">{{ stats.total_points }}</div>
-                    <div class="text-gray-600">Баллов заработано</div>
+                <div class="profile-stat bg-white rounded-2xl shadow-lg p-6 text-center">
+                    <div class="text-4xl text-green-500 mb-2">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="text-3xl font-bold text-gray-800 mb-1">{{ stats.total_points }}</div>
+                    <div class="text-sm text-gray-600">Баллов заработано</div>
                 </div>
-                <div class="bg-white rounded-lg shadow p-4 text-center">
-                    <div class="text-3xl text-green-500 mb-2">{{ stats.reports_this_month }}</div>
-                    <div class="text-gray-600">Сообщений за месяц</div>
+                <div class="profile-stat bg-white rounded-2xl shadow-lg p-6 text-center">
+                    <div class="text-4xl text-green-500 mb-2">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="text-3xl font-bold text-gray-800 mb-1">{{ stats.reports_this_month }}</div>
+                    <div class="text-sm text-gray-600">За этот месяц</div>
                 </div>
             </div>
 
             <!-- Достижения -->
-            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-                <h3 class="text-xl font-semibold mb-4">Ваши достижения</h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-trophy text-green-500 mr-3"></i>
+                    Ваши достижения
+                </h3>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
                     {% for achievement in achievements %}
-                        <div class="p-4 rounded-lg {% if achievement in user_achievements %}bg-green-50 border-green-200{% else %}bg-gray-50 border-gray-200{% endif %} border">
-                            <div class="text-3xl mb-2">{{ achievement.icon }}</div>
-                            <div class="font-medium">{{ achievement.name }}</div>
-                            <div class="text-sm text-gray-600">{{ achievement.description }}</div>
-                            <div class="text-gray-500 text-sm mt-2">
+                        <div class="achievement-card p-6 rounded-xl text-center {% if achievement in user_achievements %}bg-green-50 border-2 border-green-200{% else %}bg-gray-50 border-2 border-gray-200{% endif %}">
+                            <div class="text-4xl mb-4 {% if achievement in user_achievements %}text-green-500{% else %}text-gray-400{% endif %}">
+                                {{ achievement.icon }}
+                            </div>
+                            <div class="font-semibold mb-2">{{ achievement.name }}</div>
+                            <div class="text-sm text-gray-600 mb-4">{{ achievement.description }}</div>
+                            <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                                <div class="bg-green-500 h-2 rounded-full progress-bar" style="width: {% widthratio user.points achievement.points_required 100 %}%"></div>
+                            </div>
+                            <div class="text-xs text-gray-500">
                                 {{ user.points }}/{{ achievement.points_required }} баллов
                             </div>
                         </div>
@@ -128,28 +157,37 @@
             </div>
 
             <!-- График активности -->
-            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-                <h3 class="text-xl font-semibold mb-4">Ваша активность</h3>
-                <canvas id="activityChart"></canvas>
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-chart-line text-green-500 mr-3"></i>
+                    Ваша активность
+                </h3>
+                <div class="h-80">
+                    <canvas id="activityChart"></canvas>
+                </div>
             </div>
 
             <!-- Сообщения о мусоре -->
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <h3 class="text-xl font-semibold mb-4">Ваши сообщения о мусоре</h3>
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-trash-alt text-green-500 mr-3"></i>
+                    Ваши сообщения о мусоре
+                </h3>
                 {% if user_reports %}
-                    <div class="space-y-4">
+                    <div class="space-y-6">
                         {% for report in user_reports %}
-                        <div class="border rounded-lg p-4 {% if report.status == 'completed' %}bg-green-50{% elif report.status == 'rejected' %}bg-red-50{% endif %}">
-                            <div class="flex items-start">
+                        <div class="report-card border-2 rounded-xl p-6 {% if report.status == 'completed' %}bg-green-50 border-green-200{% elif report.status == 'rejected' %}bg-red-50 border-red-200{% else %}bg-white border-gray-200{% endif %}">
+                            <div class="flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-6">
                                 {% if report.photo %}
-                                    <img src="{{ report.photo.url }}" alt="Фото мусора" class="w-24 h-24 rounded-lg object-cover mr-4">
+                                    <img src="{{ report.photo.url }}" alt="Фото мусора" class="w-full md:w-48 h-48 rounded-xl object-cover shadow-lg">
                                 {% endif %}
                                 <div class="flex-1">
-                                    <p class="font-medium">{{ report.address }}</p>
-                                    <p class="text-sm text-gray-600">{{ report.description }}</p>
-                                    <div class="mt-2 flex items-center justify-between">
-                                        <span class="text-sm text-gray-500">{{ report.created_at|date:"d.m.Y H:i" }}</span>
-                                        <span class="px-3 py-1 rounded-full text-sm 
+                                    <div class="flex flex-wrap items-start justify-between mb-4">
+                                        <div>
+                                            <h4 class="text-lg font-semibold text-gray-800 mb-2">{{ report.address }}</h4>
+                                            <p class="text-gray-600">{{ report.description }}</p>
+                                        </div>
+                                        <span class="px-4 py-2 rounded-full text-sm font-medium mt-2 md:mt-0
                                             {% if report.status == 'new' %}bg-blue-100 text-blue-800
                                             {% elif report.status == 'in_progress' %}bg-yellow-100 text-yellow-800
                                             {% elif report.status == 'completed' %}bg-green-100 text-green-800
@@ -157,48 +195,126 @@
                                             {{ report.get_status_display }}
                                         </span>
                                     </div>
-                                    {% if report.points_awarded %}
-                                        <p class="text-sm text-green-600 mt-2">+{{ report.POINTS_FOR_COMPLETION }} баллов начислено</p>
-                                    {% endif %}
+                                    <div class="flex flex-wrap items-center justify-between">
+                                        <div class="flex items-center space-x-4 text-gray-500">
+                                            <span class="flex items-center">
+                                                <i class="far fa-calendar-alt mr-2"></i>
+                                                {{ report.created_at|date:"d.m.Y" }}
+                                            </span>
+                                            <span class="flex items-center">
+                                                <i class="far fa-clock mr-2"></i>
+                                                {{ report.created_at|date:"H:i" }}
+                                            </span>
+                                        </div>
+                                        {% if report.points_awarded %}
+                                            <div class="flex items-center text-green-600 font-medium">
+                                                <i class="fas fa-plus-circle mr-2"></i>
+                                                {{ report.POINTS_FOR_COMPLETION }} баллов
+                                            </div>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         {% endfor %}
                     </div>
                 {% else %}
-                    <p class="text-gray-600 text-center py-8">У вас пока нет сообщений о мусоре</p>
+                    <div class="text-center py-16 bg-gray-50 rounded-xl">
+                        <i class="fas fa-inbox text-gray-300 text-6xl mb-4"></i>
+                        <p class="text-gray-600 mb-6">У вас пока нет сообщений о мусоре</p>
+                        <a href="{% url 'report_trash' %}" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition duration-300 shadow-lg">
+                            <i class="fas fa-plus-circle mr-2"></i>
+                            Сообщить о мусоре
+                        </a>
+                    </div>
                 {% endif %}
             </div>
         </div>
     </div>
 </div>
+{% endblock content %}
 
-<!-- Добавьте этот скрипт в конец блока content -->
 {% block extra_js %}
 {{ block.super }}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-const ctx = document.getElementById('activityChart').getContext('2d');
-const activityChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн'],
-        datasets: [{
-            label: 'Сообщения о мусоре',
-            data: [12, 19, 3, 5, 2, 3],
-            borderColor: 'rgb(34, 197, 94)',
-            tension: 0.1
-        }]
-    },
-    options: {
-        responsive: true,
-        scales: {
-            y: {
-                beginAtZero: true
+document.addEventListener('DOMContentLoaded', function() {
+    // График активности
+    const ctx = document.getElementById('activityChart').getContext('2d');
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(34, 197, 94, 0.2)');
+    gradient.addColorStop(1, 'rgba(34, 197, 94, 0)');
+
+    const activityChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн'],
+            datasets: [{
+                label: 'Сообщения о мусоре',
+                data: [12, 19, 3, 5, 2, 3],
+                borderColor: 'rgb(34, 197, 94)',
+                backgroundColor: gradient,
+                tension: 0.4,
+                fill: true,
+                borderWidth: 3,
+                pointBackgroundColor: 'white',
+                pointBorderColor: 'rgb(34, 197, 94)',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index'
             }
         }
+    });
+
+    // Предпросмотр загруженного изображения
+    const fileInput = document.getElementById('{{ form.profile_photo.id_for_label }}');
+    const selectedFile = document.getElementById('selected-file');
+    const imagePreview = document.getElementById('image-preview');
+
+    if (fileInput) {
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                selectedFile.textContent = file.name;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.classList.remove('hidden');
+                    imagePreview.querySelector('img').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            } else {
+                selectedFile.textContent = '';
+                imagePreview.classList.add('hidden');
+            }
+        });
     }
 });
 </script>
-{% endblock %}
-{% endblock %} 
+{% endblock extra_js %} 
