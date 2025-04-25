@@ -40,6 +40,7 @@ public class ProfileFragment extends Fragment {
     private TextView emailTextView;
     private TextView ratingTextView;
     private TextView achievementsTextView;
+    private TextView bioTextView;
     private MaterialButton logoutButton;
     private View loadingView;
 
@@ -55,6 +56,7 @@ public class ProfileFragment extends Fragment {
         emailTextView = view.findViewById(R.id.email_text_view);
         ratingTextView = view.findViewById(R.id.rating_text_view);
         achievementsTextView = view.findViewById(R.id.achievements_text_view);
+        bioTextView = view.findViewById(R.id.bio_text_view);
         logoutButton = view.findViewById(R.id.logout_button);
         loadingView = view.findViewById(R.id.loading_view);
 
@@ -127,8 +129,16 @@ public class ProfileFragment extends Fragment {
         // Устанавливаем имя пользователя и email
         usernameTextView.setText(user.getUsername());
         emailTextView.setText(user.getEmail());
-        ratingTextView.setText(String.format("Очки: %d", user.getPoints()));
-        achievementsTextView.setVisibility(View.GONE);
+        ratingTextView.setText(String.format(getString(R.string.rating), user.getRating()));
+        achievementsTextView.setVisibility(View.VISIBLE);
+        achievementsTextView.setText(String.format(getString(R.string.achievements_count), user.getAchievementsCount()));
+        // Отображаем био пользователя
+        if (user.getBio() != null && !user.getBio().isEmpty()) {
+            bioTextView.setVisibility(View.VISIBLE);
+            bioTextView.setText(user.getBio());
+        } else {
+            bioTextView.setVisibility(View.GONE);
+        }
 
         // Загружаем аватар
         loadAvatar(user.getAvatarUrl());

@@ -1,17 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Базовая тема приложения -->
-    <style name="Theme.TazarAndroid" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <style name="Theme.TazarAndroid" parent="Theme.Material3.DayNight">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryContainer">@color/colorPrimaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/colorOnPrimaryContainer</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryContainer">@color/colorSecondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/colorOnSecondaryContainer</item>
+        <item name="colorSurfaceVariant">@color/colorSurfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/colorOnSurfaceVariant</item>
+        <item name="colorOutline">@color/colorOutline</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
         <item name="android:textColorPrimary">@color/primary_text</item>
         <item name="android:textColorSecondary">@color/secondary_text</item>
         <item name="android:windowBackground">@color/background</item>
+        <item name="elevationOverlayEnabled">true</item>
+        <item name="chipStyle">@style/Widget.Tazar.Chip</item>
+        <item name="buttonStyle">@style/Widget.Tazar.Button</item>
+        <item name="materialCardViewStyle">@style/Widget.Tazar.CardView</item>
+        <item name="bottomNavigationStyle">@style/Widget.Tazar.BottomNavigation</item>
+        <item name="textInputStyle">@style/Widget.Tazar.TextInputLayout</item>
     </style>
 
     <!-- Тема для экрана загрузки -->
-    <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="SplashTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -20,9 +35,10 @@
     </style>
 
     <!-- Тема без заголовка -->
-    <style name="Theme.TazarAndroid.NoActionBar">
+    <style name="Theme.TazarAndroid.NoActionBar" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowLightStatusBar">@bool/lightStatusBar</item>
     </style>
 
     <!-- Стиль для основных кнопок -->
@@ -58,5 +74,118 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- Базовые стили текста -->
+    <style name="TextAppearance.Tazar.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.Tazar.Headline2" parent="TextAppearance.MaterialComponents.Headline2">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.Tazar.Body1" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/textColorSecondary</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="TextAppearance.Tazar.Body2" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/textColorSecondary</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <!-- Стили кнопок -->
+    <style name="Widget.Tazar.Button" parent="Widget.Material3.Button">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="cornerRadius">24dp</item>
+        <item name="backgroundTint">@color/primary</item>
+        <item name="rippleColor">@color/colorPrimaryDark</item>
+        <item name="elevation">0dp</item>
+    </style>
+
+    <style name="Widget.Tazar.Button.Secondary" parent="Widget.Tazar.Button">
+        <item name="backgroundTint">@color/white</item>
+        <item name="strokeColor">@color/primary</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
+    <style name="Widget.Tazar.Button.FilledTonal" parent="Widget.Material3.Button.TonalButton">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="cornerRadius">24dp</item>
+        <item name="elevation">0dp</item>
+    </style>
+
+    <!-- Стили карточек -->
+    <style name="Widget.Tazar.CardView" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">1dp</item>
+        <item name="cardBackgroundColor">@color/white</item>
+        <item name="contentPadding">0dp</item>
+        <item name="rippleColor">@color/colorPrimaryDark</item>
+    </style>
+
+    <!-- Стили полей ввода -->
+    <style name="Widget.Tazar.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
+        <item name="boxStrokeColor">@color/primary</item>
+        <item name="hintTextColor">@color/primary</item>
+        <item name="android:textColorHint">@color/textColorSecondary</item>
+    </style>
+
+    <!-- Стили чипов -->
+    <style name="Widget.Tazar.Chip" parent="Widget.Material3.Chip.Filter">
+        <item name="chipBackgroundColor">@color/colorSurfaceVariant</item>
+        <item name="chipStrokeColor">@color/divider</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+        <item name="rippleColor">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="Widget.Tazar.Chip.Selected" parent="Widget.Tazar.Chip">
+        <item name="chipBackgroundColor">@color/colorSecondaryContainer</item>
+        <item name="chipStrokeColor">@color/primary</item>
+        <item name="android:textColor">?attr/colorOnSecondaryContainer</item>
+    </style>
+
+    <!-- Стили для Bottom Navigation -->
+    <style name="Widget.Tazar.BottomNavigation" parent="Widget.Material3.BottomNavigationView">
+        <item name="itemIconTint">@color/bottom_nav_color_state</item>
+        <item name="itemTextColor">@color/bottom_nav_color_state</item>
+        <item name="itemRippleColor">@color/colorPrimaryDark</item>
+        <item name="elevation">3dp</item>
+        <item name="backgroundTint">?attr/colorSurface</item>
+    </style>
+
+    <!-- Стили для Toolbar -->
+    <style name="Widget.Tazar.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">?attr/colorSurface</item>
+        <item name="titleTextColor">@color/textColorPrimary</item>
+        <item name="subtitleTextColor">@color/textColorSecondary</item>
+        <item name="elevation">0dp</item>
+    </style>
+
+    <!-- Стили для диалогов -->
+    <style name="ThemeOverlay.Tazar.Dialog" parent="ThemeOverlay.Material3.Dialog">
+        <item name="android:windowBackground">@drawable/bg_dialog</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
 </resources> 

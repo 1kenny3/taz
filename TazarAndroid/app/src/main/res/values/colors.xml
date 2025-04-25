@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Основные цвета темы -->
+    <!-- Material Design 3 цвета -->
     <color name="primary">#4CAF50</color>
     <color name="primary_dark">#388E3C</color>
     <color name="accent">#8BC34A</color>
@@ -8,6 +8,15 @@
     <color name="colorPrimary">#4CAF50</color>
     <color name="colorPrimaryDark">#388E3C</color>
     <color name="colorAccent">#8BC34A</color>
+    <!-- Новые Material Design 3 цвета -->
+    <color name="colorSecondary">#03A9F4</color>
+    <color name="colorPrimaryContainer">#DAFAD2</color>
+    <color name="colorOnPrimaryContainer">#0C2002</color>
+    <color name="colorSecondaryContainer">#CBE6FF</color>
+    <color name="colorOnSecondaryContainer">#001D31</color>
+    <color name="colorSurfaceVariant">#E7E0EC</color>
+    <color name="colorOnSurfaceVariant">#49454F</color>
+    <color name="colorOutline">#79747E</color>
     
     <color name="textColorPrimary">#212121</color>
     <color name="textColorSecondary">#757575</color>
@@ -21,7 +30,7 @@
     <color name="error">#D32F2F</color>
     <color name="success">#4CAF50</color>
     <color name="warning">#FFC107</color>
-    <color name="background">#F5F5F5</color>
+    <color name="background">#F8F9FA</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
@@ -44,4 +53,6 @@
     <color name="gray">#CCCCCC</color>
     <color name="gray_light">#EEEEEE</color>
     <color name="ripple_color">#1F000000</color>
+    <color name="ripple_light">#1FFFFFFF</color>
+    <color name="surface">#FFFFFF</color>
 </resources> 

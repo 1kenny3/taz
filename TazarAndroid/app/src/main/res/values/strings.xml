@@ -10,6 +10,8 @@
     <string name="nav_map">Карта</string>
     <string name="nav_reports">Отчеты</string>
     <string name="nav_profile">Профиль</string>
+    <string name="navigation_drawer_open">Открыть меню</string>
+    <string name="navigation_drawer_close">Закрыть меню</string>
     
     <!-- Авторизация -->
     <string name="login">Вход</string>
@@ -149,6 +151,8 @@
     <string name="version_info">Версия: 1.0.0</string>
     <string name="settings">Настройки</string>
     <string name="rating">Рейтинг: %d</string>
+    <string name="rating_label">Рейтинг</string>
+    <string name="achievements_label">Достижения</string>
     <string name="achievements_count">Достижений: %d</string>
     <string name="add_trash_report">Добавить сообщение о мусоре</string>
     
