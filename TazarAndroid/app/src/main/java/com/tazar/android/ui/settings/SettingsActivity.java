@@ -12,6 +12,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.app.AppCompatDelegate;
+import android.widget.RadioButton;
 
 import com.tazar.android.R;
 import com.tazar.android.TazarApplication;
@@ -79,8 +81,19 @@ public class SettingsActivity extends AppCompatActivity {
     }
     
     private void loadSettings() {
-        // Загрузка настроек
-        // Здесь можно добавить загрузку других настроек
+        // Загрузка настроек приложения
+        int mode = preferenceManager.getThemeMode();
+        switch (mode) {
+            case AppCompatDelegate.MODE_NIGHT_NO:
+                ((RadioButton) findViewById(R.id.theme_light)).setChecked(true);
+                break;
+            case AppCompatDelegate.MODE_NIGHT_YES:
+                ((RadioButton) findViewById(R.id.theme_dark)).setChecked(true);
+                break;
+            default:
+                ((RadioButton) findViewById(R.id.theme_system)).setChecked(true);
+                break;
+        }
     }
     
     /**
@@ -142,8 +155,20 @@ public class SettingsActivity extends AppCompatActivity {
     }
     
     private void saveSettings() {
-        // Сохранение настроек
-        // Здесь можно добавить сохранение других настроек
+        // Сохранение настроек приложения
+        int selectedId = themeGroup.getCheckedRadioButtonId();
+        int mode;
+        if (selectedId == R.id.theme_light) {
+            mode = AppCompatDelegate.MODE_NIGHT_NO;
+        } else if (selectedId == R.id.theme_dark) {
+            mode = AppCompatDelegate.MODE_NIGHT_YES;
+        } else {
+            mode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+        }
+        // Сохраняем режим темы
+        preferenceManager.saveThemeMode(mode);
+        // Применяем режим темы
+        AppCompatDelegate.setDefaultNightMode(mode);
         finish();
     }
     

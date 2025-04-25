@@ -61,7 +61,10 @@
         <activity android:name=".ui.achievements.AchievementsActivity" />
         <activity android:name=".ui.ecotips.EcoTipsActivity" />
         <activity android:name=".ui.events.CleanupEventsActivity" />
-        <activity android:name=".ui.settings.SettingsActivity" />
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.TazarAndroid.NoActionBar" />
         <activity
             android:name=".ui.activities.CreateReportActivity"
             android:exported="false"

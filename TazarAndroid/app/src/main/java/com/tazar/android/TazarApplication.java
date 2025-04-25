@@ -12,6 +12,8 @@ import com.tazar.android.utils.PreferenceManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import androidx.appcompat.app.AppCompatDelegate;
+
 public class TazarApplication extends Application {
     private static final String TAG = "TazarApplication";
     private static final String PREF_NAME = "tazar_prefs";
@@ -31,6 +33,9 @@ public class TazarApplication extends Application {
             appContext = getApplicationContext();
             instance = this;
             preferenceManager = new PreferenceManager(this);
+            
+            // Применяем сохраненный режим темы приложения
+            AppCompatDelegate.setDefaultNightMode(preferenceManager.getThemeMode());
             
             // Инициализация ApiClient
             ApiClient.init(appContext);

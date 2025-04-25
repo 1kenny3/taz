@@ -2,6 +2,7 @@ package com.tazar.android.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import androidx.appcompat.app.AppCompatDelegate;
 
 /**
  * Менеджер настроек приложения
@@ -14,6 +15,7 @@ public class PreferenceManager {
     private static final String SERVER_URL_KEY = "server_url";
     private static final String KEY_API_URL = "api_url";
     private static final String DEFAULT_API_URL = "http://10.0.2.2:8000/";
+    private static final String KEY_THEME_MODE = "theme_mode";
     
     private SharedPreferences preferences;
     
@@ -111,6 +113,22 @@ public class PreferenceManager {
 
     public void saveApiUrl(String url) {
         preferences.edit().putString(KEY_API_URL, url).apply();
+    }
+
+    /**
+     * Получение сохраненного режима темы приложения
+     * @return режим темы из AppCompatDelegate
+     */
+    public int getThemeMode() {
+        return preferences.getInt(KEY_THEME_MODE, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+    }
+
+    /**
+     * Сохранение режима темы приложения
+     * @param mode режим темы из AppCompatDelegate
+     */
+    public void saveThemeMode(int mode) {
+        preferences.edit().putInt(KEY_THEME_MODE, mode).apply();
     }
 
     public String getAuthToken() {

@@ -36,8 +36,8 @@
 
     <!-- Тема без заголовка -->
     <style name="Theme.TazarAndroid.NoActionBar" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
         <item name="android:windowLightStatusBar">@bool/lightStatusBar</item>
     </style>
 
