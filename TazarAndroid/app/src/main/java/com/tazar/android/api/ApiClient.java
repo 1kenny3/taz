@@ -31,6 +31,14 @@ public class ApiClient {
     private Context context;
     
     /**
+     * Получение базового URL API
+     * @return Базовый URL
+     */
+    public static String getBaseUrl() {
+        return BASE_URL;
+    }
+    
+    /**
      * Проверка инициализации ApiClient
      * @return true, если ApiClient инициализирован
      */

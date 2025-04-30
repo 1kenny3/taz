@@ -36,6 +36,7 @@
     
     <!-- Профиль -->
     <string name="profile_title">Профиль пользователя</string>
+    <string name="profile_photo_description">Фото профиля</string>
     
     <!-- Отчеты -->
     <string name="add_report">Добавить отчет</string>
