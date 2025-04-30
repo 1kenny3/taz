@@ -1,6 +1,7 @@
 package com.tazar.android.ui.fragments;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -60,6 +62,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private GoogleMap mMap;
     private ProgressBar progressBar;
     private ChipGroup wasteTypeFilterGroup;
+    private ImageButton btnToggleFilters;
+    private boolean isFiltersExpanded = true;
     private List<TrashReport> trashReports = new ArrayList<>();
     private List<RecyclingPoint> recyclingPoints = new ArrayList<>();
     private Map<Marker, Object> markerMap = new HashMap<>();
@@ -80,6 +84,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         progressBar = view.findViewById(R.id.progress_bar);
         wasteTypeFilterGroup = view.findViewById(R.id.waste_type_filter_group);
+        btnToggleFilters = view.findViewById(R.id.btn_toggle_filters);
 
         // Добавляем слушатели для кнопок масштабирования
         view.findViewById(R.id.btn_zoom_in).setOnClickListener(v -> {
@@ -108,12 +113,48 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             mapFragment.getMapAsync(this);
         }
 
-        setupFilterListeners();
+        setupFilterPanel();
 
         // Добавим тестовые данные для отладки
         addTestData();
 
         return view;
+    }
+
+    private void setupFilterPanel() {
+        // Восстанавливаем состояние панели, если оно было сохранено
+        if (getContext() != null) {
+            isFiltersExpanded = getContext()
+                .getSharedPreferences("map_preferences", Context.MODE_PRIVATE)
+                .getBoolean("filters_expanded", true);
+            updateFilterPanelState();
+        }
+
+        btnToggleFilters.setOnClickListener(v -> toggleFilters());
+    }
+
+    private void toggleFilters() {
+        isFiltersExpanded = !isFiltersExpanded;
+        updateFilterPanelState();
+        
+        // Сохраняем состояние
+        if (getContext() != null) {
+            getContext()
+                .getSharedPreferences("map_preferences", Context.MODE_PRIVATE)
+                .edit()
+                .putBoolean("filters_expanded", isFiltersExpanded)
+                .apply();
+        }
+    }
+
+    private void updateFilterPanelState() {
+        if (isFiltersExpanded) {
+            wasteTypeFilterGroup.setVisibility(View.VISIBLE);
+            btnToggleFilters.setImageResource(R.drawable.ic_expand_less);
+        } else {
+            wasteTypeFilterGroup.setVisibility(View.GONE);
+            btnToggleFilters.setImageResource(R.drawable.ic_expand_more);
+        }
     }
 
     private void setupFilterListeners() {
