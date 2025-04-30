@@ -229,7 +229,7 @@
         <p class="text-xl mb-10 max-w-2xl mx-auto animated" style="animation-delay: 1.2s; opacity: 0;">Присоединяйтесь к нашему сообществу экологически ответственных людей и внесите свой вклад в сохранение окружающей среды.</p>
         {% if not user.is_authenticated %}
         <div class="animated" style="animation-delay: 1.3s; opacity: 0;">
-            <a href="{% url 'register' %}" class="btn-action bg-white text-green-500 hover:bg-green-50 font-bold py-3 px-10 rounded-full transition duration-300 shadow-lg">Зарегистрироваться</a>
+            <a href="{% url 'register' %}" class="inline-block bg-white text-green-500 hover:bg-opacity-90 font-bold py-3 px-10 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-xl">Зарегистрироваться</a>
         </div>
         {% endif %}
     </div>
