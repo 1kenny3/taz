@@ -32,6 +32,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.widget.Toolbar;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 /**
  * Главная активность приложения
@@ -132,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
         int itemId = item.getItemId();
+        
         if (itemId == R.id.navigation_home) {
             fragment = new HomeFragment();
         } else if (itemId == R.id.navigation_map) {
@@ -142,18 +144,38 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             fragment = new ProfileFragment();
         } else if (itemId == R.id.nav_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
-            drawerLayout.closeDrawer(GravityCompat.START);
-            return true;
+        } else if (itemId == R.id.nav_about) {
+            showAboutDialog();
+        } else if (itemId == R.id.nav_help) {
+            showHelpDialog();
         }
+        
         if (fragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, fragment)
                     .commit();
-            drawerLayout.closeDrawer(GravityCompat.START);
-            return true;
         }
-        return false;
+        
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void showAboutDialog() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.menu_about)
+                .setMessage("Tazar - приложение для экологического мониторинга и сбора данных о загрязнениях окружающей среды.")
+                .setPositiveButton("OK", null)
+                .show();
+    }
+
+    private void showHelpDialog() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.menu_help)
+                .setMessage("Если у вас возникли вопросы или проблемы с использованием приложения, " +
+                          "пожалуйста, напишите нам на support@tazar.com")
+                .setPositiveButton("OK", null)
+                .show();
     }
 
     // Пример метода для начисления баллов

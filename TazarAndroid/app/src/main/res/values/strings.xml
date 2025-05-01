@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ecoup</string>
+    <string name="app_name">Tazar</string>
     
     <!-- Google Maps -->
     <string name="google_maps_key">AIzaSyCexDbGsUt37YhJ7k_2IuwhVFkE2KDjkLM</string>
@@ -184,4 +184,19 @@
     <!-- Боковое меню -->
     <string name="guest_user">Гость</string>
     <string name="guest_email">Войдите, чтобы увидеть свой профиль</string>
+    
+    <!-- Пункты меню -->
+    <string name="menu_profile">Профиль</string>
+    <string name="menu_settings">Настройки</string>
+    <string name="menu_section_other">Дополнительно</string>
+    <string name="menu_about">О приложении</string>
+    <string name="menu_help">Помощь</string>
+    
+    <!-- Нижняя навигация -->
+    <string name="title_home">Главная</string>
+    <string name="title_map">Карта</string>
+    <string name="title_reports">Отчеты</string>
+    
+    <!-- Другие строки -->
+    <string name="nav_header_desc">Фото профиля</string>
 </resources> 

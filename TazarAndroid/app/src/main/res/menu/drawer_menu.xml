@@ -1,11 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/nav_profile_drawer"
-        android:title="Профиль"
-        android:icon="@drawable/ic_profile" />
-    <item
-        android:id="@+id/nav_settings"
-        android:title="Настройки"
-        android:icon="@android:drawable/ic_menu_preferences" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_profile_drawer"
+            android:icon="@drawable/ic_account_circle"
+            android:title="@string/menu_profile" />
+        
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/menu_settings" />
+    </group>
+
+    <item android:title="@string/menu_section_other">
+        <menu>
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_info"
+                android:title="@string/menu_about" />
+            
+            <item
+                android:id="@+id/nav_help"
+                android:icon="@drawable/ic_help"
+                android:title="@string/menu_help" />
+        </menu>
+    </item>
 </menu> 
