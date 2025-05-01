@@ -10,13 +10,13 @@
     <color name="colorAccent">#8BC34A</color>
     <!-- Новые Material Design 3 цвета -->
     <color name="colorSecondary">#03A9F4</color>
-    <color name="colorPrimaryContainer">#DAFAD2</color>
-    <color name="colorOnPrimaryContainer">#0C2002</color>
-    <color name="colorSecondaryContainer">#CBE6FF</color>
-    <color name="colorOnSecondaryContainer">#001D31</color>
-    <color name="colorSurfaceVariant">#E7E0EC</color>
-    <color name="colorOnSurfaceVariant">#49454F</color>
-    <color name="colorOutline">#79747E</color>
+    <color name="colorPrimaryContainer">#E8F5E9</color>
+    <color name="colorOnPrimaryContainer">#1B5E20</color>
+    <color name="colorSecondaryContainer">#E1F5FE</color>
+    <color name="colorOnSecondaryContainer">#01579B</color>
+    <color name="colorSurfaceVariant">#F5F5F5</color>
+    <color name="colorOnSurfaceVariant">#424242</color>
+    <color name="colorOutline">#BDBDBD</color>
     
     <color name="textColorPrimary">#212121</color>
     <color name="textColorSecondary">#757575</color>
@@ -26,11 +26,11 @@
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
     <color name="icons">#FFFFFF</color>
-    <color name="divider">#BDBDBD</color>
-    <color name="error">#D32F2F</color>
-    <color name="success">#4CAF50</color>
-    <color name="warning">#FFC107</color>
-    <color name="background">#F8F9FA</color>
+    <color name="divider">#EEEEEE</color>
+    <color name="error">#EF5350</color>
+    <color name="success">#66BB6A</color>
+    <color name="warning">#FFA726</color>
+    <color name="background">#FFFFFF</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>

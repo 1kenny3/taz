@@ -7,7 +7,10 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.widget.TextView;
+import android.widget.LinearLayout;
+import android.graphics.Typeface;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +29,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -35,19 +43,24 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.tazar.android.R;
 import com.tazar.android.TazarApplication;
 import com.tazar.android.api.ApiConfig;
 import com.tazar.android.models.TrashReport;
 import com.tazar.android.api.services.TrashReportService;
-import com.tazar.android.ui.activities.CreateReportActivity;
 import com.tazar.android.models.RecyclingPoint;
 import com.tazar.android.api.services.RecyclingPointsService;
+import com.tazar.android.ui.activities.CreateReportActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -60,16 +73,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private static final String TAG = "MapFragment";
     
     private GoogleMap mMap;
-    private ProgressBar progressBar;
-    private ChipGroup wasteTypeFilterGroup;
-    private ImageButton btnToggleFilters;
-    private boolean isFiltersExpanded = true;
-    private List<TrashReport> trashReports = new ArrayList<>();
+    private View loadingView;
+    private ChipGroup filterChipGroup;
+    private ChipGroup wasteTypesChipGroup;
+    private View bottomSheet;
+    private TextView pointTitle;
+    private TextView pointAddress;
+    private MaterialButton routeButton;
+    private TextInputEditText searchEditText;
+    private FloatingActionButton locationFab;
     private List<RecyclingPoint> recyclingPoints = new ArrayList<>();
     private Map<Marker, Object> markerMap = new HashMap<>();
     private RecyclingPointsService recyclingPointsService;
-    private boolean dataLoaded = false; // Флаг для отслеживания загрузки данных
     private List<RecyclingPoint> allRecyclingPoints = new ArrayList<>();
+    private Marker lastClickedMarker;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,123 +99,240 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
-        progressBar = view.findViewById(R.id.progress_bar);
-        wasteTypeFilterGroup = view.findViewById(R.id.waste_type_filter_group);
-        btnToggleFilters = view.findViewById(R.id.btn_toggle_filters);
+        // Инициализация views
+        loadingView = view.findViewById(R.id.loading_view);
+        filterChipGroup = view.findViewById(R.id.filter_chip_group);
+        bottomSheet = view.findViewById(R.id.bottom_sheet);
+        pointTitle = view.findViewById(R.id.point_title);
+        pointAddress = view.findViewById(R.id.point_address);
+        wasteTypesChipGroup = view.findViewById(R.id.waste_types_chip_group);
+        routeButton = view.findViewById(R.id.route_button);
+        searchEditText = view.findViewById(R.id.search_edit_text);
+        locationFab = view.findViewById(R.id.location_fab);
 
-        // Добавляем слушатели для кнопок масштабирования
-        view.findViewById(R.id.btn_zoom_in).setOnClickListener(v -> {
-            if (mMap != null) {
-                mMap.animateCamera(CameraUpdateFactory.zoomIn());
-                Log.d(TAG, "Нажата кнопка приближения");
-            }
-        });
+        // Настройка поиска
+        setupSearch();
 
-        view.findViewById(R.id.btn_zoom_out).setOnClickListener(v -> {
-            if (mMap != null) {
-                mMap.animateCamera(CameraUpdateFactory.zoomOut());
-                Log.d(TAG, "Нажата кнопка отдаления");
-            }
-        });
+        // Настройка фильтров
+        setupFilters();
 
-        // Добавляем слушатель для кнопки добавления отчета
-        view.findViewById(R.id.fab_add_report).setOnClickListener(v -> {
-            Log.d(TAG, "Нажата кнопка добавления отчета");
-            showAddReportDialog();
-        });
+        // Настройка кнопки определения местоположения
+        setupLocationButton();
 
+        // Настройка bottom sheet
+        setupBottomSheet();
+
+        // Инициализация карты
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
 
-        setupFilterPanel();
-
-        // Добавим тестовые данные для отладки
-        addTestData();
-
         return view;
     }
 
-    private void setupFilterPanel() {
-        // Восстанавливаем состояние панели, если оно было сохранено
-        if (getContext() != null) {
-            isFiltersExpanded = getContext()
-                .getSharedPreferences("map_preferences", Context.MODE_PRIVATE)
-                .getBoolean("filters_expanded", true);
-            updateFilterPanelState();
-        }
+    private void setupSearch() {
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-        btnToggleFilters.setOnClickListener(v -> toggleFilters());
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                filterRecyclingPoints(s.toString());
+            }
+        });
     }
 
-    private void toggleFilters() {
-        isFiltersExpanded = !isFiltersExpanded;
-        updateFilterPanelState();
-        
-        // Сохраняем состояние
-        if (getContext() != null) {
-            getContext()
-                .getSharedPreferences("map_preferences", Context.MODE_PRIVATE)
-                .edit()
-                .putBoolean("filters_expanded", isFiltersExpanded)
-                .apply();
-        }
-    }
+    private void setupFilters() {
+        // Устанавливаем все фильтры выбранными по умолчанию
+        setAllChipsChecked(true);
 
-    private void updateFilterPanelState() {
-        if (isFiltersExpanded) {
-            wasteTypeFilterGroup.setVisibility(View.VISIBLE);
-            btnToggleFilters.setImageResource(R.drawable.ic_expand_less);
-        } else {
-            wasteTypeFilterGroup.setVisibility(View.GONE);
-            btnToggleFilters.setImageResource(R.drawable.ic_expand_more);
-        }
-    }
-
-    private void setupFilterListeners() {
-        // Добавляем слушатель для группы чипов
-        wasteTypeFilterGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            Log.d(TAG, "Изменен выбор фильтра: " + checkedId);
+        // Добавляем слушатель изменений
+        filterChipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            Log.d(TAG, "Изменение фильтров. Выбрано: " + checkedIds.size());
             updateMapMarkers();
         });
+    }
 
-        // Добавляем слушатели для каждого чипа
-        for (int i = 0; i < wasteTypeFilterGroup.getChildCount(); i++) {
-            View view = wasteTypeFilterGroup.getChildAt(i);
-            if (view instanceof Chip) {
-                Chip chip = (Chip) view;
-                chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    Log.d(TAG, "Чип " + chip.getText() + " " + (isChecked ? "выбран" : "снят"));
-                    updateMapMarkers();
-                });
+    private void setupLocationButton() {
+        locationFab.setOnClickListener(v -> {
+            if (checkLocationPermission()) {
+                mMap.setMyLocationEnabled(true);
+                // Получаем текущее местоположение и перемещаем камеру
+                if (getActivity() != null) {
+                    FusedLocationProviderClient locationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+                    locationClient.getLastLocation().addOnSuccessListener(location -> {
+                        if (location != null) {
+                            LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f));
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void setupBottomSheet() {
+        // Настройка поведения bottom sheet
+        BottomSheetBehavior<View> behavior = BottomSheetBehavior.from(bottomSheet);
+        behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        
+        routeButton.setOnClickListener(v -> {
+            Object item = markerMap.get(lastClickedMarker);
+            if (item instanceof RecyclingPoint) {
+                RecyclingPoint point = (RecyclingPoint) item;
+                // Открываем навигацию к точке
+                String uri = String.format(Locale.ENGLISH, "google.navigation:q=%f,%f", 
+                    point.getLatitude(), point.getLongitude());
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                intent.setPackage("com.google.android.apps.maps");
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void filterRecyclingPoints(String query) {
+        if (query.isEmpty()) {
+            recyclingPoints = new ArrayList<>(allRecyclingPoints);
+        } else {
+            recyclingPoints = allRecyclingPoints.stream()
+                .filter(point -> point.getName().toLowerCase().contains(query.toLowerCase()) ||
+                               point.getAddress().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+        }
+        updateMapMarkers();
+    }
+
+    private void showPointDetails(RecyclingPoint point) {
+        // Очищаем предыдущие чипы
+        wasteTypesChipGroup.removeAllViews();
+        
+        // Заполняем информацию
+        pointTitle.setText(point.getName());
+        pointAddress.setText(point.getAddress());
+        
+        // Добавляем чипы для типов отходов
+        String[] types = point.getAcceptedTypes();
+        if (types != null) {
+            for (String type : types) {
+                Chip chip = new Chip(requireContext());
+                chip.setText(getWasteTypeName(type));
+                chip.setChipIcon(getWasteTypeIcon(type));
+                chip.setClickable(false);
+                wasteTypesChipGroup.addView(chip);
             }
         }
+        
+        // Показываем bottom sheet
+        BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_EXPANDED);
+    }
+
+    private Drawable getWasteTypeIcon(String type) {
+        int iconRes;
+        switch (type.toLowerCase()) {
+            case "plastic":
+                iconRes = R.drawable.ic_plastic;
+                break;
+            case "paper":
+                iconRes = R.drawable.ic_paper;
+                break;
+            case "glass":
+                iconRes = R.drawable.ic_glass;
+                break;
+            case "metal":
+                iconRes = R.drawable.ic_metal;
+                break;
+            case "medical":
+                iconRes = R.drawable.ic_plastic; // Временно используем ic_plastic
+                break;
+            case "construction":
+                iconRes = R.drawable.ic_plastic; // Временно используем ic_plastic
+                break;
+            case "agricultural":
+                iconRes = R.drawable.ic_plastic; // Временно используем ic_plastic
+                break;
+            default:
+                iconRes = R.drawable.ic_plastic;
+                break;
+        }
+        return ContextCompat.getDrawable(requireContext(), iconRes);
     }
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
         
-        // Настройка элементов управления на карте
-        mMap.getUiSettings().setZoomControlsEnabled(true);
+        // Настройка карты
+        mMap.getUiSettings().setZoomControlsEnabled(false);
         mMap.getUiSettings().setCompassEnabled(true);
-        mMap.getUiSettings().setMapToolbarEnabled(true);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        
+        // Настраиваем информационное окно маркера
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null; // Используем стандартное окно
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                // Создаем кастомное содержимое окна
+                Context context = requireContext();
+                LinearLayout info = new LinearLayout(context);
+                info.setOrientation(LinearLayout.VERTICAL);
+                info.setPadding(12, 12, 12, 12);
+
+                TextView title = new TextView(context);
+                title.setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary));
+                title.setTextSize(14);
+                title.setTypeface(null, Typeface.BOLD);
+                title.setText(marker.getTitle());
+
+                TextView snippet = new TextView(context);
+                snippet.setTextColor(ContextCompat.getColor(context, R.color.textColorSecondary));
+                snippet.setTextSize(12);
+                snippet.setText(marker.getSnippet());
+
+                info.addView(title);
+                info.addView(snippet);
+
+                return info;
+            }
+        });
         
         // Добавляем слушатель для маркеров
         mMap.setOnMarkerClickListener(this);
         
-        // Загружаем данные
+        // Проверяем разрешение на геолокацию
+        if (checkLocationPermission()) {
+            mMap.setMyLocationEnabled(true);
+            
+            // Получаем текущее местоположение и центрируем карту
+            if (getActivity() != null) {
+                FusedLocationProviderClient locationClient = 
+                    LocationServices.getFusedLocationProviderClient(getActivity());
+                locationClient.getLastLocation().addOnSuccessListener(location -> {
+                    if (location != null) {
+                        LatLng currentLocation = new LatLng(
+                            location.getLatitude(), 
+                            location.getLongitude()
+                        );
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 12f));
+                    }
+                });
+            }
+        }
+        
+        // Загружаем точки переработки
         loadRecyclingPoints();
         
-        // Устанавливаем все чипы выбранными по умолчанию
+        // Устанавливаем все фильтры выбранными по умолчанию
         setAllChipsChecked(true);
-    }
-
-    private void loadTrashReports() {
-        // Код загрузки реальных данных из API
-        // Для простоты тут можно использовать тестовые данные из addTestData()
     }
 
     private void loadRecyclingPoints() {
@@ -214,24 +348,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 
                 if (response.isSuccessful() && response.body() != null) {
                     List<RecyclingPoint> points = response.body();
-                    Log.d("MapFragment", "Получено пунктов переработки: " + points.size());
+                    Log.d(TAG, "Получено пунктов переработки: " + points.size());
+                    
+                    // Очищаем существующие точки
+                    allRecyclingPoints.clear();
+                    recyclingPoints.clear();
                     
                     // Добавляем тестовые данные, если с сервера ничего не пришло
                     if (points.isEmpty()) {
                         addTestRecyclingPoints();
                     } else {
-                        allRecyclingPoints.clear();
                         allRecyclingPoints.addAll(points);
+                        recyclingPoints.addAll(points);
                     }
                     
                     updateMapMarkers();
                 } else {
-                    Log.e("MapFragment", "Ошибка получения пунктов переработки: " + 
+                    Log.e(TAG, "Ошибка получения пунктов переработки: " + 
                         (response.errorBody() != null ? "Код: " + response.code() : "Нет тела ответа"));
                     
                     // Добавляем тестовые данные, если произошла ошибка
                     addTestRecyclingPoints();
-                    updateMapMarkers();
                     
                     Toast.makeText(getContext(), "Используются демо-данные для пунктов переработки", 
                         Toast.LENGTH_SHORT).show();
@@ -241,80 +378,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             @Override
             public void onFailure(@NonNull Call<List<RecyclingPoint>> call, @NonNull Throwable t) {
                 showLoading(false);
-                Log.e("MapFragment", "Сбой сети при получении пунктов переработки", t);
+                Log.e(TAG, "Сбой сети при получении пунктов переработки", t);
                 
                 // Добавляем тестовые данные при сбое сети
                 addTestRecyclingPoints();
-                updateMapMarkers();
                 
                 Toast.makeText(getContext(), "Используются демо-данные для пунктов переработки", 
                     Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void addTestData() {
-        // Добавляем тестовые точки мусора разных типов
-        TrashReport plasticReport = new TrashReport();
-        plasticReport.setId(1);
-        plasticReport.setLatitude(55.751244);
-        plasticReport.setLongitude(37.618423);
-        plasticReport.setAddress("Москва, Кремль");
-        plasticReport.setDescription("Пластиковый мусор");
-        plasticReport.setStatus("new");
-        plasticReport.setWasteType("plastic");
-        trashReports.add(plasticReport);
-
-        TrashReport paperReport = new TrashReport();
-        paperReport.setId(2);
-        paperReport.setLatitude(55.753215);
-        paperReport.setLongitude(37.622504);
-        paperReport.setAddress("Москва, Красная площадь");
-        paperReport.setDescription("Бумажный мусор");
-        paperReport.setStatus("in_progress");
-        paperReport.setWasteType("paper");
-        trashReports.add(paperReport);
-
-        TrashReport glassReport = new TrashReport();
-        glassReport.setId(3);
-        glassReport.setLatitude(55.749469);
-        glassReport.setLongitude(37.608644);
-        glassReport.setAddress("Москва, ул. Арбат");
-        glassReport.setDescription("Стеклянный мусор");
-        glassReport.setStatus("completed");
-        glassReport.setWasteType("glass");
-        trashReports.add(glassReport);
-
-        // Добавляем тестовые пункты сбора отходов
-        RecyclingPoint plasticPoint = new RecyclingPoint();
-        plasticPoint.setId(1);
-        plasticPoint.setLatitude(55.746129);
-        plasticPoint.setLongitude(37.626591);
-        plasticPoint.setName("Пункт приема пластика");
-        plasticPoint.setAddress("Москва, ул. Ленина 10");
-        plasticPoint.setAcceptedTypes(new String[]{"plastic"});
-        recyclingPoints.add(plasticPoint);
-
-        RecyclingPoint paperPoint = new RecyclingPoint();
-        paperPoint.setId(2);
-        paperPoint.setLatitude(55.758468);
-        paperPoint.setLongitude(37.601013);
-        paperPoint.setName("Пункт приема бумаги и стекла");
-        paperPoint.setAddress("Москва, ул. Тверская 15");
-        paperPoint.setAcceptedTypes(new String[]{"paper", "glass"});
-        recyclingPoints.add(paperPoint);
-
-        RecyclingPoint mixedPoint = new RecyclingPoint();
-        mixedPoint.setId(3);
-        mixedPoint.setLatitude(55.739626);
-        mixedPoint.setLongitude(37.626788);
-        mixedPoint.setName("Пункт приема всех типов отходов");
-        mixedPoint.setAddress("Москва, ул. Садовая 20");
-        mixedPoint.setAcceptedTypes(new String[]{"plastic", "paper", "glass", "metal", "medical", "construction", "agricultural"});
-        recyclingPoints.add(mixedPoint);
-
-        dataLoaded = true;
-        Log.d("MapFragment", "Тестовые данные добавлены: " + trashReports.size() + " точек мусора, " + recyclingPoints.size() + " пунктов переработки");
     }
 
     private void addTestRecyclingPoints() {
@@ -381,9 +453,29 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         agriculturalPoint.setAcceptedTypes(new String[]{"agricultural"});
         allRecyclingPoints.add(agriculturalPoint);
 
+        // Комбинированный пункт приема пластика и металла
+        RecyclingPoint plasticMetalPoint = new RecyclingPoint();
+        plasticMetalPoint.setId(7);
+        plasticMetalPoint.setName("Пункт приема пластика и металла");
+        plasticMetalPoint.setAddress("Москва, ул. Пушкина 22");
+        plasticMetalPoint.setLatitude(55.749872);
+        plasticMetalPoint.setLongitude(37.608350);
+        plasticMetalPoint.setAcceptedTypes(new String[]{"plastic", "metal"});
+        allRecyclingPoints.add(plasticMetalPoint);
+
+        // Комбинированный пункт приема бумаги и медицинских отходов
+        RecyclingPoint paperMedicalPoint = new RecyclingPoint();
+        paperMedicalPoint.setId(8);
+        paperMedicalPoint.setName("Пункт приема бумаги и медицинских отходов");
+        paperMedicalPoint.setAddress("Москва, ул. Гоголя 17");
+        paperMedicalPoint.setLatitude(55.759872);
+        paperMedicalPoint.setLongitude(37.638350);
+        paperMedicalPoint.setAcceptedTypes(new String[]{"paper", "medical"});
+        allRecyclingPoints.add(paperMedicalPoint);
+
         // Универсальный пункт
         RecyclingPoint mixedPoint = new RecyclingPoint();
-        mixedPoint.setId(7);
+        mixedPoint.setId(9);
         mixedPoint.setName("Универсальный пункт приема");
         mixedPoint.setAddress("Москва, ул. Садовая 20");
         mixedPoint.setLatitude(55.739626);
@@ -392,162 +484,123 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                                                 "medical", "construction", "agricultural"});
         allRecyclingPoints.add(mixedPoint);
         
-        Log.d("MapFragment", "Добавлено " + allRecyclingPoints.size() + " тестовых пунктов переработки");
+        Log.d(TAG, "Добавлено " + allRecyclingPoints.size() + " тестовых пунктов переработки");
+        
+        // Добавляем в список для отображения
+        recyclingPoints.clear();
+        recyclingPoints.addAll(allRecyclingPoints);
     }
 
     private void updateMapMarkers() {
         if (mMap == null) return;
-        
-        Log.d(TAG, "Обновление маркеров на карте");
-        
+
+        // Очищаем карту
         mMap.clear();
         markerMap.clear();
 
-        // Получаем выбранные типы отходов
+        // Получаем выбранные фильтры
         List<String> selectedTypes = getSelectedWasteTypes();
-        Log.d(TAG, "Выбранные типы отходов: " + selectedTypes);
+        
+        Log.d(TAG, "Обновление маркеров на карте. Всего точек: " + recyclingPoints.size() + 
+              ", выбранные типы: " + selectedTypes);
 
-        // Если ни один тип не выбран, показываем все точки
-        if (selectedTypes.isEmpty()) {
-            Log.d(TAG, "Ни один тип не выбран, показываем все точки");
-            for (RecyclingPoint point : allRecyclingPoints) {
+        int addedMarkers = 0;
+        // Фильтруем и добавляем точки
+        for (RecyclingPoint point : recyclingPoints) {
+            // Если нет выбранных фильтров или точка содержит хотя бы один выбранный тип
+            if (hasSelectedType(point.getAcceptedTypes(), selectedTypes)) {
                 addRecyclingPointMarker(point);
+                addedMarkers++;
+                Log.d(TAG, "Добавлен маркер для точки: " + point.getName() + 
+                          " с типами: " + Arrays.toString(point.getAcceptedTypes()));
             }
-            return;
         }
 
-        // Отображаем точки переработки согласно фильтрам
-        for (RecyclingPoint point : allRecyclingPoints) {
-            if (point.getAcceptedTypes() != null) {
-                // Проверяем, принимает ли точка хотя бы один из выбранных типов отходов
-                boolean hasMatchingType = Arrays.stream(point.getAcceptedTypes())
-                        .anyMatch(selectedTypes::contains);
-                
-                if (hasMatchingType) {
-                    Log.d(TAG, "Добавляем точку: " + point.getName() + " с типами: " + 
-                              Arrays.toString(point.getAcceptedTypes()));
-                    addRecyclingPointMarker(point);
+        Log.d(TAG, "Добавлено маркеров: " + addedMarkers);
+
+        // Если есть точки на карте, центрируем карту
+        if (!markerMap.isEmpty()) {
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            for (Map.Entry<Marker, Object> entry : markerMap.entrySet()) {
+                if (entry.getValue() instanceof RecyclingPoint) {
+                    RecyclingPoint point = (RecyclingPoint) entry.getValue();
+                    builder.include(new LatLng(point.getLatitude(), point.getLongitude()));
                 }
             }
-        }
-    }
-
-    private void addTrashMarker(TrashReport report) {
-        LatLng position = new LatLng(report.getLatitude(), report.getLongitude());
-        BitmapDescriptor icon = getTrashMarkerIcon(report.getStatus(), report.getWasteType());
-        
-        Marker marker = mMap.addMarker(new MarkerOptions()
-                .position(position)
-                .title(report.getAddress())
-                .snippet("Тип отходов: " + getWasteTypeName(report.getWasteType()))
-                .icon(icon));
-        
-        if (marker != null) {
-            markerMap.put(marker, report);
+            
+            try {
+                LatLngBounds bounds = builder.build();
+                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+            } catch (Exception e) {
+                Log.e(TAG, "Ошибка при центрировании карты", e);
+            }
         }
     }
 
     private void addRecyclingPointMarker(RecyclingPoint point) {
         LatLng position = new LatLng(point.getLatitude(), point.getLongitude());
-        BitmapDescriptor icon = getRecyclingPointIcon(point.getAcceptedTypes());
         
-        String typesList = Arrays.stream(point.getAcceptedTypes())
+        // Создаем строку с описанием типов отходов
+        String snippet = "Принимает: " + Arrays.stream(point.getAcceptedTypes())
                 .map(this::getWasteTypeName)
                 .collect(Collectors.joining(", "));
         
-        Marker marker = mMap.addMarker(new MarkerOptions()
-                .position(position)
-                .title(point.getName())
-                .snippet("Принимает: " + typesList)
-                .icon(icon));
-        
+        MarkerOptions markerOptions = new MarkerOptions()
+            .position(position)
+            .title(point.getName())
+            .snippet(snippet)
+            .icon(getRecyclingPointIcon(point.getAcceptedTypes()));
+            
+        Marker marker = mMap.addMarker(markerOptions);
         if (marker != null) {
             markerMap.put(marker, point);
         }
     }
 
-    private BitmapDescriptor getTrashMarkerIcon(String status, String wasteType) {
-        float hue;
-        
-        // Определяем цвет по типу отходов
-        switch (wasteType) {
-            case "plastic":
-                hue = BitmapDescriptorFactory.HUE_BLUE;
-                break;
-            case "paper":
-                hue = BitmapDescriptorFactory.HUE_YELLOW;
-                break;
-            case "glass":
-                hue = BitmapDescriptorFactory.HUE_CYAN;
-                break;
-            case "metal":
-                hue = BitmapDescriptorFactory.HUE_MAGENTA;
-                break;
-            case "medical":
-                hue = BitmapDescriptorFactory.HUE_RED;
-                break;
-            case "construction":
-                hue = BitmapDescriptorFactory.HUE_ORANGE;
-                break;
-            case "agricultural":
-                hue = BitmapDescriptorFactory.HUE_GREEN;
-                break;
-            default:
-                hue = BitmapDescriptorFactory.HUE_RED;
-        }
-        
-        // Изменяем прозрачность в зависимости от статуса
-        float alpha = 1.0f;
-        if (status.equals("completed")) {
-            alpha = 0.5f;
-        }
-        
-        return BitmapDescriptorFactory.defaultMarker(hue);
-    }
-
     private BitmapDescriptor getRecyclingPointIcon(String[] types) {
         if (types == null || types.length == 0) {
-            return BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+            return BitmapDescriptorFactory.defaultMarker();
         }
-        
-        // Если пункт принимает несколько типов отходов, делаем его зеленым
+
+        // Определяем цвет маркера в зависимости от типа отходов
+        float markerColor;
         if (types.length > 1) {
-            return BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+            // Для точек с несколькими типами отходов используем фиолетовый цвет
+            markerColor = BitmapDescriptorFactory.HUE_VIOLET;
+        } else {
+            // Для точек с одним типом отходов используем соответствующий цвет
+            switch (types[0].toLowerCase()) {
+                case "plastic":
+                    markerColor = BitmapDescriptorFactory.HUE_BLUE; // Синий для пластика
+                    break;
+                case "paper":
+                    markerColor = BitmapDescriptorFactory.HUE_YELLOW; // Желтый для бумаги
+                    break;
+                case "glass":
+                    markerColor = BitmapDescriptorFactory.HUE_GREEN; // Зеленый для стекла
+                    break;
+                case "metal":
+                    markerColor = BitmapDescriptorFactory.HUE_RED; // Красный для металла
+                    break;
+                case "medical":
+                    markerColor = BitmapDescriptorFactory.HUE_AZURE; // Голубой для медицинских отходов
+                    break;
+                case "construction":
+                    markerColor = BitmapDescriptorFactory.HUE_ORANGE; // Оранжевый для строительных отходов
+                    break;
+                case "agricultural":
+                    markerColor = BitmapDescriptorFactory.HUE_MAGENTA; // Розовый для сельскохозяйственных отходов
+                    break;
+                default:
+                    markerColor = BitmapDescriptorFactory.HUE_CYAN;
+            }
         }
-        
-        // Иначе определяем цвет по типу отходов
-        float hue;
-        switch (types[0]) {
-            case RecyclingPoint.TYPE_PLASTIC:
-                hue = BitmapDescriptorFactory.HUE_BLUE;
-                break;
-            case RecyclingPoint.TYPE_PAPER:
-                hue = BitmapDescriptorFactory.HUE_YELLOW;
-                break;
-            case RecyclingPoint.TYPE_GLASS:
-                hue = BitmapDescriptorFactory.HUE_CYAN;
-                break;
-            case RecyclingPoint.TYPE_METAL:
-                hue = BitmapDescriptorFactory.HUE_MAGENTA;
-                break;
-            case RecyclingPoint.TYPE_MEDICAL:
-                hue = BitmapDescriptorFactory.HUE_RED;
-                break;
-            case RecyclingPoint.TYPE_CONSTRUCTION:
-                hue = BitmapDescriptorFactory.HUE_ORANGE;
-                break;
-            case RecyclingPoint.TYPE_AGRICULTURAL:
-                hue = BitmapDescriptorFactory.HUE_GREEN;
-                break;
-            default:
-                hue = BitmapDescriptorFactory.HUE_GREEN;
-        }
-        
-        return BitmapDescriptorFactory.defaultMarker(hue);
+
+        return BitmapDescriptorFactory.defaultMarker(markerColor);
     }
 
     private String getWasteTypeName(String type) {
-        switch (type) {
+        switch (type.toLowerCase()) {
             case "plastic":
                 return "Пластик";
             case "paper":
@@ -557,77 +610,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             case "metal":
                 return "Металл";
             case "medical":
-                return "Медицинские отходы";
+                return "Медицинские";
             case "construction":
-                return "Строительные отходы";
+                return "Строительные";
             case "agricultural":
-                return "Сельскохозяйственные отходы";
+                return "Сельские";
             default:
                 return type;
         }
     }
 
     @Override
-    public boolean onMarkerClick(Marker marker) {
+    public boolean onMarkerClick(@NonNull Marker marker) {
+        lastClickedMarker = marker;
         Object item = markerMap.get(marker);
-        if (item instanceof TrashReport) {
-            showTrashReportDetails((TrashReport) item);
-            return true;
-        } else if (item instanceof RecyclingPoint) {
-            showRecyclingPointDetails((RecyclingPoint) item);
+        
+        if (item instanceof RecyclingPoint) {
+            showPointDetails((RecyclingPoint) item);
             return true;
         }
+        
         return false;
-    }
-
-    private void showTrashReportDetails(TrashReport report) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Информация о мусоре");
-        
-        String info = "Адрес: " + report.getAddress() + "\n\n" +
-                      "Описание: " + report.getDescription() + "\n\n" +
-                      "Тип отходов: " + getWasteTypeName(report.getWasteType()) + "\n\n" +
-                      "Статус: " + getStatusName(report.getStatus());
-        
-        builder.setMessage(info);
-        builder.setPositiveButton("Закрыть", null);
-        builder.show();
-    }
-
-    private void showRecyclingPointDetails(RecyclingPoint point) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Пункт переработки");
-        
-        String typesList = Arrays.stream(point.getAcceptedTypes())
-                .map(this::getWasteTypeName)
-                .collect(Collectors.joining(", "));
-        
-        String info = "Название: " + point.getName() + "\n\n" +
-                      "Адрес: " + point.getAddress() + "\n\n" +
-                      "Принимаемые отходы: " + typesList;
-        
-        builder.setMessage(info);
-        builder.setPositiveButton("Закрыть", null);
-        builder.show();
-    }
-
-    private String getStatusName(String status) {
-        switch (status) {
-            case "new":
-                return "Новый";
-            case "in_progress":
-                return "В обработке";
-            case "completed":
-                return "Убран";
-            default:
-                return status;
-        }
-    }
-
-    private void showLoading(boolean show) {
-        if (progressBar != null) {
-            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
-        }
     }
 
     private boolean checkLocationPermission() {
@@ -681,41 +684,54 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private List<String> getSelectedWasteTypes() {
         List<String> selectedTypes = new ArrayList<>();
-        Map<Integer, String> chipToWasteType = new HashMap<>();
         
-        // Маппинг ID чипов на типы отходов
-        chipToWasteType.put(R.id.chip_plastic, "plastic");
-        chipToWasteType.put(R.id.chip_paper, "paper");
-        chipToWasteType.put(R.id.chip_glass, "glass");
-        chipToWasteType.put(R.id.chip_metal, "metal");
-        chipToWasteType.put(R.id.chip_medical, "medical");
-        chipToWasteType.put(R.id.chip_construction, "construction");
-        chipToWasteType.put(R.id.chip_agricultural, "agricultural");
-        
-        // Проверяем каждый чип
-        for (int i = 0; i < wasteTypeFilterGroup.getChildCount(); i++) {
-            View view = wasteTypeFilterGroup.getChildAt(i);
+        for (int i = 0; i < filterChipGroup.getChildCount(); i++) {
+            View view = filterChipGroup.getChildAt(i);
             if (view instanceof Chip) {
                 Chip chip = (Chip) view;
-                if (chip.isChecked() && chipToWasteType.containsKey(chip.getId())) {
-                    String wasteType = chipToWasteType.get(chip.getId());
-                    selectedTypes.add(wasteType);
-                    Log.d(TAG, "Выбран фильтр: " + chip.getText() + " (" + wasteType + ")");
+                if (chip.isChecked()) {
+                    String type = chip.getTag() != null ? chip.getTag().toString() : null;
+                    if (type != null) {
+                        selectedTypes.add(type);
+                        Log.d(TAG, "Выбран тип отходов: " + type);
+                    }
                 }
             }
         }
         
+        Log.d(TAG, "Всего выбрано типов: " + selectedTypes.size());
         return selectedTypes;
     }
 
     private void setAllChipsChecked(boolean checked) {
-        if (wasteTypeFilterGroup != null) {
-            for (int i = 0; i < wasteTypeFilterGroup.getChildCount(); i++) {
-                View view = wasteTypeFilterGroup.getChildAt(i);
+        if (filterChipGroup != null) {
+            for (int i = 0; i < filterChipGroup.getChildCount(); i++) {
+                View view = filterChipGroup.getChildAt(i);
                 if (view instanceof Chip) {
                     ((Chip) view).setChecked(checked);
                 }
             }
         }
+    }
+
+    public void showLoading(boolean show) {
+        if (loadingView != null) {
+            loadingView.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private boolean hasSelectedType(String[] pointTypes, List<String> selectedTypes) {
+        if (pointTypes == null || selectedTypes == null || selectedTypes.isEmpty()) {
+            return selectedTypes == null || selectedTypes.isEmpty(); // Показываем все точки, если нет фильтров
+        }
+        
+        for (String pointType : pointTypes) {
+            if (selectedTypes.contains(pointType)) {
+                Log.d(TAG, "Найдено совпадение типа: " + pointType);
+                return true;
+            }
+        }
+        
+        return false;
     }
 } 

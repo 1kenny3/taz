@@ -22,14 +22,10 @@
     <string name="password">Пароль</string>
     <string name="confirm_password">Подтвердите пароль</string>
     <string name="have_account">Уже есть аккаунт?</string>
-    <string name="no_account">Нет аккаунта?</string>
+    <string name="no_account_prefix">Нет аккаунта?</string>
     <string name="forgot_password">Забыли пароль?</string>
-    <string name="login_button">Войти</string>
-    <string name="register_button">Зарегистрироваться</string>
-    <string name="login_error">Ошибка входа</string>
-    <string name="login_success">Вход выполнен успешно</string>
-    <string name="network_error">Ошибка сети</string>
-    <string name="empty_fields">Пожалуйста, заполните все поля</string>
+    <string name="welcome_back">Добро пожаловать!</string>
+    <string name="login_subtitle">Войдите в свой аккаунт, чтобы продолжить</string>
     
     <!-- Разрешения -->
     <string name="permissions_required">Для полной функциональности приложения необходимы все разрешения</string>
@@ -184,4 +180,8 @@
     <string name="save_settings">Сохранить настройки</string>
     <string name="error_loading_recycling_points">Ошибка при загрузке пунктов приема</string>
     <string name="create_report">Создать отчет</string>
+    
+    <!-- Боковое меню -->
+    <string name="guest_user">Гость</string>
+    <string name="guest_email">Войдите, чтобы увидеть свой профиль</string>
 </resources> 

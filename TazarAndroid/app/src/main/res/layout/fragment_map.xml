@@ -2,261 +2,223 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background">
+    android:layout_height="match_parent">
 
-    <!-- Комментируем MapView и заменяем на SupportMapFragment и контейнер -->
-    <!--
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
+    <!-- Карта -->
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-    -->
-    <RelativeLayout
-        android:id="@+id/map_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </RelativeLayout>
-
-    <ImageButton
-        android:id="@+id/btn_zoom_in"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|top"
-        android:layout_margin="16dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        app:srcCompat="@drawable/ic_zoom_in" />
-
-    <ImageButton
-        android:id="@+id/btn_zoom_out"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|top"
-        android:layout_marginTop="72dp"
-        android:layout_marginEnd="16dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        app:srcCompat="@drawable/ic_zoom_out" />
-
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" />
-
-    <!-- Панель фильтров -->
+    <!-- Панель поиска -->
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/filtersCard"
+        android:id="@+id/search_card"
         style="@style/Widget.Tazar.CardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="24dp"
-        android:backgroundTint="?attr/colorSurfaceVariant"
-        app:strokeWidth="0dp"
-        app:cardElevation="4dp">
+        android:layout_margin="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="24dp">
+            android:orientation="vertical">
 
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Tazar.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:layout_margin="8dp"
+                app:startIconDrawable="@drawable/ic_search"
+                app:endIconMode="clear_text"
+                android:hint="Поиск пунктов сбора">
 
-                <TextView
-                    android:layout_width="0dp"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/search_edit_text"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Фильтры"
-                    style="@style/TextAppearance.Material3.TitleLarge"
-                    android:textColor="?attr/colorOnSurfaceVariant" />
+                    android:inputType="text"
+                    android:maxLines="1" />
 
-                <ImageButton
-                    android:id="@+id/btn_toggle_filters"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_expand_less"
-                    android:contentDescription="Свернуть/развернуть фильтры"
-                    android:tint="?attr/colorOnSurfaceVariant" />
-            </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/waste_type_filter_group"
+            <!-- Чипы фильтров -->
+            <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:chipSpacingHorizontal="8dp"
-                app:chipSpacingVertical="8dp"
-                android:visibility="visible"
-                android:animateLayoutChanges="true"
-                app:singleSelection="true">
+                android:clipToPadding="false"
+                android:paddingHorizontal="8dp"
+                android:scrollbars="none">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_plastic"
-                    style="@style/Widget.Tazar.Chip"
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/filter_chip_group"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Пластик" />
+                    app:singleSelection="false"
+                    app:chipSpacingHorizontal="8dp">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_paper"
-                    style="@style/Widget.Tazar.Chip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Бумага" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/filter_plastic"
+                        style="@style/Widget.Tazar.Chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Пластик"
+                        android:tag="plastic"
+                        android:checkable="true"
+                        app:chipIcon="@drawable/ic_plastic" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_metal"
-                    style="@style/Widget.Tazar.Chip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Металл" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/filter_paper"
+                        style="@style/Widget.Tazar.Chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Бумага"
+                        android:tag="paper"
+                        android:checkable="true"
+                        app:chipIcon="@drawable/ic_paper" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_glass"
-                    style="@style/Widget.Tazar.Chip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Стекло" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/filter_glass"
+                        style="@style/Widget.Tazar.Chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Стекло"
+                        android:tag="glass"
+                        android:checkable="true"
+                        app:chipIcon="@drawable/ic_glass" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_medical"
-                    style="@style/Widget.Tazar.Chip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Медицинские" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/filter_metal"
+                        style="@style/Widget.Tazar.Chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Металл"
+                        android:tag="metal"
+                        android:checkable="true"
+                        app:chipIcon="@drawable/ic_metal" />
+                        
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/filter_medical"
+                        style="@style/Widget.Tazar.Chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Медицинские"
+                        android:tag="medical"
+                        android:checkable="true"
+                        app:chipIcon="@drawable/ic_plastic" />
+                        
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/filter_construction"
+                        style="@style/Widget.Tazar.Chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Строительные"
+                        android:tag="construction"
+                        android:checkable="true"
+                        app:chipIcon="@drawable/ic_plastic" />
+                        
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/filter_agricultural"
+                        style="@style/Widget.Tazar.Chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Сельские"
+                        android:tag="agricultural"
+                        android:checkable="true"
+                        app:chipIcon="@drawable/ic_plastic" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_construction"
-                    style="@style/Widget.Tazar.Chip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Строительные" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_agricultural"
-                    style="@style/Widget.Tazar.Chip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Сельскохозяйственные" />
-            </com.google.android.material.chip.ChipGroup>
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Кнопка добавления отчета -->
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fab_add_report"
+    <!-- Кнопка определения местоположения -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/location_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:text="@string/report_trash"
-        style="@style/Widget.Material3.ExtendedFloatingActionButton.Primary"
-        android:textColor="@color/white"
-        app:icon="@drawable/ic_add"
-        app:iconTint="@color/white" />
+        app:srcCompat="@drawable/ic_my_location"
+        app:backgroundTint="@color/white"
+        app:tint="@color/colorPrimary"
+        app:borderWidth="0dp"
+        app:elevation="6dp" />
 
-    <!-- Легенда карты -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/legendCard"
-        style="@style/Widget.Tazar.CardView"
-        android:layout_width="wrap_content"
+    <!-- Bottom Sheet для деталей пункта сбора -->
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="16dp"
-        app:strokeWidth="1dp"
-        app:strokeColor="?attr/colorOutline"
-        app:cardElevation="0dp">
+        android:background="@drawable/bottom_sheet_background"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="0dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
 
+            <!-- Заголовок -->
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/point_title"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Легенда"
-                style="@style/TextAppearance.Material3.TitleMedium"
-                android:textColor="?attr/colorOnSurface" />
+                android:textAppearance="@style/TextAppearance.Tazar.Headline2" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <!-- Адрес -->
+            <TextView
+                android:id="@+id/point_address"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/TextAppearance.Tazar.Body1" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:gravity="center_vertical">
+            <!-- Принимаемые типы отходов -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Принимаемые отходы"
+                android:textAppearance="@style/TextAppearance.Tazar.Body1"
+                android:textColor="@color/textColorPrimary" />
 
-                    <View
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/circle_new" />
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/waste_types_chip_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:chipSpacingHorizontal="8dp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Новые сообщения"
-                        android:textAppearance="@style/TextAppearance.Tazar.Body2" />
-                </LinearLayout>
+            <!-- Кнопка построения маршрута -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/route_button"
+                style="@style/Widget.Tazar.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Построить маршрут" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:gravity="center_vertical">
-
-                    <View
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/circle_in_progress" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="В обработке"
-                        android:textAppearance="@style/TextAppearance.Tazar.Body2" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical">
-
-                    <View
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/circle_completed" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Убрано"
-                        android:textAppearance="@style/TextAppearance.Tazar.Body2" />
-                </LinearLayout>
-            </LinearLayout>
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <!-- Индикатор загрузки -->
+    <FrameLayout
+        android:id="@+id/loading_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80FFFFFF"
+        android:visibility="gone">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            app:indicatorColor="@color/colorPrimary" />
+    </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout> 

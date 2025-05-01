@@ -108,12 +108,13 @@
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:paddingStart">24dp</item>
         <item name="android:paddingEnd">24dp</item>
-        <item name="android:paddingTop">12dp</item>
-        <item name="android:paddingBottom">12dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
         <item name="cornerRadius">24dp</item>
         <item name="backgroundTint">@color/primary</item>
         <item name="rippleColor">@color/colorPrimaryDark</item>
-        <item name="elevation">0dp</item>
+        <item name="elevation">4dp</item>
+        <item name="android:stateListAnimator">@animator/button_state_list_animator</item>
     </style>
 
     <style name="Widget.Tazar.Button.Secondary" parent="Widget.Tazar.Button">
@@ -133,10 +134,13 @@
     <!-- Стили карточек -->
     <style name="Widget.Tazar.CardView" parent="Widget.Material3.CardView.Elevated">
         <item name="cardCornerRadius">16dp</item>
-        <item name="cardElevation">1dp</item>
+        <item name="cardElevation">4dp</item>
         <item name="cardBackgroundColor">@color/white</item>
-        <item name="contentPadding">0dp</item>
-        <item name="rippleColor">@color/colorPrimaryDark</item>
+        <item name="contentPadding">20dp</item>
+        <item name="rippleColor">@color/ripple_color</item>
+        <item name="cardPreventCornerOverlap">true</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>
 
     <!-- Стили полей ввода -->
@@ -146,8 +150,14 @@
         <item name="boxCornerRadiusBottomStart">12dp</item>
         <item name="boxCornerRadiusBottomEnd">12dp</item>
         <item name="boxStrokeColor">@color/primary</item>
+        <item name="boxStrokeWidth">1.5dp</item>
         <item name="hintTextColor">@color/primary</item>
         <item name="android:textColorHint">@color/textColorSecondary</item>
+        <item name="endIconTint">@color/primary</item>
+        <item name="startIconTint">@color/primary</item>
+        <item name="errorTextColor">@color/error</item>
+        <item name="errorIconTint">@color/error</item>
+        <item name="boxStrokeErrorColor">@color/error</item>
     </style>
 
     <!-- Стили чипов -->
@@ -169,9 +179,14 @@
     <style name="Widget.Tazar.BottomNavigation" parent="Widget.Material3.BottomNavigationView">
         <item name="itemIconTint">@color/bottom_nav_color_state</item>
         <item name="itemTextColor">@color/bottom_nav_color_state</item>
-        <item name="itemRippleColor">@color/colorPrimaryDark</item>
-        <item name="elevation">3dp</item>
+        <item name="itemRippleColor">@color/ripple_color</item>
+        <item name="elevation">16dp</item>
         <item name="backgroundTint">?attr/colorSurface</item>
+        <item name="itemIconSize">24dp</item>
+        <item name="labelVisibilityMode">labeled</item>
+        <item name="itemPaddingTop">12dp</item>
+        <item name="itemPaddingBottom">12dp</item>
+        <item name="android:background">@drawable/bottom_nav_background</item>
     </style>
 
     <!-- Стили для Toolbar -->
@@ -179,7 +194,17 @@
         <item name="android:background">?attr/colorSurface</item>
         <item name="titleTextColor">@color/textColorPrimary</item>
         <item name="subtitleTextColor">@color/textColorSecondary</item>
-        <item name="elevation">0dp</item>
+        <item name="elevation">8dp</item>
+        <item name="titleTextAppearance">@style/TextAppearance.Tazar.Toolbar.Title</item>
+        <item name="contentInsetStartWithNavigation">0dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+    </style>
+
+    <style name="TextAppearance.Tazar.Toolbar.Title" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/textColorPrimary</item>
     </style>
 
     <!-- Стили для диалогов -->
@@ -187,5 +212,29 @@
         <item name="android:windowBackground">@drawable/bg_dialog</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="cornerRadius">28dp</item>
+        <item name="android:windowElevation">8dp</item>
+    </style>
+
+    <!-- Стили для списков -->
+    <style name="Widget.Tazar.RecyclerView" parent="Widget.AppCompat.ListView">
+        <item name="android:clipToPadding">false</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:scrollbarStyle">outsideOverlay</item>
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:fadeScrollbars">true</item>
+    </style>
+
+    <!-- Стили для изображений -->
+    <style name="Widget.Tazar.ImageView.Round" parent="Widget.AppCompat.ImageButton">
+        <item name="cornerRadius">12dp</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:background">@color/colorSurfaceVariant</item>
+    </style>
+
+    <style name="CircleImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
     </style>
 </resources> 

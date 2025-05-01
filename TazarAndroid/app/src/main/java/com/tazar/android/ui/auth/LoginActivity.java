@@ -37,8 +37,8 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int PERMISSION_REQUEST_CODE = 100;
     
-    private EditText usernameEditText;
-    private EditText passwordEditText;
+    private EditText usernameInput;
+    private EditText passwordInput;
     private Button loginButton;
     private TextView registerLink;
     private TextView forgotPasswordLink;
@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
             setContentView(R.layout.activity_login);
             
             // Инициализация UI элементов
-            initializeViews();
+            initViews();
             
             // Установка обработчиков, если элементы успешно инициализированы
             if (loginButton != null && registerLink != null && forgotPasswordLink != null) {
@@ -132,23 +132,18 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Инициализация UI элементов
      */
-    private void initializeViews() {
-        try {
-            usernameEditText = findViewById(R.id.username_edit_text);
-            passwordEditText = findViewById(R.id.password_edit_text);
-            loginButton = findViewById(R.id.login_button);
-            registerLink = findViewById(R.id.register_link);
-            forgotPasswordLink = findViewById(R.id.forgot_password_link);
-            progressOverlay = findViewById(R.id.progress_overlay);
-            
-            // Если не удается найти элементы, логируем это
-            if (usernameEditText == null || passwordEditText == null || 
-                loginButton == null || registerLink == null || forgotPasswordLink == null || progressOverlay == null) {
-                Log.e(TAG, "Один или несколько элементов UI не найдены");
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Ошибка инициализации UI: ", e);
-            Toast.makeText(this, "Ошибка инициализации UI: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+    private void initViews() {
+        usernameInput = findViewById(R.id.username_input);
+        passwordInput = findViewById(R.id.password_input);
+        loginButton = findViewById(R.id.login_button);
+        registerLink = findViewById(R.id.register_link);
+        forgotPasswordLink = findViewById(R.id.forgot_password_link);
+        progressOverlay = findViewById(R.id.progress_overlay);
+        
+        // Если не удается найти элементы, логируем это
+        if (usernameInput == null || passwordInput == null || 
+            loginButton == null || registerLink == null || forgotPasswordLink == null || progressOverlay == null) {
+            Log.e(TAG, "Один или несколько элементов UI не найдены");
         }
     }
     
@@ -178,14 +173,14 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void attemptLogin() {
         // Проверяем, что все UI элементы существуют
-        if (usernameEditText == null || passwordEditText == null) {
+        if (usernameInput == null || passwordInput == null) {
             Toast.makeText(this, "Ошибка инициализации UI", Toast.LENGTH_SHORT).show();
             return;
         }
         
         // Получаем данные из полей
-        String username = usernameEditText.getText().toString().trim();
-        String password = passwordEditText.getText().toString().trim();
+        String username = usernameInput.getText().toString().trim();
+        String password = passwordInput.getText().toString().trim();
         
         // Проверяем, что поля не пустые
         if (username.isEmpty() || password.isEmpty()) {

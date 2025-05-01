@@ -1,123 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:background="@color/background"
     tools:context=".ui.auth.LoginActivity">
 
-    <ScrollView
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="280dp"
+        android:background="@drawable/login_header_background">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:contentScrim="@color/colorPrimary">
+
+            <ImageView
+                android:id="@+id/logo_image_view"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:src="@mipmap/ic_launcher"
+                app:layout_collapseMode="parallax"/>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="24dp">
 
-            <!-- Логотип -->
-            <ImageView
-                android:id="@+id/logo_image_view"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="48dp"
-                android:layout_marginBottom="32dp"
-                android:src="@mipmap/ic_launcher" />
-
-            <!-- Заголовок -->
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/login"
-                android:textAlignment="center"
-                android:textColor="@color/primary"
+                android:text="@string/welcome_back"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="32dp" />
+                android:layout_marginBottom="8dp"/>
 
-            <!-- Поле ввода имени пользователя -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login_subtitle"
+                android:textSize="16sp"
+                android:layout_marginBottom="32dp"/>
+
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/username_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/username"
-                style="@style/TextInputLayout"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                app:startIconDrawable="@drawable/ic_person">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/username_edit_text"
+                    android:id="@+id/username_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
+                    android:hint="@string/username"
+                    android:inputType="text"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Поле ввода пароля -->
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/password_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/password"
-                style="@style/TextInputLayout"
-                app:passwordToggleEnabled="true"
-                android:layout_marginBottom="24dp">
+                android:layout_marginBottom="24dp"
+                app:startIconDrawable="@drawable/ic_lock"
+                app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/password_edit_text"
+                    android:id="@+id/password_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword" />
+                    android:hint="@string/password"
+                    android:inputType="textPassword"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Кнопка входа -->
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/login_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/login"
-                style="@style/Button.Primary"
-                android:layout_marginBottom="16dp" />
+                android:padding="12dp"/>
 
-            <!-- Ссылка "Забыли пароль" -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/no_account_prefix"
+                    android:layout_marginEnd="4dp"/>
+
+                <TextView
+                    android:id="@+id/register_link"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/register"
+                    android:textColor="?attr/colorPrimary"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/forgot_password_link"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/forgot_password"
-                android:textAlignment="center"
-                android:textColor="@color/primary"
-                android:layout_marginBottom="32dp" />
-
-            <!-- Ссылка "Регистрация" -->
-            <TextView
-                android:id="@+id/register_link"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/no_account"
-                android:textAlignment="center"
-                android:textColor="@color/primary"
-                android:layout_marginBottom="16dp" />
+                android:textColor="?attr/colorPrimary"
+                android:layout_marginTop="8dp"/>
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-    <!-- Индикатор загрузки -->
-    <RelativeLayout
-        android:id="@+id/progress_overlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#80000000"
-        android:visibility="gone">
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="gone"/>
 
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:indeterminate="true" />
-
-    </RelativeLayout>
-
-</RelativeLayout> 
+</androidx.coordinatorlayout.widget.CoordinatorLayout> 

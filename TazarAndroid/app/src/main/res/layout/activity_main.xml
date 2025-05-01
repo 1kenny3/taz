@@ -4,10 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <!-- Основное содержимое -->
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/colorSurface">
@@ -17,7 +18,8 @@
             android:id="@+id/appbar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent">
+            android:background="@android:color/transparent"
+            app:elevation="0dp">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
@@ -25,7 +27,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:navigationIcon="@drawable/ic_menu"
-                app:title="@string/app_name" />
+                app:title="@string/app_name"
+                app:menu="@menu/top_app_bar"
+                app:titleTextAppearance="@style/TextAppearance.Tazar.Toolbar.Title"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -33,19 +37,9 @@
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appbar_layout" />
-
-        <!-- Divider над навигацией -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:alpha="0.1"
-            android:background="?attr/colorOutline"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation" />
+            android:layout_height="match_parent"
+            android:layout_marginBottom="80dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <!-- Нижняя навигация -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -53,14 +47,26 @@
             style="@style/Widget.Tazar.BottomNavigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:itemIconTint="@color/bottom_nav_color_state"
-            app:itemTextColor="@color/bottom_nav_color_state"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:elevation="8dp"
+            app:labelVisibilityMode="labeled"
             app:menu="@menu/bottom_nav_menu" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fab_create_report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="104dp"
+            android:text="@string/create_report"
+            app:icon="@drawable/ic_add"
+            style="@style/Widget.Material3.ExtendedFloatingActionButton.Primary"/>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <!-- Боковая панель -->
     <com.google.android.material.navigation.NavigationView
@@ -68,7 +74,16 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
+        android:background="?attr/colorSurface"
+        app:itemIconTint="@color/drawer_item_color"
+        app:itemTextColor="@color/drawer_item_color"
+        app:itemIconSize="24dp"
+        app:itemVerticalPadding="16dp"
+        app:itemHorizontalPadding="24dp"
+        app:dividerInsetStart="24dp"
+        app:dividerInsetEnd="24dp"
         app:menu="@menu/drawer_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout> 
