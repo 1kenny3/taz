@@ -24,111 +24,145 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Tazar.TextInputLayout"
+            <LinearLayout
+                android:id="@+id/search_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:startIconDrawable="@drawable/ic_search"
-                app:endIconMode="clear_text"
-                android:hint="Поиск пунктов сбора">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/search_edit_text"
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Поиск и фильтры"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1" />
+
+                <ImageView
+                    android:id="@+id/search_arrow"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_arrow_down"
+                    app:tint="?attr/colorOnSurface" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/search_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.Tazar.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:maxLines="1" />
+                    android:layout_margin="8dp"
+                    app:startIconDrawable="@drawable/ic_search"
+                    app:endIconMode="clear_text"
+                    android:hint="Поиск пунктов сбора">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/search_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:maxLines="1" />
 
-            <!-- Чипы фильтров -->
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:paddingHorizontal="8dp"
-                android:scrollbars="none">
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/filter_chip_group"
-                    android:layout_width="wrap_content"
+                <!-- Чипы фильтров -->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:singleSelection="false"
-                    app:chipSpacingHorizontal="8dp">
+                    android:clipToPadding="false"
+                    android:paddingHorizontal="8dp"
+                    android:scrollbars="none">
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/filter_plastic"
-                        style="@style/Widget.Tazar.Chip"
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/filter_chip_group"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Пластик"
-                        android:tag="plastic"
-                        android:checkable="true"
-                        app:chipIcon="@drawable/ic_plastic" />
+                        app:singleSelection="false"
+                        app:chipSpacingHorizontal="8dp">
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/filter_paper"
-                        style="@style/Widget.Tazar.Chip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Бумага"
-                        android:tag="paper"
-                        android:checkable="true"
-                        app:chipIcon="@drawable/ic_paper" />
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/filter_plastic"
+                            style="@style/Widget.Tazar.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Пластик"
+                            android:tag="plastic"
+                            android:checkable="true"
+                            app:chipIcon="@drawable/ic_plastic" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/filter_glass"
-                        style="@style/Widget.Tazar.Chip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Стекло"
-                        android:tag="glass"
-                        android:checkable="true"
-                        app:chipIcon="@drawable/ic_glass" />
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/filter_paper"
+                            style="@style/Widget.Tazar.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Бумага"
+                            android:tag="paper"
+                            android:checkable="true"
+                            app:chipIcon="@drawable/ic_paper" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/filter_metal"
-                        style="@style/Widget.Tazar.Chip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Металл"
-                        android:tag="metal"
-                        android:checkable="true"
-                        app:chipIcon="@drawable/ic_metal" />
-                        
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/filter_medical"
-                        style="@style/Widget.Tazar.Chip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Медицинские"
-                        android:tag="medical"
-                        android:checkable="true"
-                        app:chipIcon="@drawable/ic_plastic" />
-                        
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/filter_construction"
-                        style="@style/Widget.Tazar.Chip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Строительные"
-                        android:tag="construction"
-                        android:checkable="true"
-                        app:chipIcon="@drawable/ic_plastic" />
-                        
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/filter_agricultural"
-                        style="@style/Widget.Tazar.Chip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Сельские"
-                        android:tag="agricultural"
-                        android:checkable="true"
-                        app:chipIcon="@drawable/ic_plastic" />
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/filter_glass"
+                            style="@style/Widget.Tazar.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Стекло"
+                            android:tag="glass"
+                            android:checkable="true"
+                            app:chipIcon="@drawable/ic_glass" />
 
-                </com.google.android.material.chip.ChipGroup>
-            </HorizontalScrollView>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/filter_metal"
+                            style="@style/Widget.Tazar.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Металл"
+                            android:tag="metal"
+                            android:checkable="true"
+                            app:chipIcon="@drawable/ic_metal" />
+                            
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/filter_medical"
+                            style="@style/Widget.Tazar.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Медицинские"
+                            android:tag="medical"
+                            android:checkable="true"
+                            app:chipIcon="@drawable/ic_plastic" />
+                            
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/filter_construction"
+                            style="@style/Widget.Tazar.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Строительные"
+                            android:tag="construction"
+                            android:checkable="true"
+                            app:chipIcon="@drawable/ic_plastic" />
+                            
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/filter_agricultural"
+                            style="@style/Widget.Tazar.Chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Сельские"
+                            android:tag="agricultural"
+                            android:checkable="true"
+                            app:chipIcon="@drawable/ic_plastic" />
+
+                    </com.google.android.material.chip.ChipGroup>
+                </HorizontalScrollView>
+            </LinearLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 

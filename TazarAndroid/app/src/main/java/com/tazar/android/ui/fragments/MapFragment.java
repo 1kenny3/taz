@@ -21,6 +21,7 @@ import android.widget.Toast;
 import android.widget.TextView;
 import android.widget.LinearLayout;
 import android.graphics.Typeface;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -87,6 +88,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private RecyclingPointsService recyclingPointsService;
     private List<RecyclingPoint> allRecyclingPoints = new ArrayList<>();
     private Marker lastClickedMarker;
+    private View searchHeader;
+    private View searchContent;
+    private ImageView searchArrow;
+    private boolean isSearchExpanded = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,6 +114,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         routeButton = view.findViewById(R.id.route_button);
         searchEditText = view.findViewById(R.id.search_edit_text);
         locationFab = view.findViewById(R.id.location_fab);
+        searchHeader = view.findViewById(R.id.search_header);
+        searchContent = view.findViewById(R.id.search_content);
+        searchArrow = view.findViewById(R.id.search_arrow);
 
         // Настройка поиска
         setupSearch();
@@ -133,6 +141,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     }
 
     private void setupSearch() {
+        // Устанавливаем начальное состояние
+        searchContent.setVisibility(View.VISIBLE);
+        searchArrow.setRotation(180); // Стрелка вверх
+        
+        searchHeader.setOnClickListener(v -> toggleSearchPanel());
+        
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -145,6 +159,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 filterRecyclingPoints(s.toString());
             }
         });
+    }
+
+    private void toggleSearchPanel() {
+        isSearchExpanded = !isSearchExpanded;
+        searchContent.setVisibility(isSearchExpanded ? View.VISIBLE : View.GONE);
+        searchArrow.animate()
+                .rotation(isSearchExpanded ? 180 : 0)
+                .setDuration(200)
+                .start();
     }
 
     private void setupFilters() {
