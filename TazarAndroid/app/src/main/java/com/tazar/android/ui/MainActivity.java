@@ -6,6 +6,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -43,11 +45,15 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle drawerToggle;
+    private PreferencesManager preferencesManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        preferencesManager = new PreferencesManager(this);
+        
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -57,6 +63,19 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Настройка информации пользователя в боковом меню
+        View headerView = navigationView.getHeaderView(0);
+        TextView userName = headerView.findViewById(R.id.user_name);
+        TextView userEmail = headerView.findViewById(R.id.user_email);
+        
+        if (preferencesManager.isLoggedIn()) {
+            userName.setVisibility(View.VISIBLE);
+            userEmail.setVisibility(View.VISIBLE);
+            userName.setText(preferencesManager.getUserName());
+            userEmail.setText(preferencesManager.getUserEmail());
+        }
+
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(this);
 
@@ -77,7 +96,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         Intent serviceIntent = new Intent(this, PointsCheckingService.class);
         startService(serviceIntent);
 
-        PreferencesManager preferencesManager = new PreferencesManager(this);
         int userId = preferencesManager.getUserId();
         Log.d("MainActivity", "ID пользователя: " + userId);
 

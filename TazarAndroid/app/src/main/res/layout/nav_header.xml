@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/nav_header_background"
     android:orientation="vertical"
     android:gravity="bottom"
@@ -25,7 +25,7 @@
         android:id="@+id/user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/guest_user"
+        android:visibility="gone"
         android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
         android:textColor="@color/white"/>
 
@@ -33,7 +33,7 @@
         android:id="@+id/user_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/guest_email"
+        android:visibility="gone"
         android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
         android:textColor="@color/white"
         android:alpha="0.7"/>
