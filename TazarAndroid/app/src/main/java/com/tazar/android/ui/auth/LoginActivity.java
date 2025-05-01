@@ -224,6 +224,7 @@ public class LoginActivity extends AppCompatActivity {
                         // Создаем экземпляр PreferencesManager для сохранения ID пользователя
                         PreferencesManager preferencesManager = new PreferencesManager(LoginActivity.this);
                         preferencesManager.saveUserId(tokenResponse.getUserId());
+                        preferencesManager.setLoggedIn(true);
                         
                         // Показываем сообщение об успешном входе
                         Toast.makeText(LoginActivity.this, "Вход выполнен успешно", Toast.LENGTH_SHORT).show();

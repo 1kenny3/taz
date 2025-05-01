@@ -56,6 +56,7 @@ import com.tazar.android.api.services.TrashReportService;
 import com.tazar.android.models.RecyclingPoint;
 import com.tazar.android.api.services.RecyclingPointsService;
 import com.tazar.android.ui.activities.CreateReportActivity;
+import com.tazar.android.helpers.PreferencesManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -664,11 +665,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         return true;
     }
 
-    private void showAddReportDialog() {
+    public void showAddReportDialog() {
         Log.d(TAG, "Открытие экрана создания отчета");
         
-        // Проверяем авторизацию пользователя
-        if (TazarApplication.getInstance().getAuthToken() == null) {
+        // Проверяем авторизацию пользователя через оба менеджера
+        PreferencesManager preferencesManager = new PreferencesManager(requireContext());
+        if (!preferencesManager.isLoggedIn() || TazarApplication.getInstance().getAuthToken() == null) {
             Toast.makeText(requireContext(), "Для создания отчета необходимо авторизоваться", 
                 Toast.LENGTH_LONG).show();
             return;

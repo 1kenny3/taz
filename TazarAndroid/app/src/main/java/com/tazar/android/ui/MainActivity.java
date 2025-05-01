@@ -35,6 +35,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 /**
  * Главная активность приложения
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private NavigationView navigationView;
     private ActionBarDrawerToggle drawerToggle;
     private PreferencesManager preferencesManager;
+    private ExtendedFloatingActionButton fabCreateReport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,30 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Инициализация FAB
+        fabCreateReport = findViewById(R.id.fab_create_report);
+        fabCreateReport.setOnClickListener(view -> {
+            if (!preferencesManager.isLoggedIn()) {
+                Toast.makeText(this, "Для создания отчета необходимо авторизоваться", Toast.LENGTH_LONG).show();
+                return;
+            }
+            
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+            if (currentFragment instanceof MapFragment) {
+                ((MapFragment) currentFragment).showAddReportDialog();
+            } else {
+                // Если мы не на экране карты, сначала переключимся на него
+                bottomNavigationView.setSelectedItemId(R.id.navigation_map);
+                // Даем время для инициализации фрагмента
+                fabCreateReport.postDelayed(() -> {
+                    Fragment mapFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                    if (mapFragment instanceof MapFragment) {
+                        ((MapFragment) mapFragment).showAddReportDialog();
+                    }
+                }, 300);
+            }
+        });
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -154,12 +180,16 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         
         if (itemId == R.id.navigation_home) {
             fragment = new HomeFragment();
+            updateFabVisibility(false);
         } else if (itemId == R.id.navigation_map) {
             fragment = new MapFragment();
+            updateFabVisibility(true);
         } else if (itemId == R.id.navigation_reports) {
             fragment = new ReportsFragment();
+            updateFabVisibility(false);
         } else if (itemId == R.id.nav_profile_drawer) {
             fragment = new ProfileFragment();
+            updateFabVisibility(false);
         } else if (itemId == R.id.nav_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
         } else if (itemId == R.id.nav_about) {
@@ -177,6 +207,16 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void updateFabVisibility(boolean show) {
+        if (fabCreateReport != null) {
+            if (show) {
+                fabCreateReport.show();
+            } else {
+                fabCreateReport.hide();
+            }
+        }
     }
 
     private void showAboutDialog() {
