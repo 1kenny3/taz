@@ -171,8 +171,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     }
 
     private void setupFilters() {
-        // Устанавливаем все фильтры выбранными по умолчанию
-        setAllChipsChecked(true);
+        // Устанавливаем все фильтры невыбранными по умолчанию
+        setAllChipsChecked(false);
 
         // Добавляем слушатель изменений
         filterChipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
@@ -353,9 +353,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         
         // Загружаем точки переработки
         loadRecyclingPoints();
-        
-        // Устанавливаем все фильтры выбранными по умолчанию
-        setAllChipsChecked(true);
     }
 
     private void loadRecyclingPoints() {

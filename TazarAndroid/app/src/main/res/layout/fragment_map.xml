@@ -98,6 +98,7 @@
                             android:text="Пластик"
                             android:tag="plastic"
                             android:checkable="true"
+                            app:chipBackgroundColor="@color/chip_background_plastic"
                             app:chipIcon="@drawable/ic_plastic" />
 
                         <com.google.android.material.chip.Chip
@@ -108,6 +109,7 @@
                             android:text="Бумага"
                             android:tag="paper"
                             android:checkable="true"
+                            app:chipBackgroundColor="@color/chip_background_paper"
                             app:chipIcon="@drawable/ic_paper" />
 
                         <com.google.android.material.chip.Chip
@@ -118,6 +120,7 @@
                             android:text="Стекло"
                             android:tag="glass"
                             android:checkable="true"
+                            app:chipBackgroundColor="@color/chip_background_glass"
                             app:chipIcon="@drawable/ic_glass" />
 
                         <com.google.android.material.chip.Chip
@@ -128,6 +131,7 @@
                             android:text="Металл"
                             android:tag="metal"
                             android:checkable="true"
+                            app:chipBackgroundColor="@color/chip_background_metal"
                             app:chipIcon="@drawable/ic_metal" />
                             
                         <com.google.android.material.chip.Chip
@@ -138,6 +142,7 @@
                             android:text="Медицинские"
                             android:tag="medical"
                             android:checkable="true"
+                            app:chipBackgroundColor="@color/chip_background_medical"
                             app:chipIcon="@drawable/ic_plastic" />
                             
                         <com.google.android.material.chip.Chip
@@ -148,6 +153,7 @@
                             android:text="Строительные"
                             android:tag="construction"
                             android:checkable="true"
+                            app:chipBackgroundColor="@color/chip_background_construction"
                             app:chipIcon="@drawable/ic_plastic" />
                             
                         <com.google.android.material.chip.Chip
@@ -158,6 +164,7 @@
                             android:text="Сельские"
                             android:tag="agricultural"
                             android:checkable="true"
+                            app:chipBackgroundColor="@color/chip_background_agricultural"
                             app:chipIcon="@drawable/ic_plastic" />
 
                     </com.google.android.material.chip.ChipGroup>

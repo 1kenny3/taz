@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="#80E91E63" android:state_checked="false"/> <!-- Pink with 50% opacity -->
+    <item android:color="#E91E63" android:state_checked="true"/> <!-- Pink -->
+</selector> 
