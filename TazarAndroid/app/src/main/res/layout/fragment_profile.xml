@@ -97,75 +97,76 @@
                         android:textColor="?attr/colorOnSurfaceVariant"/>
 
                     <!-- Статистика -->
-                    <com.google.android.material.card.MaterialCardView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="horizontal"
                         android:layout_marginTop="36dp"
-                        app:cardCornerRadius="24dp"
-                        app:cardElevation="0dp"
-                        app:strokeWidth="1dp"
-                        app:strokeColor="?attr/colorOutline">
+                        android:padding="16dp"
+                        android:background="@drawable/stats_background">
 
+                        <!-- Рейтинг -->
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="24dp">
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
-                            <!-- Рейтинг -->
-                            <LinearLayout
-                                android:layout_width="0dp"
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:src="@drawable/ic_star"
+                                android:tint="?attr/colorPrimary"
+                                android:layout_marginBottom="8dp"/>
+
+                            <TextView
+                                android:id="@+id/rating_text_view"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="center"
-                                android:orientation="vertical">
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                                android:textColor="?attr/colorPrimary"
+                                android:textStyle="bold"/>
 
-                                <TextView
-                                    android:id="@+id/rating_text_view"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textAppearance="@style/TextAppearance.Tazar.Headline1"
-                                    android:textColor="?attr/colorPrimary"/>
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Рейтинг"
-                                    android:textAppearance="@style/TextAppearance.Tazar.Body2"
-                                    android:textColor="?attr/colorOnSurfaceVariant"/>
-                            </LinearLayout>
-
-                            <!-- Разделитель -->
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="match_parent"
-                                android:background="?attr/colorOutline"
-                                android:alpha="0.2"/>
-
-                            <!-- Достижения -->
-                            <LinearLayout
-                                android:layout_width="0dp"
+                            <TextView
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/achievements_text_view"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textAppearance="@style/TextAppearance.Tazar.Headline1"
-                                    android:textColor="?attr/colorPrimary"/>
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Достижения"
-                                    android:textAppearance="@style/TextAppearance.Tazar.Body2"
-                                    android:textColor="?attr/colorOnSurfaceVariant"/>
-                            </LinearLayout>
+                                android:text="Рейтинг"
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                                android:textColor="?attr/colorOnSurfaceVariant"/>
                         </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
+
+                        <!-- Достижения -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:src="@drawable/ic_achievement"
+                                android:tint="?attr/colorPrimary"
+                                android:layout_marginBottom="8dp"/>
+
+                            <TextView
+                                android:id="@+id/achievements_text_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                                android:textColor="?attr/colorPrimary"
+                                android:textStyle="bold"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Достижения"
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                                android:textColor="?attr/colorOnSurfaceVariant"/>
+                        </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
