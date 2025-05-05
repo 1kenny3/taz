@@ -36,10 +36,10 @@
     <color name="transparent">#00000000</color>
     
     <!-- Статусы отчетов -->
-    <color name="status_new">#2196F3</color>
-    <color name="status_in_progress">#FF9800</color>
-    <color name="status_completed">#4CAF50</color>
-    <color name="status_rejected">#F44336</color>
+    <color name="status_new">#FF9800</color>             <!-- Оранжевый -->
+    <color name="status_in_progress">#2196F3</color>     <!-- Синий -->
+    <color name="status_completed">#4CAF50</color>       <!-- Зеленый -->
+    <color name="status_rejected">#F44336</color>        <!-- Красный -->
     
     <!-- Типы отходов -->
     <color name="waste_plastic">#2196F3</color>
@@ -55,4 +55,8 @@
     <color name="ripple_color">#1F000000</color>
     <color name="ripple_light">#1FFFFFFF</color>
     <color name="surface">#FFFFFF</color>
+    
+    <!-- Цвета фона -->
+    <color name="background_light">#F5F5F5</color>       <!-- Светло-серый -->
+    <color name="background_dark">#303030</color>        <!-- Темно-серый -->
 </resources> 

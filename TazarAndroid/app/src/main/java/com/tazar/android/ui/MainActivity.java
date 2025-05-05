@@ -265,4 +265,25 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             super.onBackPressed();
         }
     }
+    
+    /**
+     * Открывает диалог для создания нового отчета
+     * Данный метод перенаправляет вызов на соответствующий метод в MapFragment
+     */
+    public void showAddReportDialog() {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (currentFragment instanceof MapFragment) {
+            ((MapFragment) currentFragment).showAddReportDialog();
+        } else {
+            // Если мы не на экране карты, сначала переключимся на него
+            bottomNavigationView.setSelectedItemId(R.id.navigation_map);
+            // Даем время для инициализации фрагмента
+            fabCreateReport.postDelayed(() -> {
+                Fragment mapFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                if (mapFragment instanceof MapFragment) {
+                    ((MapFragment) mapFragment).showAddReportDialog();
+                }
+            }, 300);
+        }
+    }
 } 
