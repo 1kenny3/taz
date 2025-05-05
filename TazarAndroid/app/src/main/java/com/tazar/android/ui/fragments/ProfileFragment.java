@@ -50,10 +50,10 @@ public class ProfileFragment extends Fragment {
     private TextView usernameTextView;
     private TextView emailTextView;
     private TextView ratingTextView;
-    private TextView achievementsTextView;
+    private TextView pointsTextView;
     private TextView bioTextView;
-    private MaterialButton logoutButton;
     private View loadingView;
+    private View logoutContainer;
 
     private PreferencesManager preferencesManager;
 
@@ -66,9 +66,9 @@ public class ProfileFragment extends Fragment {
         usernameTextView = view.findViewById(R.id.username_text_view);
         emailTextView = view.findViewById(R.id.email_text_view);
         ratingTextView = view.findViewById(R.id.rating_text_view);
-        achievementsTextView = view.findViewById(R.id.achievements_text_view);
+        pointsTextView = view.findViewById(R.id.points_text_view);
         bioTextView = view.findViewById(R.id.bio_text_view);
-        logoutButton = view.findViewById(R.id.logout_button);
+        logoutContainer = view.findViewById(R.id.logout_container);
         loadingView = view.findViewById(R.id.loading_view);
 
         // Инициализация менеджера настроек
@@ -78,7 +78,7 @@ public class ProfileFragment extends Fragment {
         loadUserProfile();
 
         // Обработчик кнопки выхода
-        logoutButton.setOnClickListener(v -> logout());
+        logoutContainer.setOnClickListener(v -> logout());
 
         return view;
     }
@@ -111,8 +111,8 @@ public class ProfileFragment extends Fragment {
     private void displayUserProfile(User user) {
         usernameTextView.setText(user.getUsername());
         emailTextView.setText(user.getEmail());
-        ratingTextView.setText(String.format(getString(R.string.rating), user.getRating()));
-        achievementsTextView.setText(String.format(getString(R.string.achievements_count), user.getAchievementsCount()));
+        ratingTextView.setText(String.valueOf(user.getRating()));
+        pointsTextView.setText(String.valueOf(user.getAchievementsCount()));
         
         if (user.getBio() != null && !user.getBio().isEmpty()) {
             bioTextView.setVisibility(View.VISIBLE);
