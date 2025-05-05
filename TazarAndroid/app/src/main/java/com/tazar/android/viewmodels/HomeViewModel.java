@@ -4,12 +4,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.tazar.android.BuildConfig;
-import com.tazar.android.models.Article;
+import com.tazar.android.api.ApiClient;
+import com.tazar.android.api.ApiService;
 import com.tazar.android.models.News;
-import com.tazar.android.models.NewsResponse;
-import com.tazar.android.network.NewsApiService;
-import com.tazar.android.network.RetrofitClient;
+import com.tazar.android.models.TazarNews;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,35 +20,24 @@ public class HomeViewModel extends ViewModel {
     private final MutableLiveData<List<News>> news = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
     private final MutableLiveData<String> error = new MutableLiveData<>();
-    private final NewsApiService newsApiService;
+    private final ApiService apiService;
 
     public HomeViewModel() {
-        newsApiService = RetrofitClient.getNewsApiService();
+        apiService = ApiClient.getInstance().create(ApiService.class);
         loadNews();
     }
 
     public void loadNews() {
         isLoading.setValue(true);
 
-        newsApiService.getEcoNews(
-            "экология OR природа OR переработка мусора",
-            "ru",
-            "publishedAt",
-            BuildConfig.NEWS_API_KEY
-        ).enqueue(new Callback<NewsResponse>() {
+        apiService.getNews().enqueue(new Callback<List<TazarNews>>() {
             @Override
-            public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
+            public void onResponse(Call<List<TazarNews>> call, Response<List<TazarNews>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<News> newsList = new ArrayList<>();
-                    for (Article article : response.body().getArticles()) {
-                        newsList.add(new News(
-                            article.getTitle(),
-                            article.getDescription(),
-                            article.getUrl(),
-                            article.getUrlToImage(),
-                            article.getPublishedAt(),
-                            article.getSource().getName()
-                        ));
+                    for (TazarNews tazarNews : response.body()) {
+                        // Конвертируем TazarNews в News для совместимости с адаптером
+                        newsList.add(tazarNews.toNews());
                     }
                     news.setValue(newsList);
                 } else {
@@ -60,7 +47,7 @@ public class HomeViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<NewsResponse> call, Throwable t) {
+            public void onFailure(Call<List<TazarNews>> call, Throwable t) {
                 error.setValue("Ошибка сети: " + t.getMessage());
                 isLoading.setValue(false);
             }

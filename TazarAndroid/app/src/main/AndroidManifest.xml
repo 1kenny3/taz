@@ -75,6 +75,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activities.MainActivity" />
         </activity>
+        
+        <!-- Активность детального просмотра новостей -->
+        <activity
+            android:name=".ui.activities.NewsDetailActivity"
+            android:exported="false"
+            android:label="@string/news_detail"
+            android:theme="@style/Theme.TazarAndroid.NoActionBar"
+            android:parentActivityName=".ui.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MainActivity" />
+        </activity>
 
         <!-- Провайдер для доступа к файлам приложения -->
         <provider

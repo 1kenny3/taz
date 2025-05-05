@@ -18,6 +18,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.tazar.android.R;
 import com.tazar.android.models.News;
+import com.tazar.android.ui.activities.NewsDetailActivity;
 
 public class NewsAdapter extends ListAdapter<News, NewsAdapter.NewsViewHolder> {
 
@@ -76,13 +77,8 @@ public class NewsAdapter extends ListAdapter<News, NewsAdapter.NewsViewHolder> {
             }
 
             itemView.setOnClickListener(v -> {
-                try {
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(news.getUrl()));
-                    v.getContext().startActivity(intent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                Intent intent = NewsDetailActivity.newIntent(v.getContext(), news);
+                v.getContext().startActivity(intent);
             });
 
             itemView.setClickable(true);

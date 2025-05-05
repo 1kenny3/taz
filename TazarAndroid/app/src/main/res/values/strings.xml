@@ -166,6 +166,9 @@
     <string name="news_image_description">Изображение новости</string>
     <string name="welcome_text">Добро пожаловать!</string>
     <string name="news_section_title">Экологические новости</string>
+    <string name="news_detail">Новость</string>
+    <string name="share">Поделиться</string>
+    <string name="share_news">Поделиться новостью</string>
     
     <!-- Новый ресурс -->
     <string name="date_not_available">Дата не указана</string>
