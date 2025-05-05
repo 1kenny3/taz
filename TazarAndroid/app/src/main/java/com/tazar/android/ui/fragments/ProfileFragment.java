@@ -71,6 +71,21 @@ public class ProfileFragment extends Fragment {
         logoutContainer = view.findViewById(R.id.logout_container);
         loadingView = view.findViewById(R.id.loading_view);
 
+        // Настройка Toolbar
+        androidx.appcompat.widget.Toolbar toolbar = view.findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            // Центрируем заголовок
+            toolbar.setTitle(R.string.menu_profile);
+            
+            // Если требуется добавить кнопку назад, раскомментируйте следующие строки
+            // AppCompatActivity activity = (AppCompatActivity) getActivity();
+            // if (activity != null) {
+            //    activity.setSupportActionBar(toolbar);
+            //    activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            //    activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
+            // }
+        }
+
         // Инициализация менеджера настроек
         preferencesManager = new PreferencesManager(requireContext());
 

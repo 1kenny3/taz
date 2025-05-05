@@ -207,6 +207,11 @@
         <item name="android:textColor">@color/textColorPrimary</item>
     </style>
 
+    <style name="TextAppearance.Tazar.Toolbar.Title.Center">
+        <item name="android:gravity">center</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
     <!-- Стили для диалогов -->
     <style name="ThemeOverlay.Tazar.Dialog" parent="ThemeOverlay.Material3.Dialog">
         <item name="android:windowBackground">@drawable/bg_dialog</item>
