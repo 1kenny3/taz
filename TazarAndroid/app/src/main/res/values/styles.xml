@@ -181,11 +181,11 @@
 
     <!-- Стили для Bottom Navigation -->
     <style name="Widget.Tazar.BottomNavigation" parent="Widget.Material3.BottomNavigationView">
-        <item name="itemIconTint">@color/bottom_nav_color_state</item>
-        <item name="itemTextColor">@color/bottom_nav_color_state</item>
+        <item name="itemIconTint">@color/colorSecondary</item>
+        <item name="itemTextColor">@color/colorSecondary</item>
         <item name="itemRippleColor">@color/ripple_color</item>
         <item name="elevation">16dp</item>
-        <item name="backgroundTint">?attr/colorSurface</item>
+        <item name="backgroundTint">@color/white</item>
         <item name="itemIconSize">24dp</item>
         <item name="labelVisibilityMode">labeled</item>
         <item name="itemPaddingTop">12dp</item>
