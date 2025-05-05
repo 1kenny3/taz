@@ -13,7 +13,7 @@
         <item name="colorSurfaceVariant">@color/colorSurfaceVariant</item>
         <item name="colorOnSurfaceVariant">@color/colorOnSurfaceVariant</item>
         <item name="colorOutline">@color/colorOutline</item>
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
         <item name="android:textColorPrimary">@color/primary_text</item>
         <item name="android:textColorSecondary">@color/secondary_text</item>
         <item name="android:windowBackground">@color/background</item>
@@ -38,7 +38,11 @@
     <style name="Theme.TazarAndroid.NoActionBar" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowLightStatusBar">@bool/lightStatusBar</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <!-- Стиль для основных кнопок -->
@@ -191,14 +195,16 @@
 
     <!-- Стили для Toolbar -->
     <style name="Widget.Tazar.Toolbar" parent="Widget.Material3.Toolbar">
-        <item name="android:background">?attr/colorSurface</item>
-        <item name="titleTextColor">@color/textColorPrimary</item>
-        <item name="subtitleTextColor">@color/textColorSecondary</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="titleTextColor">@color/white</item>
+        <item name="subtitleTextColor">@color/white</item>
         <item name="elevation">8dp</item>
         <item name="titleTextAppearance">@style/TextAppearance.Tazar.Toolbar.Title</item>
         <item name="contentInsetStartWithNavigation">0dp</item>
         <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">16dp</item>
+        <item name="navigationIconTint">@color/white</item>
+        <item name="iconTint">@color/white</item>
     </style>
 
     <style name="TextAppearance.Tazar.Toolbar.Title" parent="TextAppearance.Material3.TitleLarge">

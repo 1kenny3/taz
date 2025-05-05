@@ -59,4 +59,5 @@
     <!-- Цвета фона -->
     <color name="background_light">#F5F5F5</color>       <!-- Светло-серый -->
     <color name="background_dark">#303030</color>        <!-- Темно-серый -->
+    <color name="ic_launcher_background">#FFFFFF</color>
 </resources> 

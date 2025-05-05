@@ -14,6 +14,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <!-- Указываем, что камера не обязательна -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
     <application
         android:name=".TazarApplication"
         android:allowBackup="true"
@@ -55,13 +58,6 @@
             android:name=".ui.auth.RegisterActivity"
             android:exported="false"
             android:theme="@style/Theme.TazarAndroid.NoActionBar" />
-        <activity android:name=".ui.profile.ProfileActivity" />
-        <activity android:name=".ui.reports.ReportTrashActivity" />
-        <activity android:name=".ui.collection.CollectionPointDetailsActivity" />
-        <activity android:name=".ui.collection.AddCollectionPointActivity" />
-        <activity android:name=".ui.achievements.AchievementsActivity" />
-        <activity android:name=".ui.ecotips.EcoTipsActivity" />
-        <activity android:name=".ui.events.CleanupEventsActivity" />
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:exported="false"
