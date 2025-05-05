@@ -169,6 +169,7 @@
     <string name="news_detail">Новость</string>
     <string name="share">Поделиться</string>
     <string name="share_news">Поделиться новостью</string>
+    <string name="no_image_available">Нет изображения</string>
     
     <!-- Новый ресурс -->
     <string name="date_not_available">Дата не указана</string>

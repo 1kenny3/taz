@@ -22,7 +22,7 @@
         <ImageView
             android:id="@+id/news_image"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="180dp"
             android:scaleType="centerCrop"
             android:background="?attr/colorSurfaceVariant"
             android:contentDescription="@string/news_image_description" />
@@ -37,8 +37,9 @@
                 android:id="@+id/title_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textAppearance="?attr/textAppearanceHeadlineMedium"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textAppearance="?attr/textAppearanceHeadlineSmall"
                 android:textColor="?attr/colorOnSurface"
                 tools:text="Заголовок новости" />
 

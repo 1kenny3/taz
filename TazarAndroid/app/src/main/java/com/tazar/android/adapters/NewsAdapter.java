@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.card.MaterialCardView;
 import com.tazar.android.R;
 import com.tazar.android.models.News;
 import com.tazar.android.ui.activities.NewsDetailActivity;
@@ -62,8 +64,17 @@ public class NewsAdapter extends ListAdapter<News, NewsAdapter.NewsViewHolder> {
             descriptionText.setText(news.getDescription());
             sourceText.setText(news.getSource());
             dateText.setText(news.getPublishedAt());
+            
+            MaterialCardView cardView = (MaterialCardView) itemView;
 
             if (news.getImageUrl() != null && !news.getImageUrl().isEmpty()) {
+                // Если есть URL изображения - показываем и загружаем его
+                newsImage.setVisibility(View.VISIBLE);
+                
+                // Сбрасываем стили карточки
+                cardView.setStrokeWidth(1);
+                cardView.setCardBackgroundColor(itemView.getContext().getResources().getColor(android.R.color.white, null));
+                
                 Glide.with(itemView.getContext())
                     .load(news.getImageUrl())
                     .apply(new RequestOptions()
@@ -72,8 +83,23 @@ public class NewsAdapter extends ListAdapter<News, NewsAdapter.NewsViewHolder> {
                         .centerCrop())
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(newsImage);
+                    
+                // Сбрасываем стиль заголовка
+                titleText.setTextColor(itemView.getContext().getResources().getColor(android.R.color.black, null));
             } else {
-                newsImage.setImageResource(R.drawable.placeholder_image);
+                // Если изображения нет - скрываем ImageView и меняем стиль
+                newsImage.setVisibility(View.GONE);
+                
+                // Особый стиль для карточки без изображения
+                cardView.setStrokeWidth(0);
+                cardView.setCardBackgroundColor(itemView.getContext().getResources().getColor(R.color.colorPrimaryContainer, null));
+                
+                // Добавляем левую цветную полоску
+                cardView.setStrokeColor(itemView.getContext().getResources().getColor(R.color.colorPrimary, null)); 
+                cardView.setStrokeWidth(8);
+                
+                // Меняем цвет заголовка
+                titleText.setTextColor(itemView.getContext().getResources().getColor(R.color.colorPrimary, null));
             }
 
             itemView.setOnClickListener(v -> {
@@ -83,7 +109,6 @@ public class NewsAdapter extends ListAdapter<News, NewsAdapter.NewsViewHolder> {
 
             itemView.setClickable(true);
             itemView.setFocusable(true);
-            itemView.setBackgroundResource(R.drawable.ripple_effect);
         }
     }
 
