@@ -69,4 +69,32 @@
     <!-- Цвета для антиспам сообщений -->
     <color name="antispam_background">#FFF3E0</color><!-- Светло-оранжевый фон -->
     <color name="antispam_text">#EF6C00</color>      <!-- Темно-оранжевый текст -->
+    
+    <!-- Цвета для боковой панели -->
+    <color name="drawer_background">#F5F5F5</color>         <!-- Светло-серый фон -->
+    <color name="drawer_text">#333333</color>              <!-- Темно-серый текст -->
+    <color name="drawer_header">#1A237E</color>            <!-- Темно-синий для заголовков -->
+    <color name="drawer_item">#1976D2</color>              <!-- Синий для пунктов меню -->
+    <color name="drawer_item_hover">#E3F2FD</color>        <!-- Светло-голубой при наведении -->
+    <color name="drawer_number">#00ACC1</color>            <!-- Голубой для номеров -->
+    <color name="drawer_divider">#E0E0E0</color>           <!-- Светло-серый для разделителей -->
+    <color name="drawer_notification">#FF9800</color>      <!-- Оранжевый для уведомлений -->
+    <color name="drawer_success">#4CAF50</color>           <!-- Зеленый для подтверждений -->
+    <color name="drawer_active_bg">#1A237E</color>         <!-- Темно-синий фон активного -->
+    <color name="drawer_active_text">#FFFFFF</color>       <!-- Белый текст активного -->
+    
+    <!-- Цвета для экрана профиля -->
+    <color name="profile_background">#FDFDF6</color>         <!-- Светло-бежевый фон -->
+    <color name="profile_text">#2D3436</color>              <!-- Темно-серый текст -->
+    <color name="profile_header">#1B5E20</color>            <!-- Темно-зеленый для заголовков -->
+    <color name="profile_button">#2E7D32</color>            <!-- Зеленый для кнопок -->
+    <color name="profile_button_hover">#E8F5E9</color>      <!-- Светло-зеленый при наведении -->
+    <color name="profile_inactive">#BDBDBD</color>          <!-- Серый для неактивных элементов -->
+    <color name="profile_field_text">#546E7A</color>        <!-- Серо-синий для полей -->
+    <color name="profile_nav_bg">#1A237E</color>            <!-- Темно-синий для навигации -->
+    <color name="profile_nav_selected">#2E7D32</color>      <!-- Зеленый для выбранной навигации -->
+    <color name="profile_divider">#E0E0E0</color>           <!-- Светло-серый для разделителей -->
+    <color name="profile_warning">#EF6C00</color>           <!-- Оранжевый для предупреждений -->
+    <color name="profile_avatar">#00ACC1</color>            <!-- Голубой для аватара -->
+    <color name="profile_nav_text">#FFFFFF</color>          <!-- Белый текст для навигации -->
 </resources> 

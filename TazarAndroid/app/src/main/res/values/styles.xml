@@ -254,5 +254,128 @@
         <item name="android:textSize">16sp</item>
         <item name="android:layout_marginStart">8dp</item>
         <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:textColor">@color/drawer_item_color</item>
+        <item name="android:background">@drawable/drawer_item_background</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+    </style>
+
+    <!-- Стиль для заголовков в боковом меню -->
+    <style name="NavigationDrawerHeader">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/drawer_header</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+
+    <!-- Стиль для номеров пунктов в боковом меню -->
+    <style name="NavigationDrawerNumber">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/drawer_number</item>
+        <item name="android:layout_marginEnd">8dp</item>
+    </style>
+
+    <!-- Стиль для разделителей в боковом меню -->
+    <style name="NavigationDrawerDivider">
+        <item name="android:background">@color/drawer_divider</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:height">1dp</item>
+    </style>
+
+    <!-- Стили для экрана профиля -->
+    <style name="Profile">
+        <item name="android:background">@color/profile_background</item>
+    </style>
+
+    <!-- Заголовки в профиле -->
+    <style name="Profile.Header">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/profile_header</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
+    </style>
+
+    <!-- Подзаголовки в профиле -->
+    <style name="Profile.Subheader">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/profile_header</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+
+    <!-- Метки полей в профиле -->
+    <style name="Profile.Label">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/profile_text</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+    <!-- Значения полей в профиле -->
+    <style name="Profile.Value">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/profile_field_text</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+    </style>
+
+    <!-- Кнопки в профиле -->
+    <style name="Profile.Button" parent="Widget.Material3.Button">
+        <item name="android:textColor">@color/profile_nav_text</item>
+        <item name="backgroundTint">@color/profile_button</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+
+    <!-- Кнопка выхода в профиле -->
+    <style name="Profile.Button.Warning">
+        <item name="backgroundTint">@color/profile_warning</item>
+    </style>
+
+    <!-- Разделители в профиле -->
+    <style name="Profile.Divider">
+        <item name="android:background">@color/profile_divider</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+    </style>
+
+    <!-- Чекбоксы в профиле -->
+    <style name="Profile.Checkbox" parent="Widget.Material3.CompoundButton.CheckBox">
+        <item name="android:textColor">@color/profile_text</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:padding">16dp</item>
+        <item name="buttonTint">@color/profile_checkbox_tint</item>
+    </style>
+
+    <!-- Аватар в профиле -->
+    <style name="Profile.Avatar">
+        <item name="android:layout_width">120dp</item>
+        <item name="android:layout_height">120dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:background">@drawable/profile_avatar_background</item>
+        <item name="android:scaleType">centerCrop</item>
     </style>
 </resources> 
