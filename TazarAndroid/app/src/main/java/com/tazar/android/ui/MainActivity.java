@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.tazar.android.R;
 import com.tazar.android.helpers.NotificationHelper;
 import com.tazar.android.services.NotificationService;
@@ -27,10 +28,9 @@ import com.tazar.android.services.PointsCheckingService;
 import com.tazar.android.ui.fragments.HomeFragment;
 import com.tazar.android.ui.fragments.MapFragment;
 import com.tazar.android.ui.fragments.ReportsFragment;
-import com.tazar.android.ui.fragments.ProfileFragment;
+import com.tazar.android.ui.profile.ProfileActivity;
 import com.tazar.android.ui.settings.SettingsActivity;
 import com.tazar.android.helpers.PreferencesManager;
-import com.tazar.android.ui.events.CleanupEventsActivity;
 import com.tazar.android.ui.achievements.AchievementsActivity;
 import com.tazar.android.ui.ecotips.EcoTipsActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -39,6 +39,7 @@ import androidx.core.view.GravityCompat;
 import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.bumptech.glide.Glide;
 
 /**
  * Главная активность приложения
@@ -97,12 +98,28 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         View headerView = navigationView.getHeaderView(0);
         TextView userName = headerView.findViewById(R.id.user_name);
         TextView userEmail = headerView.findViewById(R.id.user_email);
+        ShapeableImageView userAvatar = headerView.findViewById(R.id.user_avatar);
         
         if (preferencesManager.isLoggedIn()) {
             userName.setVisibility(View.VISIBLE);
             userEmail.setVisibility(View.VISIBLE);
+            
             userName.setText(preferencesManager.getUserName());
             userEmail.setText(preferencesManager.getUserEmail());
+            
+            // Загрузка аватара пользователя
+            String avatarUrl = preferencesManager.getUserAvatarUrl();
+            if (avatarUrl != null && !avatarUrl.isEmpty()) {
+                Glide.with(this)
+                    .load(avatarUrl)
+                    .placeholder(R.drawable.ic_account_circle)
+                    .error(R.drawable.ic_account_circle)
+                    .into(userAvatar);
+            }
+        } else {
+            userName.setText(R.string.guest_user);
+            userEmail.setVisibility(View.GONE);
+            userAvatar.setImageResource(R.drawable.ic_account_circle);
         }
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -190,8 +207,13 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         } else if (itemId == R.id.navigation_reports || itemId == R.id.nav_reports) {
             fragment = new ReportsFragment();
             updateFabVisibility(false);
-        } else if (itemId == R.id.nav_events) {
-            startActivity(new Intent(this, CleanupEventsActivity.class));
+        } else if (itemId == R.id.nav_profile) {
+            if (!preferencesManager.isLoggedIn()) {
+                Toast.makeText(this, "Для доступа к профилю необходимо авторизоваться", Toast.LENGTH_LONG).show();
+                return true;
+            }
+            startActivity(new Intent(this, ProfileActivity.class));
+            return true;
         } else if (itemId == R.id.nav_achievements) {
             startActivity(new Intent(this, AchievementsActivity.class));
         } else if (itemId == R.id.nav_eco_tips) {

@@ -11,8 +11,11 @@ public class PreferencesManager {
     private static final String KEY_USER_ID = "user_id";
     private static final String KEY_USER_NAME = "user_name";
     private static final String KEY_USER_EMAIL = "user_email";
+    private static final String KEY_USER_TOKEN = "user_token";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
     private static final String KEY_PROCESSED_REPORT_IDS = "processed_report_ids";
+    private static final String KEY_USER_POINTS = "user_points";
+    private static final String KEY_USER_AVATAR_URL = "user_avatar_url";
     
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
@@ -90,6 +93,24 @@ public class PreferencesManager {
     
     public void clearProcessedReportIds() {
         editor.remove(KEY_PROCESSED_REPORT_IDS);
+        editor.apply();
+    }
+    
+    public int getUserPoints() {
+        return preferences.getInt(KEY_USER_POINTS, 0);
+    }
+    
+    public void saveUserPoints(int points) {
+        editor.putInt(KEY_USER_POINTS, points);
+        editor.apply();
+    }
+    
+    public String getUserAvatarUrl() {
+        return preferences.getString(KEY_USER_AVATAR_URL, null);
+    }
+    
+    public void saveUserAvatarUrl(String url) {
+        editor.putString(KEY_USER_AVATAR_URL, url);
         editor.apply();
     }
 } 

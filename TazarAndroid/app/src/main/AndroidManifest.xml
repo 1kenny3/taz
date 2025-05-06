@@ -103,6 +103,12 @@
             android:name=".services.PointsCheckingService"
             android:enabled="true"
             android:exported="false" />
+
+        <activity
+            android:name=".ui.profile.ProfileActivity"
+            android:label="Профиль"
+            android:theme="@style/Theme.TazarAndroid.NoActionBar"
+            android:parentActivityName=".ui.MainActivity" />
     </application>
 
 </manifest> 

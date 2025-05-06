@@ -18,11 +18,11 @@
             android:id="@+id/nav_reports"
             android:icon="@drawable/ic_report"
             android:title="Мои отчёты" />
-
+            
         <item
-            android:id="@+id/nav_events"
-            android:icon="@drawable/ic_event"
-            android:title="Мероприятия" />
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_account_circle"
+            android:title="Профиль" />
     </group>
 
     <item android:title="Дополнительно">

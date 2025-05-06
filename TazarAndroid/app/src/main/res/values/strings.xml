@@ -203,4 +203,7 @@
     
     <!-- Другие строки -->
     <string name="nav_header_desc">Фото профиля</string>
+    
+    <!-- Новые строки -->
+    <string name="points_format">%d баллов</string>
 </resources> 
