@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/drawer_header"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/drawer_user_avatar"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/profile_avatar_background"
+        android:contentDescription="@null"
+        android:padding="8dp"
+        android:src="@drawable/ic_person" />
+
+    <TextView
+        android:id="@+id/drawer_user_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:text="Иван Иванов" />
+
+    <TextView
+        android:id="@+id/drawer_user_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:alpha="0.87"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        tools:text="ivan@example.com" />
+
+    <TextView
+        android:id="@+id/drawer_user_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/drawer_badge_background"
+        android:drawablePadding="4dp"
+        android:gravity="center_vertical"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        tools:text="Рейтинг: 4.8" />
+
+</LinearLayout> 

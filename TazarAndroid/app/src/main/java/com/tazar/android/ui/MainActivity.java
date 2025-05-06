@@ -30,6 +30,9 @@ import com.tazar.android.ui.fragments.ReportsFragment;
 import com.tazar.android.ui.fragments.ProfileFragment;
 import com.tazar.android.ui.settings.SettingsActivity;
 import com.tazar.android.helpers.PreferencesManager;
+import com.tazar.android.ui.events.CleanupEventsActivity;
+import com.tazar.android.ui.achievements.AchievementsActivity;
+import com.tazar.android.ui.ecotips.EcoTipsActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
@@ -178,24 +181,23 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         Fragment fragment = null;
         int itemId = item.getItemId();
         
-        if (itemId == R.id.navigation_home) {
+        if (itemId == R.id.navigation_home || itemId == R.id.nav_home) {
             fragment = new HomeFragment();
             updateFabVisibility(false);
-        } else if (itemId == R.id.navigation_map) {
+        } else if (itemId == R.id.navigation_map || itemId == R.id.nav_map) {
             fragment = new MapFragment();
             updateFabVisibility(true);
-        } else if (itemId == R.id.navigation_reports) {
+        } else if (itemId == R.id.navigation_reports || itemId == R.id.nav_reports) {
             fragment = new ReportsFragment();
             updateFabVisibility(false);
-        } else if (itemId == R.id.nav_profile_drawer) {
-            fragment = new ProfileFragment();
-            updateFabVisibility(false);
+        } else if (itemId == R.id.nav_events) {
+            startActivity(new Intent(this, CleanupEventsActivity.class));
+        } else if (itemId == R.id.nav_achievements) {
+            startActivity(new Intent(this, AchievementsActivity.class));
+        } else if (itemId == R.id.nav_eco_tips) {
+            startActivity(new Intent(this, EcoTipsActivity.class));
         } else if (itemId == R.id.nav_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
-        } else if (itemId == R.id.nav_about) {
-            showAboutDialog();
-        } else if (itemId == R.id.nav_help) {
-            showHelpDialog();
         }
         
         if (fragment != null) {
@@ -217,34 +219,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 fabCreateReport.hide();
             }
         }
-    }
-
-    private void showAboutDialog() {
-        new MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.menu_about)
-                .setMessage("Tazar - приложение для экологического мониторинга и сбора данных о загрязнениях окружающей среды.")
-                .setPositiveButton("OK", null)
-                .show();
-    }
-
-    private void showHelpDialog() {
-        new MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.menu_help)
-                .setMessage("Если у вас возникли вопросы или проблемы с использованием приложения, " +
-                          "пожалуйста, напишите нам на support@tazar.com")
-                .setPositiveButton("OK", null)
-                .show();
-    }
-
-    // Пример метода для начисления баллов
-    private void addPoints(int points) {
-        // ... ваш код для добавления баллов ...
-        
-        // Отправка уведомления о начислении баллов
-        notificationHelper.showPointsAddedNotification(points);
-        
-        // Для отладки
-        Toast.makeText(this, "Начислено " + points + " баллов", Toast.LENGTH_SHORT).show();
     }
 
     // Обработка клика по иконке гамбургера
