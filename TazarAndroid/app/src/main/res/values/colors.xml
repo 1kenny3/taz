@@ -97,4 +97,5 @@
     <color name="profile_warning">#EF6C00</color>           <!-- Оранжевый для предупреждений -->
     <color name="profile_avatar">#00ACC1</color>            <!-- Голубой для аватара -->
     <color name="profile_nav_text">#FFFFFF</color>          <!-- Белый текст для навигации -->
+    <color name="profile_checkbox_tint">#4CAF50</color>
 </resources> 
