@@ -10,17 +10,6 @@
     android:padding="24dp"
     android:theme="@style/ThemeOverlay.Material3.Dark">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/profile_image"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:padding="4dp"
-        android:src="@drawable/default_avatar"
-        app:shapeAppearanceOverlay="@style/CircleImageView"
-        app:strokeColor="@color/white"
-        app:strokeWidth="2dp"
-        android:layout_marginBottom="16dp"/>
-
     <TextView
         android:id="@+id/user_name"
         android:layout_width="match_parent"
