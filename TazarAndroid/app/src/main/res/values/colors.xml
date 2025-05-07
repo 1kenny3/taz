@@ -64,7 +64,7 @@
     <!-- Цвета фона -->
     <color name="background_light">#F8F9FA</color>   <!-- Светло-бежевый -->
     <color name="background_dark">#2D3436</color>    <!-- Темно-серый -->
-    <color name="ic_launcher_background">#FFFFFF</color>
+    <color name="ic_launcher_background">#4CAF50</color>
     
     <!-- Цвета для антиспам сообщений -->
     <color name="antispam_background">#FFF3E0</color><!-- Светло-оранжевый фон -->
