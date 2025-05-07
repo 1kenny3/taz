@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <script src="{% static 'js/theme.js' %}"></script>
     <style>
         .nav-link {
             position: relative;
@@ -87,6 +88,160 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+
+        /* Стили для темной темы */
+        .dark {
+            color-scheme: dark;
+        }
+        
+        .dark body {
+            background-color: #1a1a1a;
+            color: #f3f4f6;
+        }
+        
+        .dark .bg-gray-50 {
+            background-color: #1a1a1a;
+        }
+        
+        .dark .bg-white {
+            background-color: #2d2d2d;
+            color: #f3f4f6;
+        }
+        
+        .dark .text-gray-700 {
+            color: #e5e7eb;
+        }
+        
+        .dark .bg-blue-100 {
+            background-color: #1e3a5f;
+            color: #93c5fd;
+            border-color: #3b82f6;
+        }
+        
+        .dark .bg-red-100 {
+            background-color: #5f1e1e;
+            color: #fda4af;
+            border-color: #ef4444;
+        }
+        
+        .dark .text-blue-700 {
+            color: #93c5fd;
+        }
+        
+        .dark .text-red-700 {
+            color: #fda4af;
+        }
+        
+        .dark .border-gray-200 {
+            border-color: #374151;
+        }
+        
+        .dark .shadow-sm {
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Стили для темной темы - зеленые элементы */
+        .dark .bg-green-400 {
+            background-color: #2e7d32;
+        }
+        
+        .dark .hover\:bg-green-300:hover {
+            background-color: #388e3c;
+        }
+        
+        .dark .text-green-500 {
+            color: #66bb6a;
+        }
+        
+        .dark .hover\:text-green-100:hover {
+            color: #c8e6c9;
+        }
+        
+        .dark .bg-gradient-primary {
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+        }
+        
+        .dark .hover\:bg-green-50:hover {
+            background-color: #1c3020;
+        }
+        
+        .dark .border-green-400 {
+            border-color: #43a047;
+        }
+        
+        /* Стили для баннеров в темной теме */
+        .dark .bg-green-500, 
+        .dark .bg-green-600 {
+            background-color: #2e7d32;
+        }
+        
+        .dark .rounded-full {
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Стили для статистических блоков в темной теме */
+        .dark .text-green-400 {
+            color: #66bb6a;
+        }
+        
+        .dark .text-green-300 {
+            color: #81c784;
+        }
+        
+        .dark .bg-gray-800, 
+        .dark .bg-gray-900 {
+            background-color: #1e1e1e;
+        }
+        
+        .dark .text-gray-300, 
+        .dark .text-gray-400, 
+        .dark .text-gray-500,
+        .dark .text-gray-600 {
+            color: #aaaaaa;
+        }
+        
+        /* Переключатель темы */
+        .theme-toggle {
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Стили для кнопок авторизации в темной теме */
+        .dark a.bg-white.text-green-500.hover\:bg-green-50 {
+            background-color: #2d2d2d !important;
+            color: #66bb6a !important;
+        }
+        
+        .dark a.bg-white.text-green-500.hover\:bg-green-50:hover {
+            background-color: #1c3020 !important;
+        }
+        
+        .dark a.bg-green-400.text-white.hover\:bg-green-300 {
+            background-color: #2e7d32 !important;
+        }
+        
+        .dark a.bg-green-400.text-white.hover\:bg-green-300:hover {
+            background-color: #388e3c !important;
+        }
+        
+        /* Стили для футера в темной теме */
+        .dark footer.bg-gradient-primary {
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+        }
+        
+        .dark footer .border-t.border-green-400 {
+            border-color: #43a047;
+        }
+        
+        .dark footer .hover\:text-green-200:hover {
+            color: #c8e6c9;
+        }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
@@ -127,6 +282,12 @@
                             <i class="fas fa-user-plus mr-1"></i> Регистрация
                         </a>
                     {% endif %}
+                    
+                    <!-- Переключатель темы -->
+                    <button id="theme-toggle" class="theme-toggle ml-2" aria-label="Переключить тему">
+                        <i class="fas fa-moon text-white text-lg" id="dark-icon"></i>
+                        <i class="fas fa-sun text-white text-lg hidden" id="light-icon"></i>
+                    </button>
                 </div>
                 
                 <button class="menu-btn focus:outline-none">
