@@ -281,6 +281,92 @@
         .dark .text-gray-800 {
             color: white !important;
         }
+
+        /* Анимация смены темы */
+        html.light,
+        html.dark,
+        html.light *,
+        html.dark * {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .dark body {
+            background-color: #1a1a1a;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .dark .bg-white,
+        .dark .bg-gray-50,
+        .dark .bg-gray-100,
+        .dark .bg-gray-800,
+        .dark .bg-gray-900,
+        .dark .feature-card,
+        .dark .step-card {
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .theme-toggle {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-toggle i {
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* Базовые стили для анимации */
+        :root {
+            --theme-transition-duration: 0.3s;
+        }
+
+        /* Плавный переход для всех элементов */
+        *,
+        *::before,
+        *::after {
+            transition: background-color var(--theme-transition-duration) ease,
+                        color var(--theme-transition-duration) ease,
+                        border-color var(--theme-transition-duration) ease,
+                        box-shadow var(--theme-transition-duration) ease;
+        }
+
+        /* Анимация для иконки переключения */
+        .theme-toggle {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-toggle i {
+            transition: transform var(--theme-transition-duration) ease,
+                        opacity var(--theme-transition-duration) ease;
+        }
+
+        .theme-toggle i.hidden {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+        }
+
+        .theme-toggle i:not(.hidden) {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        /* Анимация для темной темы */
+        .dark {
+            transition: background-color var(--theme-transition-duration) ease;
+        }
+
+        .dark * {
+            transition: background-color var(--theme-transition-duration) ease,
+                        color var(--theme-transition-duration) ease,
+                        border-color var(--theme-transition-duration) ease,
+                        box-shadow var(--theme-transition-duration) ease;
+        }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
