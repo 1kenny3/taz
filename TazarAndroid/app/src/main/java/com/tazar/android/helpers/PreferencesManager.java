@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class PreferencesManager {
-    private static final String PREF_NAME = "TazarPrefs";
+    private static final String PREF_NAME = "EcoupPrefs";
     private static final String KEY_USER_ID = "user_id";
     private static final String KEY_USER_NAME = "user_name";
     private static final String KEY_USER_EMAIL = "user_email";

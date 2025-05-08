@@ -2,7 +2,7 @@ package com.tazar.android.utils;
 
 import android.content.Context;
 
-import com.tazar.android.TazarApplication;
+import com.tazar.android.EcoupApplication;
 import com.tazar.android.api.services.AuthService;
 import com.tazar.android.config.ApiConfig;
 import com.tazar.android.models.auth.RefreshTokenRequest;
@@ -36,7 +36,7 @@ public class TokenAuthenticator implements Authenticator {
     @Override
     public Request authenticate(Route route, Response response) throws IOException {
         // Получаем экземпляр приложения через контекст
-        TazarApplication app = (TazarApplication) context.getApplicationContext();
+        EcoupApplication app = (EcoupApplication) context.getApplicationContext();
         PreferenceManager preferenceManager = app.getPreferenceManager();
 
         String refreshToken = preferenceManager.getRefreshToken();

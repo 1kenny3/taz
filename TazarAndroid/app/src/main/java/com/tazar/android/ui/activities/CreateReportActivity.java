@@ -32,7 +32,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.tazar.android.R;
-import com.tazar.android.TazarApplication;
+import com.tazar.android.EcoupApplication;
 import com.tazar.android.api.ApiClient;
 import com.tazar.android.api.TrashReportService;
 import com.tazar.android.utils.FileUtils;
@@ -288,7 +288,7 @@ public class CreateReportActivity extends AppCompatActivity implements OnMapRead
         btnSubmit.setEnabled(false);
         
         // Получаем токен авторизации
-        String token = TazarApplication.getInstance().getAuthToken();
+        String token = EcoupApplication.getInstance().getAuthToken();
         if (token == null || token.isEmpty()) {
             Toast.makeText(this, "Ошибка авторизации. Войдите снова", Toast.LENGTH_SHORT).show();
             progressBar.setVisibility(View.GONE);
@@ -297,7 +297,7 @@ public class CreateReportActivity extends AppCompatActivity implements OnMapRead
         }
         
         // Получаем ID пользователя
-        String userId = TazarApplication.getInstance().getUserId();
+        String userId = EcoupApplication.getInstance().getUserId();
         if (userId == null || userId.isEmpty()) {
             Toast.makeText(this, "Ошибка: не удалось получить айди пользователя", Toast.LENGTH_SHORT).show();
             progressBar.setVisibility(View.GONE);

@@ -10,7 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.tazar.android.R;
-import com.tazar.android.TazarApplication;
+import com.tazar.android.EcoupApplication;
 import com.tazar.android.ui.auth.LoginActivity;
 import com.tazar.android.utils.PreferenceManager;
 
@@ -28,7 +28,7 @@ public class SplashActivity extends AppCompatActivity {
         
         try {
             // Получаем PreferenceManager через getInstance
-            PreferenceManager preferenceManager = ((TazarApplication) getApplication()).getPreferenceManager();
+            PreferenceManager preferenceManager = ((EcoupApplication) getApplication()).getPreferenceManager();
             
             // Задержка для отображения splash screen
             new Handler(Looper.getMainLooper()).postDelayed(this::navigateToNextScreen, SPLASH_DELAY);
@@ -43,7 +43,7 @@ public class SplashActivity extends AppCompatActivity {
      */
     private void navigateToNextScreen() {
         try {
-            PreferenceManager preferenceManager = ((TazarApplication) getApplication()).getPreferenceManager();
+            PreferenceManager preferenceManager = ((EcoupApplication) getApplication()).getPreferenceManager();
             
             // Проверяем, авторизован ли пользователь
             if (preferenceManager != null && preferenceManager.isLoggedIn()) {

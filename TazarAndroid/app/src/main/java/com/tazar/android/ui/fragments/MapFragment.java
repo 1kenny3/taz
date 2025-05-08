@@ -49,7 +49,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.tazar.android.R;
-import com.tazar.android.TazarApplication;
+import com.tazar.android.EcoupApplication;
 import com.tazar.android.api.ApiConfig;
 import com.tazar.android.models.TrashReport;
 import com.tazar.android.api.services.TrashReportService;
@@ -359,7 +359,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private void loadRecyclingPoints() {
         showLoading(true);
 
-        String token = "Bearer " + TazarApplication.getInstance().getAuthToken();
+        String token = "Bearer " + EcoupApplication.getInstance().getAuthToken();
         
         recyclingPointsService.getRecyclingPoints(token).enqueue(new Callback<List<RecyclingPoint>>() {
             @Override
@@ -670,7 +670,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         
         // Проверяем авторизацию пользователя через оба менеджера
         PreferencesManager preferencesManager = new PreferencesManager(requireContext());
-        if (!preferencesManager.isLoggedIn() || TazarApplication.getInstance().getAuthToken() == null) {
+        if (!preferencesManager.isLoggedIn() || EcoupApplication.getInstance().getAuthToken() == null) {
             Toast.makeText(requireContext(), "Для создания отчета необходимо авторизоваться", 
                 Toast.LENGTH_LONG).show();
             return;

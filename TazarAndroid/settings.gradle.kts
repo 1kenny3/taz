@@ -1,2 +1,2 @@
-rootProject.name = "TazarAndroid"
+rootProject.name = "EcoupAndroid"
 include(":app") 

@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import com.tazar.android.BuildConfig;
-import com.tazar.android.TazarApplication;
+import com.tazar.android.EcoupApplication;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -65,7 +65,7 @@ public class ApiConfig {
 
     public static String getBaseUrl() {
         // Получаем URL из настроек приложения, если он там есть
-        String savedUrl = TazarApplication.getInstance().getServerUrl();
+        String savedUrl = EcoupApplication.getInstance().getServerUrl();
         return savedUrl != null ? savedUrl : BASE_URL;
     }
 

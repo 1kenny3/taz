@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel;
 import com.tazar.android.api.ApiClient;
 import com.tazar.android.api.ApiService;
 import com.tazar.android.models.News;
-import com.tazar.android.models.TazarNews;
+import com.tazar.android.models.EcoupNews;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,14 +30,14 @@ public class HomeViewModel extends ViewModel {
     public void loadNews() {
         isLoading.setValue(true);
 
-        apiService.getNews().enqueue(new Callback<List<TazarNews>>() {
+        apiService.getNews().enqueue(new Callback<List<EcoupNews>>() {
             @Override
-            public void onResponse(Call<List<TazarNews>> call, Response<List<TazarNews>> response) {
+            public void onResponse(Call<List<EcoupNews>> call, Response<List<EcoupNews>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<News> newsList = new ArrayList<>();
-                    for (TazarNews tazarNews : response.body()) {
-                        // Конвертируем TazarNews в News для совместимости с адаптером
-                        newsList.add(tazarNews.toNews());
+                    for (EcoupNews ecoupNews : response.body()) {
+                        // Конвертируем EcoupNews в News для совместимости с адаптером
+                        newsList.add(ecoupNews.toNews());
                     }
                     news.setValue(newsList);
                 } else {
@@ -47,7 +47,7 @@ public class HomeViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<List<TazarNews>> call, Throwable t) {
+            public void onFailure(Call<List<EcoupNews>> call, Throwable t) {
                 error.setValue("Ошибка сети: " + t.getMessage());
                 isLoading.setValue(false);
             }

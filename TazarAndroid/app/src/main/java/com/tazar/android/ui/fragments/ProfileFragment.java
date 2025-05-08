@@ -29,7 +29,7 @@ import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.signature.ObjectKey;
 import com.google.android.material.button.MaterialButton;
 import com.tazar.android.R;
-import com.tazar.android.TazarApplication;
+import com.tazar.android.EcoupApplication;
 import com.tazar.android.api.ApiClient;
 import com.tazar.android.api.services.UserService;
 import com.tazar.android.helpers.PreferencesManager;

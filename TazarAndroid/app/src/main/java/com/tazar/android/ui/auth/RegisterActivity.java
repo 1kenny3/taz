@@ -12,7 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.tazar.android.R;
-import com.tazar.android.TazarApplication;
+import com.tazar.android.EcoupApplication;
 import com.tazar.android.api.ApiClient;
 import com.tazar.android.api.services.AuthService;
 import com.tazar.android.models.auth.RegisterRequest;

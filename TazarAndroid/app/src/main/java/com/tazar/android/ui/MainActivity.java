@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private void showAboutDialog() {
         new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.menu_about)
-                .setMessage("Tazar - приложение для экологического мониторинга и сбора данных о загрязнениях окружающей среды.")
+                .setMessage("Ecoup - приложение для экологического мониторинга и сбора данных о загрязнениях окружающей среды.")
                 .setPositiveButton("OK", null)
                 .show();
     }

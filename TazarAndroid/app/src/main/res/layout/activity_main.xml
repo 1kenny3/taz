@@ -23,13 +23,13 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
-                style="@style/Widget.Tazar.Toolbar"
+                style="@style/Widget.Ecoup.Toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:navigationIcon="@drawable/ic_menu"
                 app:title="@string/app_name"
                 app:menu="@menu/top_app_bar"
-                app:titleTextAppearance="@style/TextAppearance.Tazar.Toolbar.Title"/>
+                app:titleTextAppearance="@style/TextAppearance.Ecoup.Toolbar.Title"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -44,7 +44,7 @@
         <!-- Нижняя навигация -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"
-            style="@style/Widget.Tazar.BottomNavigation"
+            style="@style/Widget.Ecoup.BottomNavigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"

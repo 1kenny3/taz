@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import android.widget.RadioButton;
 
 import com.tazar.android.R;
-import com.tazar.android.TazarApplication;
+import com.tazar.android.EcoupApplication;
 import com.tazar.android.api.ApiClient;
 import com.tazar.android.config.ApiConfig;
 import com.tazar.android.utils.ApiUrlUtil;
@@ -41,7 +41,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         
         // Правильное получение PreferenceManager через getInstance()
-        preferenceManager = ((TazarApplication) getApplication()).getPreferenceManager();
+        preferenceManager = ((EcoupApplication) getApplication()).getPreferenceManager();
         
         setupToolbar();
         initViews();

@@ -2,7 +2,7 @@ package com.tazar.android.utils;
 
 import android.content.Context;
 
-import com.tazar.android.TazarApplication;
+import com.tazar.android.EcoupApplication;
 
 import java.io.IOException;
 
@@ -29,7 +29,7 @@ public class TokenInterceptor implements Interceptor {
         Request original = chain.request();
         
         // Получаем экземпляр приложения через контекст
-        TazarApplication app = (TazarApplication) context.getApplicationContext();
+        EcoupApplication app = (EcoupApplication) context.getApplicationContext();
         String accessToken = app.getPreferenceManager().getAccessToken();
         
         // Если токен существует, добавляем его в заголовок запроса

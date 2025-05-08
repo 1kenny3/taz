@@ -5,7 +5,7 @@ import com.tazar.android.models.User;
 import com.tazar.android.models.LoginResponse;
 import com.tazar.android.models.CollectionPoint;
 import com.tazar.android.models.NewsResponse;
-import com.tazar.android.models.TazarNews;
+import com.tazar.android.models.EcoupNews;
 import com.tazar.android.models.TrashReport;
 import com.tazar.android.models.auth.LoginRequest;
 import com.tazar.android.models.auth.TokenResponse;
@@ -58,7 +58,7 @@ public interface ApiService {
     
     // Новости
     @GET("api/news/")
-    Call<List<TazarNews>> getNews();
+    Call<List<EcoupNews>> getNews();
     
     // Другие API методы...
 } 

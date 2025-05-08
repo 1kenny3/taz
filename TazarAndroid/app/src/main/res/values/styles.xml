@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Базовая тема приложения -->
-    <style name="Theme.TazarAndroid" parent="Theme.Material3.DayNight">
+    <style name="Theme.EcoupAndroid" parent="Theme.Material3.DayNight">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -18,11 +18,11 @@
         <item name="android:textColorSecondary">@color/secondary_text</item>
         <item name="android:windowBackground">@color/background</item>
         <item name="elevationOverlayEnabled">true</item>
-        <item name="chipStyle">@style/Widget.Tazar.Chip</item>
-        <item name="buttonStyle">@style/Widget.Tazar.Button</item>
-        <item name="materialCardViewStyle">@style/Widget.Tazar.CardView</item>
-        <item name="bottomNavigationStyle">@style/Widget.Tazar.BottomNavigation</item>
-        <item name="textInputStyle">@style/Widget.Tazar.TextInputLayout</item>
+        <item name="chipStyle">@style/Widget.Ecoup.Chip</item>
+        <item name="buttonStyle">@style/Widget.Ecoup.Button</item>
+        <item name="materialCardViewStyle">@style/Widget.Ecoup.CardView</item>
+        <item name="bottomNavigationStyle">@style/Widget.Ecoup.BottomNavigation</item>
+        <item name="textInputStyle">@style/Widget.Ecoup.TextInputLayout</item>
     </style>
 
     <!-- Тема для экрана загрузки -->
@@ -35,7 +35,7 @@
     </style>
 
     <!-- Тема без заголовка -->
-    <style name="Theme.TazarAndroid.NoActionBar" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.EcoupAndroid.NoActionBar" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowLightStatusBar">false</item>
@@ -81,32 +81,32 @@
     </style>
 
     <!-- Базовые стили текста -->
-    <style name="TextAppearance.Tazar.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
+    <style name="TextAppearance.Ecoup.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
         <item name="android:textSize">28sp</item>
         <item name="android:textColor">@color/textColorPrimary</item>
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
-    <style name="TextAppearance.Tazar.Headline2" parent="TextAppearance.MaterialComponents.Headline2">
+    <style name="TextAppearance.Ecoup.Headline2" parent="TextAppearance.MaterialComponents.Headline2">
         <item name="android:textSize">24sp</item>
         <item name="android:textColor">@color/textColorPrimary</item>
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
-    <style name="TextAppearance.Tazar.Body1" parent="TextAppearance.MaterialComponents.Body1">
+    <style name="TextAppearance.Ecoup.Body1" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/textColorSecondary</item>
         <item name="android:fontFamily">sans-serif</item>
     </style>
 
-    <style name="TextAppearance.Tazar.Body2" parent="TextAppearance.MaterialComponents.Body2">
+    <style name="TextAppearance.Ecoup.Body2" parent="TextAppearance.MaterialComponents.Body2">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/textColorSecondary</item>
         <item name="android:fontFamily">sans-serif</item>
     </style>
 
     <!-- Стили кнопок -->
-    <style name="Widget.Tazar.Button" parent="Widget.Material3.Button">
+    <style name="Widget.Ecoup.Button" parent="Widget.Material3.Button">
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
@@ -121,14 +121,14 @@
         <item name="android:stateListAnimator">@animator/button_state_list_animator</item>
     </style>
 
-    <style name="Widget.Tazar.Button.Secondary" parent="Widget.Tazar.Button">
+    <style name="Widget.Ecoup.Button.Secondary" parent="Widget.Ecoup.Button">
         <item name="backgroundTint">@color/white</item>
         <item name="strokeColor">@color/primary</item>
         <item name="strokeWidth">1dp</item>
         <item name="android:textColor">@color/primary</item>
     </style>
 
-    <style name="Widget.Tazar.Button.FilledTonal" parent="Widget.Material3.Button.TonalButton">
+    <style name="Widget.Ecoup.Button.FilledTonal" parent="Widget.Material3.Button.TonalButton">
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="cornerRadius">24dp</item>
@@ -136,7 +136,7 @@
     </style>
 
     <!-- Стили карточек -->
-    <style name="Widget.Tazar.CardView" parent="Widget.Material3.CardView.Elevated">
+    <style name="Widget.Ecoup.CardView" parent="Widget.Material3.CardView.Elevated">
         <item name="cardCornerRadius">16dp</item>
         <item name="cardElevation">4dp</item>
         <item name="cardBackgroundColor">@color/white</item>
@@ -148,7 +148,7 @@
     </style>
 
     <!-- Стили полей ввода -->
-    <style name="Widget.Tazar.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+    <style name="Widget.Ecoup.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
         <item name="boxCornerRadiusTopStart">12dp</item>
         <item name="boxCornerRadiusTopEnd">12dp</item>
         <item name="boxCornerRadiusBottomStart">12dp</item>
@@ -165,7 +165,7 @@
     </style>
 
     <!-- Стили чипов -->
-    <style name="Widget.Tazar.Chip" parent="Widget.Material3.Chip.Filter">
+    <style name="Widget.Ecoup.Chip" parent="Widget.Material3.Chip.Filter">
         <item name="chipBackgroundColor">@color/colorSurfaceVariant</item>
         <item name="chipStrokeColor">@color/divider</item>
         <item name="chipStrokeWidth">1dp</item>
@@ -173,14 +173,14 @@
         <item name="rippleColor">@color/colorPrimaryDark</item>
     </style>
 
-    <style name="Widget.Tazar.Chip.Selected" parent="Widget.Tazar.Chip">
+    <style name="Widget.Ecoup.Chip.Selected" parent="Widget.Ecoup.Chip">
         <item name="chipBackgroundColor">@color/colorSecondaryContainer</item>
         <item name="chipStrokeColor">@color/primary</item>
         <item name="android:textColor">?attr/colorOnSecondaryContainer</item>
     </style>
 
     <!-- Стили для Bottom Navigation -->
-    <style name="Widget.Tazar.BottomNavigation" parent="Widget.Material3.BottomNavigationView">
+    <style name="Widget.Ecoup.BottomNavigation" parent="Widget.Material3.BottomNavigationView">
         <item name="itemIconTint">@color/colorSecondary</item>
         <item name="itemTextColor">@color/colorSecondary</item>
         <item name="itemRippleColor">@color/ripple_color</item>
@@ -194,12 +194,12 @@
     </style>
 
     <!-- Стили для Toolbar -->
-    <style name="Widget.Tazar.Toolbar" parent="Widget.Material3.Toolbar">
+    <style name="Widget.Ecoup.Toolbar" parent="Widget.Material3.Toolbar">
         <item name="android:background">@color/colorPrimary</item>
         <item name="titleTextColor">@color/white</item>
         <item name="subtitleTextColor">@color/white</item>
         <item name="elevation">8dp</item>
-        <item name="titleTextAppearance">@style/TextAppearance.Tazar.Toolbar.Title</item>
+        <item name="titleTextAppearance">@style/TextAppearance.Ecoup.Toolbar.Title</item>
         <item name="contentInsetStartWithNavigation">0dp</item>
         <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">16dp</item>
@@ -207,19 +207,19 @@
         <item name="iconTint">@color/white</item>
     </style>
 
-    <style name="TextAppearance.Tazar.Toolbar.Title" parent="TextAppearance.Material3.TitleLarge">
+    <style name="TextAppearance.Ecoup.Toolbar.Title" parent="TextAppearance.Material3.TitleLarge">
         <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textColor">@color/textColorPrimary</item>
     </style>
 
-    <style name="TextAppearance.Tazar.Toolbar.Title.Center">
+    <style name="TextAppearance.Ecoup.Toolbar.Title.Center">
         <item name="android:gravity">center</item>
         <item name="android:textAlignment">center</item>
     </style>
 
     <!-- Стили для диалогов -->
-    <style name="ThemeOverlay.Tazar.Dialog" parent="ThemeOverlay.Material3.Dialog">
+    <style name="ThemeOverlay.Ecoup.Dialog" parent="ThemeOverlay.Material3.Dialog">
         <item name="android:windowBackground">@drawable/bg_dialog</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowCloseOnTouchOutside">true</item>
@@ -228,7 +228,7 @@
     </style>
 
     <!-- Стили для списков -->
-    <style name="Widget.Tazar.RecyclerView" parent="Widget.AppCompat.ListView">
+    <style name="Widget.Ecoup.RecyclerView" parent="Widget.AppCompat.ListView">
         <item name="android:clipToPadding">false</item>
         <item name="android:paddingTop">8dp</item>
         <item name="android:paddingBottom">8dp</item>
@@ -238,7 +238,7 @@
     </style>
 
     <!-- Стили для изображений -->
-    <style name="Widget.Tazar.ImageView.Round" parent="Widget.AppCompat.ImageButton">
+    <style name="Widget.Ecoup.ImageView.Round" parent="Widget.AppCompat.ImageButton">
         <item name="cornerRadius">12dp</item>
         <item name="android:scaleType">centerCrop</item>
         <item name="android:background">@color/colorSurfaceVariant</item>
@@ -377,5 +377,11 @@
         <item name="android:layout_marginBottom">16dp</item>
         <item name="android:background">@drawable/profile_avatar_background</item>
         <item name="android:scaleType">centerCrop</item>
+    </style>
+
+    <style name="TextAppearance.Ecoup.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 </resources> 

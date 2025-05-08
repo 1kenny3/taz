@@ -14,7 +14,7 @@
     <!-- Панель поиска -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/search_card"
-        style="@style/Widget.Tazar.CardView"
+        style="@style/Widget.Ecoup.CardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp">
@@ -40,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Поиск и фильтры"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1" />
+                    android:textAppearance="@style/TextAppearance.Ecoup.Subtitle1" />
 
                 <ImageView
                     android:id="@+id/search_arrow"
@@ -58,7 +58,7 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.Tazar.TextInputLayout"
+                    style="@style/Widget.Ecoup.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
@@ -92,7 +92,7 @@
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/filter_plastic"
-                            style="@style/Widget.Tazar.Chip"
+                            style="@style/Widget.Ecoup.Chip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Пластик"
@@ -103,7 +103,7 @@
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/filter_paper"
-                            style="@style/Widget.Tazar.Chip"
+                            style="@style/Widget.Ecoup.Chip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Бумага"
@@ -114,7 +114,7 @@
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/filter_glass"
-                            style="@style/Widget.Tazar.Chip"
+                            style="@style/Widget.Ecoup.Chip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Стекло"
@@ -125,7 +125,7 @@
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/filter_metal"
-                            style="@style/Widget.Tazar.Chip"
+                            style="@style/Widget.Ecoup.Chip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Металл"
@@ -136,7 +136,7 @@
                             
                         <com.google.android.material.chip.Chip
                             android:id="@+id/filter_medical"
-                            style="@style/Widget.Tazar.Chip"
+                            style="@style/Widget.Ecoup.Chip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Медицинские"
@@ -147,7 +147,7 @@
                             
                         <com.google.android.material.chip.Chip
                             android:id="@+id/filter_construction"
-                            style="@style/Widget.Tazar.Chip"
+                            style="@style/Widget.Ecoup.Chip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Строительные"
@@ -158,7 +158,7 @@
                             
                         <com.google.android.material.chip.Chip
                             android:id="@+id/filter_agricultural"
-                            style="@style/Widget.Tazar.Chip"
+                            style="@style/Widget.Ecoup.Chip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Сельские"
@@ -207,7 +207,7 @@
                 android:id="@+id/point_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.Tazar.Headline2" />
+                android:textAppearance="@style/TextAppearance.Ecoup.Headline2" />
 
             <!-- Адрес -->
             <TextView
@@ -215,7 +215,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:textAppearance="@style/TextAppearance.Tazar.Body1" />
+                android:textAppearance="@style/TextAppearance.Ecoup.Body1" />
 
             <!-- Принимаемые типы отходов -->
             <TextView
@@ -223,7 +223,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Принимаемые отходы"
-                android:textAppearance="@style/TextAppearance.Tazar.Body1"
+                android:textAppearance="@style/TextAppearance.Ecoup.Body1"
                 android:textColor="@color/textColorPrimary" />
 
             <com.google.android.material.chip.ChipGroup
@@ -236,7 +236,7 @@
             <!-- Кнопка построения маршрута -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/route_button"
-                style="@style/Widget.Tazar.Button"
+                style="@style/Widget.Ecoup.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"

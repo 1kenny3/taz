@@ -21,7 +21,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.tazar.android.R;
-import com.tazar.android.TazarApplication;
+import com.tazar.android.EcoupApplication;
 import com.tazar.android.api.ApiClient;
 import com.tazar.android.api.TrashReportService;
 import com.tazar.android.models.TrashReport;
@@ -112,7 +112,7 @@ public class ReportsFragment extends Fragment implements OnReportClickListener {
     }
     
     private void loadReports() {
-        String token = TazarApplication.getInstance().getAuthToken();
+        String token = EcoupApplication.getInstance().getAuthToken();
         if (token == null || token.isEmpty()) {
             showError("Необходима авторизация");
             swipeRefreshLayout.setRefreshing(false);
@@ -121,7 +121,7 @@ public class ReportsFragment extends Fragment implements OnReportClickListener {
         }
         
         // Получаем ID текущего пользователя
-        String userId = TazarApplication.getInstance().getUserId();
+        String userId = EcoupApplication.getInstance().getUserId();
         if (userId == null || userId.isEmpty()) {
             showError("Не удалось получить ID пользователя");
             swipeRefreshLayout.setRefreshing(false);

@@ -18,13 +18,13 @@
     <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
-        android:name=".TazarApplication"
+        android:name=".EcoupApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TazarAndroid"
+        android:theme="@style/Theme.EcoupAndroid"
         android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:enableOnBackInvokedCallback="true">
@@ -38,7 +38,7 @@
         <activity
             android:name=".ui.SplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.TazarAndroid.NoActionBar">
+            android:theme="@style/Theme.EcoupAndroid.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -49,19 +49,19 @@
         <activity
             android:name=".ui.MainActivity"
             android:exported="false"
-            android:theme="@style/Theme.TazarAndroid.NoActionBar" />
+            android:theme="@style/Theme.EcoupAndroid.NoActionBar" />
         <activity
             android:name=".ui.auth.LoginActivity"
             android:exported="false"
-            android:theme="@style/Theme.TazarAndroid.NoActionBar" />
+            android:theme="@style/Theme.EcoupAndroid.NoActionBar" />
         <activity
             android:name=".ui.auth.RegisterActivity"
             android:exported="false"
-            android:theme="@style/Theme.TazarAndroid.NoActionBar" />
+            android:theme="@style/Theme.EcoupAndroid.NoActionBar" />
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:exported="false"
-            android:theme="@style/Theme.TazarAndroid.NoActionBar" />
+            android:theme="@style/Theme.EcoupAndroid.NoActionBar" />
         <activity
             android:name=".ui.activities.CreateReportActivity"
             android:exported="false"
@@ -77,7 +77,7 @@
             android:name=".ui.activities.NewsDetailActivity"
             android:exported="false"
             android:label="@string/news_detail"
-            android:theme="@style/Theme.TazarAndroid.NoActionBar"
+            android:theme="@style/Theme.EcoupAndroid.NoActionBar"
             android:parentActivityName=".ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

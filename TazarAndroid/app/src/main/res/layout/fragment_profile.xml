@@ -69,7 +69,7 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:title="Профиль"
-                app:titleTextAppearance="@style/TextAppearance.Tazar.Toolbar.Title.Center"
+                app:titleTextAppearance="@style/TextAppearance.Ecoup.Toolbar.Title.Center"
                 app:contentInsetStartWithNavigation="0dp"
                 app:contentInsetStart="0dp"
                 android:gravity="center_horizontal" />

@@ -15,8 +15,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tazar.android.R;
+import com.tazar.android.models.EcoupNews;
 import com.tazar.android.models.News;
-import com.tazar.android.models.TazarNews;
 
 public class NewsDetailActivity extends AppCompatActivity {
 
@@ -34,14 +34,14 @@ public class NewsDetailActivity extends AppCompatActivity {
     private TextView dateTextView;
     private FloatingActionButton fabShare;
 
-    public static Intent newIntent(Context context, TazarNews news) {
+    public static Intent newIntent(Context context, EcoupNews news) {
         Intent intent = new Intent(context, NewsDetailActivity.class);
         intent.putExtra(EXTRA_NEWS_ID, news.getId());
         intent.putExtra(EXTRA_NEWS_TITLE, news.getTitle());
         intent.putExtra(EXTRA_NEWS_CONTENT, news.getContent());
         intent.putExtra(EXTRA_NEWS_IMAGE, news.getImage());
         intent.putExtra(EXTRA_NEWS_DATE, news.getCreatedAt());
-        intent.putExtra(EXTRA_NEWS_SOURCE, "Tazar");
+        intent.putExtra(EXTRA_NEWS_SOURCE, "Ecoup");
         return intent;
     }
 

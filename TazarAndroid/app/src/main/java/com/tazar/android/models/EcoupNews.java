@@ -2,7 +2,7 @@ package com.tazar.android.models;
 
 import java.util.Objects;
 
-public class TazarNews {
+public class EcoupNews {
     private int id;
     private String title;
     private String content;
@@ -11,11 +11,11 @@ public class TazarNews {
     private String updated_at;
     private boolean is_published;
 
-    public TazarNews() {
+    public EcoupNews() {
         // Пустой конструктор для Gson
     }
 
-    public TazarNews(int id, String title, String content, String image, String created_at, String updated_at, boolean is_published) {
+    public EcoupNews(int id, String title, String content, String image, String created_at, String updated_at, boolean is_published) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -57,8 +57,8 @@ public class TazarNews {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TazarNews tazarNews = (TazarNews) o;
-        return id == tazarNews.id;
+        EcoupNews ecoupNews = (EcoupNews) o;
+        return id == ecoupNews.id;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class TazarNews {
         return Objects.hash(id);
     }
 
-    // Метод для конвертации TazarNews в News для совместимости с существующим адаптером
+    // Метод для конвертации EcoupNews в News для совместимости с существующим адаптером
     public News toNews() {
         return new News(
             title,
@@ -74,7 +74,7 @@ public class TazarNews {
             "", // URL не используется, так как новости показываются непосредственно в приложении
             image,
             created_at,
-            "Tazar" // Источник - наша платформа
+            "Ecoup" // Источник - наша платформа
         );
     }
 } 

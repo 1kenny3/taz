@@ -16,7 +16,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.tazar.android.R;
-import com.tazar.android.TazarApplication;
+import com.tazar.android.EcoupApplication;
 import com.tazar.android.api.ApiClient;
 import com.tazar.android.api.services.AuthService;
 import com.tazar.android.models.auth.LoginRequest;
@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         
         // Инициализируем PreferenceManager
-        preferenceManager = ((TazarApplication) getApplication()).getPreferenceManager();
+        preferenceManager = ((EcoupApplication) getApplication()).getPreferenceManager();
         
         // Проверяем, авторизован ли пользователь
         if (preferenceManager.isLoggedIn()) {

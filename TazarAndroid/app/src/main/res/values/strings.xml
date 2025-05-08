@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Tazar</string>
+    <string name="app_name">Ecoup</string>
     
     <!-- Google Maps -->
     <string name="google_maps_key">AIzaSyCexDbGsUt37YhJ7k_2IuwhVFkE2KDjkLM</string>
@@ -39,7 +39,7 @@
     <string name="report_image_description">Фото отчета</string>
     
     <!-- Сообщения -->
-    <string name="welcome_message">Добро пожаловать в Tazar!</string>
+    <string name="welcome_message">Добро пожаловать в Ecoup!</string>
     <string name="features_title">Возможности приложения</string>
     <string name="features_description">Сообщайте о местах скопления мусора, находите пункты сбора и участвуйте в экологических мероприятиях.</string>
     <string name="achievements_title">Достижения</string>
@@ -144,7 +144,7 @@
     <string name="enable_notifications">Включить уведомления</string>
     <string name="enable_report_notifications">Уведомления о статусе отчетов</string>
     <string name="enable_achievement_notifications">Уведомления о достижениях</string>
-    <string name="app_description">Tazar Mobile - мобильное приложение для экологического проекта Tazar, позволяющее сообщать о местах скопления мусора, находить точки сбора различных видов отходов, получать достижения и многое другое.</string>
+    <string name="app_description">Ecoup Mobile - мобильное приложение для экологического проекта Ecoup, позволяющее сообщать о местах скопления мусора, находить точки сбора различных видов отходов, получать достижения и многое другое.</string>
     <string name="version_info">Версия: 1.0.0</string>
     <string name="settings">Настройки</string>
     <string name="rating">Рейтинг: %d</string>

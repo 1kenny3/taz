@@ -14,8 +14,8 @@ import org.json.JSONObject;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
-public class TazarApplication extends Application {
-    private static final String TAG = "TazarApplication";
+public class EcoupApplication extends Application {
+    private static final String TAG = "EcoupApplication";
     private static final String PREF_NAME = "tazar_prefs";
     private static final String AUTH_TOKEN_KEY = "auth_token";
     private static final String USER_ID_KEY = "user_id";
@@ -23,7 +23,7 @@ public class TazarApplication extends Application {
     private static final String DEFAULT_SERVER_URL = "http://10.0.2.2:8000/";
     
     private static Context appContext;
-    private static TazarApplication instance;
+    private static EcoupApplication instance;
     private PreferenceManager preferenceManager;
     
     @Override
@@ -49,7 +49,7 @@ public class TazarApplication extends Application {
         return appContext;
     }
     
-    public static TazarApplication getInstance() {
+    public static EcoupApplication getInstance() {
         return instance;
     }
 
