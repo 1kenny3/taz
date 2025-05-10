@@ -4,4 +4,5 @@
     <background android:drawable="@color/ic_launcher_background"/>
     <!-- Передний план: используем наш drawable ic_launcher_foreground -->
     <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
+    <monochrome android:drawable="@mipmap/ic_launcher_foreground"/>
 </adaptive-icon> 

@@ -2,7 +2,7 @@ from PIL import Image, ImageDraw
 import os
 
 # Загружаем оригинальное изображение
-input_path = "/Users/kenny/Desktop/taz/ChatGPT Image 8 мая 2025 г., 01_46_20.png"
+input_path = "/Users/kenny/Desktop/taz/ChatGPT%20Image%208%20%D0%BC%D0%B0%D1%8F%202025%20%D0%B3.%2C%2001_46_20-Photoroom.png"
 original_image = Image.open(input_path).convert("RGBA")
 
 # Определяем базовый путь для Android проекта
