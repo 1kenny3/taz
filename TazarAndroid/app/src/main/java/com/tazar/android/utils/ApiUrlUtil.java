@@ -94,7 +94,7 @@ public class ApiUrlUtil {
      */
     public static void saveApiUrl(Context context, String url) {
         PreferenceManager preferenceManager = new PreferenceManager(context);
-        preferenceManager.saveApiUrl(url);
+        preferenceManager.setApiUrl(url);
     }
 
     public static String getDefaultApiUrl() {

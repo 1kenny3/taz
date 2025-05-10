@@ -20,7 +20,7 @@ public class EcoupApplication extends Application {
     private static final String AUTH_TOKEN_KEY = "auth_token";
     private static final String USER_ID_KEY = "user_id";
     private static final String SERVER_URL_KEY = "server_url";
-    private static final String DEFAULT_SERVER_URL = "http://10.0.2.2:8000/";
+    private static final String DEFAULT_SERVER_URL = "http://172.20.10.4:8000/";
     
     private static Context appContext;
     private static EcoupApplication instance;
@@ -39,9 +39,18 @@ public class EcoupApplication extends Application {
             
             // Инициализация ApiClient
             ApiClient.init(appContext);
+            
+            initializeServerUrl();
         } catch (Exception e) {
             Log.e(TAG, "Ошибка при инициализации приложения: ", e);
             // Не крашим приложение, а просто логируем ошибку
+        }
+    }
+    
+    private void initializeServerUrl() {
+        SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        if (!prefs.contains(SERVER_URL_KEY)) {
+            prefs.edit().putString(SERVER_URL_KEY, DEFAULT_SERVER_URL).apply();
         }
     }
     

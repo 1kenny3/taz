@@ -1,6 +1,7 @@
 package com.tazar.android.api;
 
 import android.content.Context;
+import android.os.Build;
 
 import com.tazar.android.config.ApiConfig;
 import com.tazar.android.models.Report;
@@ -22,9 +23,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Клиент для работы с API
  */
 public class ApiClient {
-    // Базовый URL для API
-    // Для эмулятора Android использую адрес 10.0.2.2 (соответствует localhost на компьютере разработчика)
-    private static final String BASE_URL = "http://10.0.2.2:8000/";
+    // Используем реальный IP-адрес для физического устройства
+    private static final String BASE_URL = "http://172.20.10.4:8000/";
     private static Retrofit retrofit = null;
     private static OkHttpClient okHttpClient;
     private static boolean isInitialized = false;
@@ -116,10 +116,21 @@ public class ApiClient {
 
     public static Retrofit getClient() {
         if (retrofit == null) {
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+            OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build();
+
             retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build();
         }
         return retrofit;
     }

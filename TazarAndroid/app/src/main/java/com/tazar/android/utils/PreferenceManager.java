@@ -8,23 +8,23 @@ import androidx.appcompat.app.AppCompatDelegate;
  * Менеджер настроек приложения
  */
 public class PreferenceManager {
-    private static final String PREF_NAME = "tazar_prefs";
+    private static final String PREF_NAME = "EcoupPreferences";
     private static final String ACCESS_TOKEN_KEY = "access_token";
     private static final String REFRESH_TOKEN_KEY = "refresh_token";
     private static final String USER_ID_KEY = "user_id";
     private static final String SERVER_URL_KEY = "server_url";
     private static final String KEY_API_URL = "api_url";
-    private static final String DEFAULT_API_URL = "http://10.0.2.2:8000/";
+    private static final String DEFAULT_API_URL = "http://172.20.10.4:8000/";
     private static final String KEY_THEME_MODE = "theme_mode";
     
-    private SharedPreferences preferences;
+    private final SharedPreferences sharedPreferences;
     
     /**
      * Конструктор
      * @param context Контекст приложения
      */
     public PreferenceManager(Context context) {
-        preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
     
     /**
@@ -33,7 +33,7 @@ public class PreferenceManager {
      * @param refreshToken Токен обновления
      */
     public void saveTokens(String accessToken, String refreshToken) {
-        preferences.edit()
+        sharedPreferences.edit()
                 .putString(ACCESS_TOKEN_KEY, accessToken)
                 .putString(REFRESH_TOKEN_KEY, refreshToken)
                 .apply();
@@ -44,7 +44,7 @@ public class PreferenceManager {
      * @return Токен авторизации
      */
     public String getAccessToken() {
-        return preferences.getString(ACCESS_TOKEN_KEY, null);
+        return sharedPreferences.getString(ACCESS_TOKEN_KEY, null);
     }
     
     /**
@@ -52,14 +52,14 @@ public class PreferenceManager {
      * @return Токен обновления
      */
     public String getRefreshToken() {
-        return preferences.getString(REFRESH_TOKEN_KEY, null);
+        return sharedPreferences.getString(REFRESH_TOKEN_KEY, null);
     }
     
     /**
      * Очистка сессии пользователя
      */
     public void logout() {
-        preferences.edit()
+        sharedPreferences.edit()
                 .remove(ACCESS_TOKEN_KEY)
                 .remove(REFRESH_TOKEN_KEY)
                 .remove(USER_ID_KEY)
@@ -79,7 +79,7 @@ public class PreferenceManager {
      * @param userId ID пользователя
      */
     public void saveUserId(int userId) {
-        preferences.edit().putInt(USER_ID_KEY, userId).apply();
+        sharedPreferences.edit().putInt(USER_ID_KEY, userId).apply();
     }
     
     /**
@@ -87,7 +87,7 @@ public class PreferenceManager {
      * @return ID пользователя
      */
     public int getUserId() {
-        return preferences.getInt(USER_ID_KEY, -1);
+        return sharedPreferences.getInt(USER_ID_KEY, -1);
     }
     
     /**
@@ -95,7 +95,7 @@ public class PreferenceManager {
      * @param url Адрес сервера
      */
     public void saveServerUrl(String url) {
-        preferences.edit().putString(SERVER_URL_KEY, url).apply();
+        sharedPreferences.edit().putString(SERVER_URL_KEY, url).apply();
     }
     
     /**
@@ -104,15 +104,19 @@ public class PreferenceManager {
      * @return Адрес сервера
      */
     public String getServerUrl(String defaultUrl) {
-        return preferences.getString(SERVER_URL_KEY, defaultUrl);
+        return sharedPreferences.getString(SERVER_URL_KEY, defaultUrl);
     }
 
     public String getApiUrl() {
-        return preferences.getString(KEY_API_URL, DEFAULT_API_URL);
+        return sharedPreferences.getString(KEY_API_URL, DEFAULT_API_URL);
     }
 
-    public void saveApiUrl(String url) {
-        preferences.edit().putString(KEY_API_URL, url).apply();
+    public void setApiUrl(String url) {
+        sharedPreferences.edit().putString(KEY_API_URL, url).apply();
+    }
+
+    public void resetApiUrl() {
+        setApiUrl(DEFAULT_API_URL);
     }
 
     /**
@@ -120,7 +124,7 @@ public class PreferenceManager {
      * @return режим темы из AppCompatDelegate
      */
     public int getThemeMode() {
-        return preferences.getInt(KEY_THEME_MODE, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        return sharedPreferences.getInt(KEY_THEME_MODE, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
     }
 
     /**
@@ -128,7 +132,7 @@ public class PreferenceManager {
      * @param mode режим темы из AppCompatDelegate
      */
     public void saveThemeMode(int mode) {
-        preferences.edit().putInt(KEY_THEME_MODE, mode).apply();
+        sharedPreferences.edit().putInt(KEY_THEME_MODE, mode).apply();
     }
 
     public String getAuthToken() {
@@ -139,7 +143,7 @@ public class PreferenceManager {
      * Очистка всех данных сессии пользователя
      */
     public void clearSession() {
-        preferences.edit()
+        sharedPreferences.edit()
                 .remove(ACCESS_TOKEN_KEY)
                 .remove(REFRESH_TOKEN_KEY)
                 .remove(USER_ID_KEY)
